@@ -29,8 +29,13 @@ const userSchema = new Schema({
   Gender:{
     type: String,
     required: [true ,'Please add the required data']
+  },
+  Country:{
+    type: String,
+    required: [false]
   }
+
 }, { timestamps: true });
 
 const User = mongoose.model('User', userSchema);
-module.exports = User;
+module.exports = User

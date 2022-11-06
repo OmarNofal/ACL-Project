@@ -1,6 +1,6 @@
 const express = require('express')
 const router =express.Router()
-const { registerUser,loginUser, getMe,addInstructor,addTrainees,addAdmin }=require('../controllers/userController')
+const { registerUser,loginUser, getMe,addInstructor,addTrainees,addAdmin,selectCountry}=require('../controllers/userController')
 
 const { protect } = require('../middleware/authMiddleware')
 
@@ -10,7 +10,7 @@ router.get('/me',protect,getMe)
 router.post('/addInstructor',addInstructor)
 router.post('/addTrainees',addTrainees)
 router.post('/addAdmin',addAdmin)
-
+router.post('/selectCountry',selectCountry)
 
 
 

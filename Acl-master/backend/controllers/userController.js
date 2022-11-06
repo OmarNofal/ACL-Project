@@ -87,6 +87,7 @@ const getMe =asyncHandler( async (req,res)=>{
 
 
 
+
 const addAdmin = asyncHandler(async (req,res)=>{
     const{Username,Password,Type,Email,FirstName,LastName,Gender}=req.body
     if(!Username || !Password || !Type || !Email || !FirstName || !LastName || !Gender){
@@ -208,6 +209,12 @@ const addTrainees = asyncHandler(async (req,res)=>{
 })
 
 
+const selectCountry=asyncHandler(async (req,res)=>{
+    const usernamee= req.body.Username
+    const country=req.body.country
+    var result=await user.findOneAndUpdate({Username:username},{Country:country,})
+    res.send(result)
+})
 
 
 //gernerat jwt token
@@ -224,6 +231,7 @@ module.exports = {
     getMe,
     addInstructor,
     addTrainees,
-    addAdmin
+    addAdmin,
+    selectCountry
 
 }
