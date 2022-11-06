@@ -7,7 +7,7 @@ const {errorHandler} = require('./middleware/error')
 //const connectDB= require('./config/db')
 //connectDB()
 const app=express()
-const MongoURI =  "mongodb+srv://OmarNofal:AemqdNy9bbcaaPhj@cluster0.cjtxn9t.mongodb.net/ACL?retryWrites=true&w=majority"
+const MongoURI =  "mongodb+srv://admin:0000@cluster0.ggpyeec.mongodb.net/?retryWrites=true&w=majority"
 
 
 mongoose.connect(MongoURI)
