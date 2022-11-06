@@ -123,4 +123,12 @@ const getAllCourses = asyncHandler( async (req,res) => {
 })
 
 
-module.exports = {searchCourses, getAllCourses, viewCoursesTitles, filterCoursesInst, searchCoursesInst, createCourseInst};
+const getCourse = asyncHandler( async (req,res) => {
+    const id=req.body.id
+    var result=await Course.find({_id:id}).exec()
+
+    res.json(result);
+
+})
+
+module.exports = {searchCourses, getAllCourses, viewCoursesTitles, filterCoursesInst, searchCoursesInst, createCourseInst,getCourse};

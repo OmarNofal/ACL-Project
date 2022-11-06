@@ -3,10 +3,12 @@ const mongoose = require('mongoose');
 const colors = require('colors')
 const dotenv= require('dotenv').config()
 const port =process.env.port || 8000
+const cookieParser = require('cookie-parser')
 const {errorHandler} = require('./middleware/error')
 //const connectDB= require('./config/db')
 //connectDB()
 const app=express()
+app.use(cookieParser());
 const MongoURI =  "mongodb+srv://admin:0000@cluster0.ggpyeec.mongodb.net/?retryWrites=true&w=majority"
 
 

@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const courseSchema = new Schema({
+
   Title: {
     type: String,
     //required: [true ,'Please add a title']
@@ -22,8 +23,9 @@ const courseSchema = new Schema({
     type: String,
     //required: [true ,'Please add the required data']
   },
+  
   Subtitles:{
-    type: [{Language: String, LengthMins: Number}],
+    type: [{Name: String, LengthMins: Number}],
     //required: [true ,'Please add the required data']
   },
   Exercises:{
@@ -33,6 +35,12 @@ const courseSchema = new Schema({
   Summary:{
     type: String,
     //required: [true ,'Please add the required data']
+  },
+  Hours:{
+    type:Number,
+  },
+  Discount:{
+    type:Number,
   }
 
 }, { timestamps: true });

@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const asyncHandler=require('express-async-handler')
+const express = require('express')
+const cookieParser = require('cookie-parser')
 const User = require('../model/user')
 //const Instructor = require('../model/Instructor')
 //const Trainees = require('../model/Trainees')
@@ -208,7 +210,11 @@ const addTrainees = asyncHandler(async (req,res)=>{
 })
 
 
-
+const selectCountry=asyncHandler(async (req,res)=>{
+    const country=req.body.country
+    res.cookie('country',country);
+    res.send("Success")
+})
 
 //gernerat jwt token
 const generateToken = (id) =>{
@@ -224,6 +230,7 @@ module.exports = {
     getMe,
     addInstructor,
     addTrainees,
-    addAdmin
+    addAdmin,
+    selectCountry
 
 }
