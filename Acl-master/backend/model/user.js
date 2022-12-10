@@ -34,11 +34,6 @@ const userSchema = new Schema({
     type: String,
     required: [true ,'Please add the required data']
   },
-<<<<<<< Updated upstream
-  Country:{
-    type: String,
-    required: [false]
-=======
   // Rating:{
   //   type: [{score: Number, count: Number, sumSoFar:Number, }],
   //   required: false
@@ -65,7 +60,6 @@ const userSchema = new Schema({
   Reviews:{
     type: [String],
     //required: [true ,'Please add the required data']
->>>>>>> Stashed changes
   }
 
 }, { timestamps: true });

@@ -221,8 +221,6 @@ const selectCountry=asyncHandler(async (req,res)=>{
     res.send(result)
 })
 
-<<<<<<< Updated upstream
-=======
 //@desc
 //@route P
 //@access Private
@@ -437,7 +435,6 @@ const changePasswordUser=asyncHandler(async (req,res)=>{
 })
 
 
->>>>>>> Stashed changes
 
 //gernerat jwt token
 const generateToken = (id) =>{

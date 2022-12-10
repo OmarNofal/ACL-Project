@@ -2,8 +2,6 @@ const Course = require('../model/course');
 const asyncHandler = require('express-async-handler')
 
 
-<<<<<<< Updated upstream
-=======
 const currentInstName='Yahia' //ttzabat m3 el session
 const viewCoursesTitles=asyncHandler(async(req,res)=>{ 
     const courses=await Course.find({currentInstName})
@@ -133,4 +131,3 @@ const getCourse = asyncHandler( async (req,res) => {
 })
 
 module.exports = {searchCourses, getAllCourses, viewCoursesTitles, filterCoursesInst, searchCoursesInst, createCourseInst,getCourse};
->>>>>>> Stashed changes

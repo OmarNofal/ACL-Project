@@ -1,10 +1,6 @@
 const express = require('express')
 const router =express.Router()
-<<<<<<< Updated upstream
-const { registerUser,loginUser, getMe,addInstructor,addTrainees,addAdmin,selectCountry}=require('../controllers/userController')
-=======
 const { registerUser,loginUser, getMe,addInstructor,addTrainees,addAdmin,selectCountry, rateInstructor ,rateCourse,viewRatingsCourse,changePasswordUser,submitExercise,viewGrade,sendEmail,viewRatingsInstructor}=require('../controllers/userController')
->>>>>>> Stashed changes
 
 const { protect } = require('../middleware/authMiddleware')
 
