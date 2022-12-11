@@ -7,9 +7,15 @@ const User = require('../model/user')
 //const Instructor = require('../model/Instructor')
 //const Trainees = require('../model/Trainees')
 const registerUser = asyncHandler(async (req,res)=>{
-    const{ Name,Email,Password,Age,BornIn,LivesIn,MartialStatus,PhoneNumber,Job}=req.body
+    const{ Username,
+      Password,
+      Type,
+      Email,
+      FirstName,
+      LastName,
+      Gender}=req.body
 
-    if(!Name || !Email || !Password|| !Age || !BornIn || !LivesIn || !MartialStatus || !PhoneNumber || !Job){
+    if(!Username || !Email || !Password|| !Type || !FirstName || !Gender || !LastName ){
         res.status(400)
         throw new Error ('please add all fields')
     }
@@ -26,27 +32,22 @@ const registerUser = asyncHandler(async (req,res)=>{
 
     //create user
     const user=await User.create({
-        Name,
+        Username,
         Email,
         Password:hashedPassword,
-        Age,
-        BornIn,
-        LivesIn,
-        MartialStatus,
-        PhoneNumber,
-        Job
+        Type,FirstName,Gender,LastName
     })
     if(user){
         res.status(201).json({
             _id:user.id,
-            Name:user.Name,
+            Username:user.Username,
             Email:user.Email,
-            Age:user.Age,
-            BornIn:user.BornIn,
-            LivesIn:user.LivesIn,
-            MartialStatus:user.MartialStatus,
-            PhoneNumber:user.PhoneNumber,
-            Job:user.Job,
+            Password:user.Password,
+            Type:user.Type,
+            FirstName:user.FirstName,
+            Gender:user.Gender,
+            LastName:user.LastName,
+           
             token: generateToken(user._id)
         })
     }else{
@@ -64,14 +65,14 @@ const loginUser = asyncHandler(async (req,res)=>{
     if(user&&(await bcrypt.compare(Password,user.Password))){
         res.status(201).json({
             _id:user.id,
-            Name:user.Name,
+            Username:user.Username,
             Email:user.Email,
-            Age:user.Age,
-            BornIn:user.BornIn,
-            LivesIn:user.LivesIn,
-            MartialStatus:user.MartialStatus,
-            PhoneNumber:user.PhoneNumber,
-            Job:user.Job,
+            Password:user.Password,
+            Type:user.Type,
+            FirstName:user.FirstName,
+            Gender:user.Gender,
+            LastName:user.LastName,
+           
             token: generateToken(user._id)
         })
     }else{
@@ -90,8 +91,8 @@ const getMe =asyncHandler( async (req,res)=>{
 
 
 const addAdmin = asyncHandler(async (req,res)=>{
-    const{Username,Password,Type,Email,FirstName,LastName,Gender}=req.body
-    if(!Username || !Password || !Type || !Email || !FirstName || !LastName || !Gender){
+    const{Username,Password,Email}=req.body
+    if(!Username || !Password || !Email ){
         res.status(400)
         throw new Error ('please add all fields')
     }
@@ -109,11 +110,9 @@ const addAdmin = asyncHandler(async (req,res)=>{
         
         Password:hashedPassword,
         Username,
-        Type,
-        Email,
-        FirstName,
-        LastName,
-        Gender
+        Type:"Admin",
+        Email
+        
     })
     if(admin){
         res.status(201).json({
@@ -130,8 +129,8 @@ const addAdmin = asyncHandler(async (req,res)=>{
 
 
 const addInstructor = asyncHandler(async (req,res)=>{
-    const{Username,Password,Type,Email,FirstName,LastName,Gender}=req.body
-    if(!Username || !Password || !Type || !Email || !FirstName || !LastName || !Gender){
+    const{Username,Password,Email}=req.body
+    if(!Username || !Password ||!Email ){
         res.status(400)
         throw new Error ('please add all fields')
     }
@@ -150,11 +149,8 @@ const addInstructor = asyncHandler(async (req,res)=>{
     const instructor=await User.create({
         Password:hashedPassword,
         Username,
-        Type,
-        Email,
-        FirstName,
-        LastName,
-        Gender
+        Type:"Instructor",
+        Email
     })
     if(instructor){
         res.status(201).json({
@@ -169,8 +165,8 @@ const addInstructor = asyncHandler(async (req,res)=>{
 })
 
 const addTrainees = asyncHandler(async (req,res)=>{
-    const{Username,Password,Type,Email,FirstName,LastName,Gender}=req.body
-    if(!Username || !Password || !Type || !Email || !FirstName || !LastName || !Gender){
+    const{Username,Password,Email}=req.body
+    if(!Username || !Password ||!Email ){
         res.status(400)
         throw new Error ('please add all fields')
     }
@@ -189,11 +185,9 @@ const addTrainees = asyncHandler(async (req,res)=>{
     const trainees=await User.create({
         Password:hashedPassword,
         Username,
-        Type,
-        Email,
-        FirstName,
-        LastName,
-        Gender
+        Type:"CorporateTrainee",
+        Email
+        
     })
     if(trainees){
         res.status(201).json({

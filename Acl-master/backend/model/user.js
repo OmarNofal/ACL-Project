@@ -20,15 +20,15 @@ const userSchema = new Schema({
   },
   FirstName:{
     type: String,
-    required: [true ,'Please add the required data']
+    
   },
   LastName:{
     type: String,
-    required: [true ,'Please add the required data']
+    
   },
   Gender:{
     type: String,
-    required: [true ,'Please add the required data']
+    
   }
 }, { timestamps: true });
 
