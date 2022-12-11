@@ -5,15 +5,14 @@ const dotenv= require('dotenv').config()
 const port =process.env.port || 8000
 const cookieParser = require('cookie-parser')
 const {errorHandler} = require('./middleware/error')
-require("dotenv").config();
+const cookieParser = require('cookie-parser')
+const router=require('./routes/userRoutes')
 //const connectDB= require('./config/db')
 //connectDB()
 const app=express()
 app.use(cookieParser());
-const MongoURI =  "mongodb+srv://admin:0000@cluster0.ggpyeec.mongodb.net/?retryWrites=true&w=majority"
+const MongoURI =  "mongodb+srv://KarimAbouzeid:4444@cluster0.teyx3kg.mongodb.net/?retryWrites=true&w=majority"
 
-var cors = require('cors');
-app.use(cors())
 mongoose.connect(MongoURI)
 .then(()=>{
   console.log("MongoDB is now connected!")

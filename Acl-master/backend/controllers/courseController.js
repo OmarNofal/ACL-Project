@@ -49,9 +49,9 @@ const searchCoursesInst=asyncHandler(async(req,res)=>{
 
 
 const createCourseInst = asyncHandler(async (req,res)=>{
-    const{ Title,Rating,Price,Subject,Instructor,Subtitles,Exercises,Summary}=req.body
+    const{ Title,Price,Subject,Instructor,Subtitles,Exercises,Summary}=req.body
 
-    if(!Title || !Rating || !Price|| !Subject || !Instructor || !Subtitles || !Exercises || !Summary){
+    if(!Title|| !Price|| !Subject || !Instructor || !Subtitles || !Exercises || !Summary){
         res.status(400)
         throw new Error ('please add all fields')
     }
@@ -64,11 +64,11 @@ const createCourseInst = asyncHandler(async (req,res)=>{
     }
    
     //create course
+    const zero=0
     const course=await Course.create({
-        Title,
-        Rating,
-        Price,
-        Subject,
+        Title:Title,
+        Price:Price,
+        Subject:Subject,
         Instructor,
         Subtitles,
         Exercises,
@@ -78,14 +78,13 @@ const createCourseInst = asyncHandler(async (req,res)=>{
         res.status(201).json({
             _id:course.id,
             Title:course.Title,
-            Rating:course.Rating,
             Price:course.Price,
             Subject:course.Subject,
             Instructor:course.Instructor,
             Subtitles:course.Subtitles,
             Exercises:course.Excersises,
             Summary:course.Summary,
-            token: generateToken(course._id)
+           // token: generateToken(course._id)
         })
     }else{
         res.status(400)
