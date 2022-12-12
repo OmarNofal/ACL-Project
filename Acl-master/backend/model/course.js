@@ -42,7 +42,14 @@ const courseSchema = new Schema({
   },
   
   Subtitles:{
-    type: [{Name: String, LengthMins: Number}],
+    type: [
+      {
+        Name: String, 
+        LengthMins: Number,
+        VideoURL: String,
+        VideoDescription: String
+      }
+    ],
     //required: [true ,'Please add the required data']
   },
   Exercises:{
@@ -58,6 +65,9 @@ const courseSchema = new Schema({
   },
   Discount:{
     type:Number,
+  },
+  PreviewVideoURL: {
+    type: String
   }
 
 }, { timestamps: true });
