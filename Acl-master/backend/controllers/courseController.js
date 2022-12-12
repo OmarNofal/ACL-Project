@@ -1,4 +1,5 @@
 const axios = require('axios');
+const Exercise = require('../model/exercise');
 
 const isAValidYoutubeVideo = require('./helpers/youtubeVerifier');
 
@@ -220,6 +221,53 @@ const setCourseYoutubePreview = asyncHandler( async (req, res) => {
 })
 
 
+const addExerciseToCourse = asyncHandler(async (req, res) => {
+
+    const body = req.body;
+
+    const courseId = body.courseId;
+    const exerciseName = body.exerciseName;
+    const exerciseQuestions = body.questions;
+    const exercisesChoices = body.choices;
+    const answers = body.answersIndices;
+
+    if (!courseId || !exerciseName || !exerciseQuestions || !exercisesChoices || !answers) {
+        return res.json({
+            result: "error",
+            message: "Please supply all fields"
+        });
+    }
+
+    const correctAnswers = [];
+    for (let i = 0; i < exercisesChoices.length; i++) {
+        correctAnswers.push(exercisesChoices[i][answers[i]]);
+    }
+
+    const exercise = await Exercise.create({
+        Name: exerciseName,
+        CourseId: courseId,
+        usersScore: [],
+        QuestionTitles: exerciseQuestions,
+        QuestionChoices: exercisesChoices,
+        QuestionCorrect: correctAnswers
+    })
+
+    if (exercise) {
+        // exercise creation is successful
+        return res.json({
+            result: "success"
+        })
+    } else {
+
+        return res.json({
+            result: "error",
+            message: "Couldn't insert your exercise :("
+        })
+    }
+
+});
+
+
 module.exports = {
     searchCourses,
     getAllCourses,
@@ -229,5 +277,6 @@ module.exports = {
     createCourseInst,
     getCourse,
     addYoutubeVideoToSubtitle,
-    setCourseYoutubePreview
+    setCourseYoutubePreview,
+    addExerciseToCourse
 };

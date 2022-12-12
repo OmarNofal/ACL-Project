@@ -3,10 +3,15 @@ const Schema = mongoose.Schema;
 
 
 const exerciseSchema = new Schema({
-    QuestionCorrect: {
+      Name: {
+        type: String
+      },
+      QuestionCorrect: {
         type:[String],
       },
-
+      QuestionTitles: {
+        type: [String]
+      },
       QuestionChoices: {
         type: [[String]],
       },
