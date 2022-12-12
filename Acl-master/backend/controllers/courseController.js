@@ -1,5 +1,7 @@
 const axios = require('axios');
 
+const isAValidYoutubeVideo = require('./helpers/youtubeVerifier');
+
 const Course = require('../model/course');
 const asyncHandler = require('express-async-handler');
 const { default: mongoose } = require('mongoose');
@@ -144,15 +146,14 @@ const addYoutubeVideoToSubtitle = asyncHandler( async (req, res) => {
     const videoDescription = body.videoDescription;
 
     // We check to see if the URL is a valid video
-    try {
-        await axios.get('https://youtube.com/oembed?url=' + videoURL)
-    }
-    catch(error) {
+    const isValid = await isAValidYoutubeVideo(videoURL);
+    if (!isValid) {
         return res.json({
             result: "error",
             message: "Video is not a valid youtube video"
         })
     }
+
     // video is valid we can procced
     const videoURLProperty = `Subtitles.${subtitleIndex}.VideoURL`;
     const videoDescriptionProperty = `Subtitles.${subtitleIndex}.VideoDescription`
@@ -172,11 +173,51 @@ const addYoutubeVideoToSubtitle = asyncHandler( async (req, res) => {
     } else {
         res.json({
             result: "error",
-            message: "An error occurred while inserting the URL. Are you sure the subtitle exists?",
-            matchedCount: result.matchedCount
+            message: "An error occurred while inserting the URL. Are you sure the subtitle exists?"
         })
     }
 });
+
+
+const setCourseYoutubePreview = asyncHandler( async (req, res) => {
+
+    const body = req.body;
+
+    const courseId = body.courseId;
+    const videoURL = body.videoURL;
+
+    const isValid = await isAValidYoutubeVideo(videoURL);
+    if (!isValid) {
+        return res.json({
+            result: "error",
+            message: "Video is not a valid youtube video"
+        })
+    }
+
+    const videoURLProperty = `PreviewVideoURL`;
+    const result = await Course.updateOne(
+        {_id: courseId}, 
+        {
+            $set: {
+                [videoURLProperty]: videoURL
+            }
+        }
+    )
+    if (result.modifiedCount == 1) {
+        return res.json(
+            {
+                result: "success",
+            }
+        )
+    } else {
+        return res.json(
+            {
+                result: "error",
+                message: "Failed to add video preview to the course"
+            }
+        )
+    }
+})
 
 
 module.exports = {
@@ -187,5 +228,6 @@ module.exports = {
     searchCoursesInst, 
     createCourseInst,
     getCourse,
-    addYoutubeVideoToSubtitle
+    addYoutubeVideoToSubtitle,
+    setCourseYoutubePreview
 };

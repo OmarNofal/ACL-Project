@@ -65,6 +65,9 @@ const courseSchema = new Schema({
   },
   Discount:{
     type:Number,
+  },
+  PreviewVideoURL: {
+    type: String
   }
 
 }, { timestamps: true });
