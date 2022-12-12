@@ -25,12 +25,10 @@ const courseSchema = new Schema({
   },
   
   Subtitles:{
-    type: [{Name: String, LengthMins: Number}],
-    //required: [true ,'Please add the required data']
+    type: String    //required: [true ,'Please add the required data']
   },
   Exercises:{
-    type: [{Name: String, Type: String, LengthMins: Number}],
-    //required: [true ,'Please add the required data']
+    type: String    //required: [true ,'Please add the required data']
   },
   Summary:{
     type: String,

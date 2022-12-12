@@ -15,6 +15,8 @@ import ViewThePricesofEachCourse from './components/ViewThePricesofEachCourse';
 import AddAnotherInstructor from './components/AddAnotherInstructor';
 import AddAnotherAdmin from './components/AddAnotherAdmin';
 import AddAnotherCorporateTrainee from './components/AddAnotherCorporateTrainee';
+import AddNewCourse from './components/AddNewCourse';
+import ViewInstructorCourse from './components/ViewInstructorCourse';
 function App() {
   return (
     <>
@@ -34,6 +36,9 @@ function App() {
               <Route path='/AddAnotherInstructor' element={<AddAnotherInstructor />}/>
               <Route path='/AddAnotherAdmin' element={<AddAnotherAdmin />}/>
               <Route path='/AddAnotherCorporateTrainee' element={<AddAnotherCorporateTrainee />}/>
+              <Route path='/AddNewCourse' element={<AddNewCourse />}/>
+              <Route path='/ViewInstructorCourse' element={<ViewInstructorCourse />}/>
+
 
               <Route path='/Guest' element={<Guest />}/>
             </Routes>

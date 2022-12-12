@@ -2,16 +2,14 @@ const Course = require('../model/course');
 const asyncHandler = require('express-async-handler')
 
 
-const currentInstName='Yahia' //ttzabat m3 el session
+const currentInstName='instructorin' //ttzabat m3 el session
 const viewCoursesTitles=asyncHandler(async(req,res)=>{ 
-    const courses=await Course.find({currentInstName})
+
+    
+
+    const courses=await Course.find({Instructor:req.params.Instructor})
     console.log(courses)
-    console.log("The length is "+courses.length)
-    let titles=""
-    for(i=0;i<courses.length;i++){
-        titles=titles+ courses[i]["Title"] + "\n"
-    }
-    res.send(titles);
+    res.json(courses)
  
 })
 
@@ -83,9 +81,9 @@ const createCourseInst = asyncHandler(async (req,res)=>{
             Subject:course.Subject,
             Instructor:course.Instructor,
             Subtitles:course.Subtitles,
-            Exercises:course.Excersises,
+            Exercises:course.Exercises,
             Summary:course.Summary,
-            token: generateToken(course._id)
+            //token: generateToken(course._id)
         })
     }else{
         res.status(400)
