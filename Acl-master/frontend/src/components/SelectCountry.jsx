@@ -21,6 +21,14 @@ console.log("")
 
     }
 
+    const handleCountry=(event)=>{
+        const getcountryid=event.target.value
+        //console.log(getcountryid)
+        setCountryid(getcountryid)
+        localStorage.setItem('country',JSON.stringify(getcountryid))
+
+    }
+
 const country=[...new Set(data.map(item=>item.country))]
    //console.log(country) 
   return (
