@@ -166,7 +166,7 @@ h3 {
 }
 
 .btn:hover {
-  transform: scale(0.98);
+  transform: scale(6);
 }
 
 .loadingSpinnerContainer {

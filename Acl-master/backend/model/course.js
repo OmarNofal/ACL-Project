@@ -39,6 +39,9 @@ const courseSchema = new Schema({
   },
   Discount:{
     type:Number,
+  },
+  Show:{
+    type:String
   }
 
 }, { timestamps: true });
