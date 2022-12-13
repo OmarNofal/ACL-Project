@@ -53,8 +53,7 @@ const courseSchema = new Schema({
     //required: [true ,'Please add the required data']
   },
   Exercises:{
-    type: [{Name: String, Type: String, LengthMins: Number}],
-    //required: [true ,'Please add the required data']
+    type: String    //required: [true ,'Please add the required data']
   },
   Summary:{
     type: String,
@@ -65,6 +64,9 @@ const courseSchema = new Schema({
   },
   Discount:{
     type:Number,
+  },
+  Show:{
+    type:String
   },
   PreviewVideoURL: {
     type: String

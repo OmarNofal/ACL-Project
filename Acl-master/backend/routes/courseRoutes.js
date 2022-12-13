@@ -21,7 +21,7 @@ router.post('/addYoutubeVideoToSubtitle', addYoutubeVideoToSubtitle);
 router.post('/setCourseYoutubePreview', setCourseYoutubePreview);
 router.post('/addExerciseToCourse', addExerciseToCourse);
 
-router.get('/instructor/viewCoursesTitles',viewCoursesTitles)
+router.get('/instructor/viewCoursesTitles/:Instructor',viewCoursesTitles)
 router.get('/instructor/filterCourses',filterCoursesInst)
 router.get('/instructor/searchCourses', searchCoursesInst)
 router.post('/instructor/createCourse', createCourseInst)
