@@ -25,6 +25,13 @@ function CorporateTrainee() {
 
      </Link>
 </pre>
+<pre className='goal'>
+                  <Link to='/MyCourses'>
+                      <t1>                View my courses
+                      </t1>
+
+                  </Link>
+          </pre>
 </>    
 
   )
