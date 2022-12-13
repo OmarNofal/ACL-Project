@@ -8,7 +8,7 @@ function InstructorHome() {
   return (
     <>
     <div className='form'>
-    <div className='form-group'>Welcome Instructor{user&&user.Username}</div>
+    <div className='form-group'>Welcome {user&&user.Username}</div>
 
     <div className='form-group'><SelectCountry /></div>
     <div className='form-group'>

@@ -6,7 +6,6 @@ const currentInstName='instructorin' //ttzabat m3 el session
 const viewCoursesTitles=asyncHandler(async(req,res)=>{ 
 
     
-
     const courses=await Course.find({Instructor:req.params.Instructor})
     console.log(courses)
     res.json(courses)
