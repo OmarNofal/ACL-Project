@@ -2,6 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose');
 const colors = require('colors')
 const dotenv= require('dotenv').config()
+const cors = require('cors');
 const port =process.env.port || 8000
 const cookieParser = require('cookie-parser')
 const {errorHandler} = require('./middleware/error')
@@ -10,6 +11,7 @@ const router=require('./routes/userRoutes')
 //connectDB()
 const app=express()
 app.use(cookieParser());
+app.use(cors());
 const MongoURI =  "mongodb+srv://omar:nofal@cluster0.ggpyeec.mongodb.net/?retryWrites=true&w=majority"
 
 mongoose.connect(MongoURI)

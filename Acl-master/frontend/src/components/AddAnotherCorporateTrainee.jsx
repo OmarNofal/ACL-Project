@@ -19,8 +19,7 @@ function AddAnotherCorporateTrainee() {
     fetch('http://localhost:8000/api/users/addTrainees', {
         method: 'POST', // or 'PUT'
         headers: {
-            'Content-Type': 'application/json;chaerset=UTF-8'
-
+            'Content-Type': 'application/json;charset=UTF-8'
         },
         body: JSON.stringify(data),
         

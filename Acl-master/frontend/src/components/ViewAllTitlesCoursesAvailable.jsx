@@ -9,7 +9,7 @@ function ViewAllTitlesCoursesAvailable() {
 
 
     useEffect(()=>{
-        fetch('http://localhost:8000/api/courses/getAllCourses')
+        fetch('http://localhost:8000/api/courses/getAllCourses')    
         .then(response=>response.json())
         .then(json=>setItems(json))
     },[])
