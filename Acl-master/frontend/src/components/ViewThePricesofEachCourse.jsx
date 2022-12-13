@@ -14,7 +14,18 @@ function ViewThePricesofEachCourse() {
         fetch('http://localhost:8000/api/courses/getAllCourses')
         .then(response=>response.json())
         .then(json=>setItems(json))
+        const countryname=localStorage.getItem('country')
+        console.log(countryname)
     },[])
+
+
+    const handleCountry=()=>{
+        if(localStorage.getItem('country')=="Egypt" ){
+            return .6
+        }else{
+            return 7
+        }
+    }
     return (
 
         <div >
@@ -58,7 +69,7 @@ function ViewThePricesofEachCourse() {
                             
                             <h1>{item.Title}</h1>
                             <div>Prices:{item.Price}</div>
-                            <div>Prices:{item.Show}</div>
+                            <div>Show:{item.Show}</div>
 
                             <button type='click' className='btn:hover' onClick={()=>{
                                 setShow(!show)
@@ -75,7 +86,9 @@ function ViewThePricesofEachCourse() {
                                     <div>Subtitle:{item.Subtitles}</div>
                                     <div>Exercises:{item.Exercises}</div>
                                     <div>Hours:{item.Hours}</div>
-                                    <div>Price after discount:{item.Price}</div>
+                                    <div>Price after discount:{Number(item.Price)*
+                                        Number(handleCountry())
+                                    }</div>
 
                                 
                                 </>
