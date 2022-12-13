@@ -12,14 +12,6 @@ function SelectCountry() {
         .catch(err=>console.log(err))
 
     },[])
-console.log("")
-    const handleCountry=(event)=>{
-        const getcountryid=event.target.value
-        //console.log(getcountryid)
-        setCountryid(getcountryid)
-        localStorage.setItem('country',JSON.stringify(getcountryid))
-
-    }
 
     const handleCountry=(event)=>{
         const getcountryid=event.target.value
