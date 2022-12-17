@@ -1,22 +1,5 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-
-
-const ExerciseSchema = new Schema({
-      Name: {
-        type: String
-      },
-
-      Questions: [QuestionSchema],
-
-      CourseId:{
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref:'Course'
-      }
-})  
-
-
 const QuestionSchema = new mongoose.Schema( {
 
   Title: String,
@@ -26,5 +9,22 @@ const QuestionSchema = new mongoose.Schema( {
   CorrectChoiceIndex: Number // 0 - 3
 
 } )
+
+const ExerciseSchema = new Schema({
+      Name: {
+        type: String
+      },
+
+      
+
+      CourseId:{
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref:'Course'
+      }
+})  
+
+
+
 
 module.exports = ExerciseSchema;

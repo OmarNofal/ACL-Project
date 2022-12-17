@@ -4,6 +4,13 @@ const Schema = mongoose.Schema;
 const RatingSchema = require('./ratingSchema');
 const ExerciseSchema = require('./exercise');
 const ReviewSchema = require('./reviewSchema');
+const SubtitleSchema = Schema({
+  Name: String, 
+  LengthMins: Number,
+  VideoURL: String,
+  VideoDescription: String
+});
+
 
 const CourseSchema = new Schema({
 
@@ -45,12 +52,6 @@ const CourseSchema = new Schema({
 
 
 
-const SubtitleSchema = Schema({
-  Name: String, 
-  LengthMins: Number,
-  VideoURL: String,
-  VideoDescription: String
-});
 
 const Course = mongoose.model('Course', CourseSchema);
 module.exports = Course;
