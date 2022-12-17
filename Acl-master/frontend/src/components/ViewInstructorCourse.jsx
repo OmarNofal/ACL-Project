@@ -12,11 +12,14 @@ function ViewInstructorCourse() {
     const{user}=useSelector((state)=>state.auth)
     //http://localhost:8000/api/courses/instructor/filterCourses
     const[items,setItems]=useState([])
-    const username1=user.Username
+    const username1=user._id;
+
+    console.log(user);
+
     useEffect(()=>{
         fetch('http://localhost:8000/api/courses/instructor/viewCoursesTitles/'+username1)
         .then(response=>response.json())
-        .then(json=>setItems(json))
+        .then(json=> { console.log(json); setItems(json) })
     },[])
 
 
@@ -69,6 +72,7 @@ function ViewInstructorCourse() {
            </div>
             <ul>
             {
+                
                 items.filter((item)=>{
                   return search1.toLocaleLowerCase()===''
                   ?item
@@ -96,8 +100,7 @@ function ViewInstructorCourse() {
                             <div>Price: {item.Price}</div>
                             <div>Subject: {item.Subject}</div>
                             <div>Instructor: {item.Instructor}</div>
-                            <div>Subject: {item.Subtitles}</div>
-                         
+                            
                         </pre>
                 })
             }

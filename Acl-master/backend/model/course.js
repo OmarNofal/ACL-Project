@@ -4,24 +4,27 @@ const Schema = mongoose.Schema;
 const courseSchema = new Schema({
 
   Title: {
-    type: String,
-    //required: [true ,'Please add a title']
+    type: String
   },
+
   Score:{
     type:Number,
     default:0,
     required:false
   },
+
   Count:{
     type:Number,
     default:0,
     required:false
   },
+
   SumSoFar:{
     type:Number,
     default:0,
     required:false
   },
+  
   Price: { // we will assume price is in USD
     type: Number,
     //required: [true ,'Please add a Password']
