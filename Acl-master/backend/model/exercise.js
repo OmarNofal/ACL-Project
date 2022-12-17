@@ -2,29 +2,29 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 
-const exerciseSchema = new Schema({
+const ExerciseSchema = new Schema({
       Name: {
         type: String
       },
-      QuestionCorrect: {
-        type:[String],
-      },
-      QuestionTitles: {
-        type: [String]
-      },
-      QuestionChoices: {
-        type: [[String]],
-      },
+
+      Questions: [QuestionSchema],
+
       CourseId:{
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref:'Course'
-      },
-      usersScore:{
-        type:[{username:String,score:Number}],
-        required:false
       }
 })  
 
-const exercise = mongoose.model('exercise', exerciseSchema);
-module.exports = exercise; 
+
+const QuestionSchema = new mongoose.Schema( {
+
+  Title: String,
+
+  Choices: [String], // only 4 choices available
+
+  CorrectChoiceIndex: Number // 0 - 3
+
+} )
+
+module.exports = ExerciseSchema;
