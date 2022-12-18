@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+
 const QuestionSchema = new mongoose.Schema( {
 
   Title: String,
@@ -9,17 +10,16 @@ const QuestionSchema = new mongoose.Schema( {
   CorrectChoiceIndex: Number // 0 - 3
 
 } )
-
 const ExerciseSchema = new Schema({
       Name: {
         type: String
       },
 
-      
+      Questions: [QuestionSchema],
 
       CourseTitle:{
         type: String,
-        
+        required: true,
         ref:'Course'
       }
 })  
