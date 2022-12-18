@@ -12,47 +12,48 @@ const mongoose = require('mongoose');
 
 //const Trainees = require('../model/Trainees')
 const registerUser = asyncHandler(async (req,res)=>{
-    const{username,password,type,email,firstName,lastName,gender}=req.body
+    const{ Username,
+      Password,
+      Type,
+      Email,
+      FirstName,
+      LastName,
+      Gender}=req.body
 
-    if(!username || !email ){
+    if(!Username || !Email || !Password|| !Type || !FirstName || !Gender || !LastName ){
         res.status(400)
         throw new Error ('please add all fields')
     }
 
     //check if user exists
-    const userExists = await User.findOne({Email:email})
-    const userExists2 = await User.findOne({Username:username})
-    if(userExists||userExists2){
+    const userExists = await User.findOne({Email})
+    if(userExists){
         res.status(400)
         throw new Error('User already exists')
     }
     //hash password
-   // const salt = await bcrypt.genSalt(10)
-    //const hashedPassword = await bcrypt.hash(Password,salt)
+    const salt = await bcrypt.genSalt(10)
+    const hashedPassword = await bcrypt.hash(Password,salt)
 
     //create user
     const user=await User.create({
-       Username:username,
-       Password:password,
-       Type:type,
-       Email:email,
-       FirstName:firstName,
-       LastName:lastName,
-       Gender:gender,
-        
+        Username,
+        Email,
+        Password:hashedPassword,
+        Type,FirstName,Gender,LastName
     })
     if(user){
         res.status(201).json({
-            //_id:user.id,
+            _id:user.id,
             Username:user.Username,
+            Email:user.Email,
             Password:user.Password,
             Type:user.Type,
-            Email:user.Email,
             FirstName:user.FirstName,
-            LastName:user.LastName,
             Gender:user.Gender,
-            //Age:user.Age
-            //token: generateToken(user._id)
+            LastName:user.LastName,
+           
+            token: generateToken(user._id)
         })
     }else{
         res.status(400)
@@ -60,6 +61,7 @@ const registerUser = asyncHandler(async (req,res)=>{
     }
     res.json({message : 'register user'})
 })
+
 
 
 const loginUser = asyncHandler(async (req,res)=>{
@@ -134,37 +136,34 @@ const addAdmin = asyncHandler(async (req,res)=>{
 
 
 const addInstructor = asyncHandler(async (req,res)=>{
-    const{username,password,type,email,firstName,lastName,gender}=req.body
-    if(!username || !password || !type || !email || !firstName || !lastName || !gender){
+    const{Username,Password,Email}=req.body
+    if(!Username || !Password ||!Email ){
         res.status(400)
         throw new Error ('please add all fields')
     }
-    
+
     //check if user exists
-    const instructorExists = await User.findOne({Username: username})
+    const instructorExists = await User.findOne({Email})
     if(instructorExists){
         res.status(400)
         throw new Error('User already exists')
     }
     //hash password
-    // const salt = await bcrypt.genSalt(10)
-    // const hashedPassword = await bcrypt.hash(Password,salt)
+    const salt = await bcrypt.genSalt(10)
+    const hashedPassword = await bcrypt.hash(Password,salt)
 
-    
-    const zero=0
     //create user
     const instructor=await User.create({
-        Username:username,
-        Password:password,
-        Type:type,
-        Email:email,
-        FirstName:firstName,
-        LastName:lastName,
-        Gender:gender,
-        Rating:{zero,zero}
+        Password:hashedPassword,
+        Username,
+        Type:"Instructor",
+        Email
     })
     if(instructor){
-        res.status(201).json({instructor})
+        res.status(201).json({
+            Username:instructor.Username           
+           // token: generateToken(instructor._id)
+        })
     }else{
         res.status(400)
         throw new Error('Invalid user data')
