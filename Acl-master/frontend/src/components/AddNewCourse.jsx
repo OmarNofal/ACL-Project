@@ -19,8 +19,11 @@ function AddNewCourse() {
         Price,
         Subject,
         Instructor,
-        Subtitles,
-        Exercises,
+        SubName,
+        SubUrl
+        ,Subdesc,
+        Sublength,
+        ExersiceName,
         Summary } = formData
 
       const navigate = useNavigate()
@@ -31,8 +34,8 @@ function AddNewCourse() {
             Price:Price,
             Subject:Subject,
             Instructor:Instructor,
-            Subtitles:Subtitles,
-            Exercises:Exercises,
+            Subtitles:{Name:SubName, LengthMins: Sublength,VideoURL: SubUrl,VideoDescription: Subdesc},
+            Exercises:{Name:ExersiceName,CourseTitle:Title},
             Summary:Summary };
 
         fetch('http://localhost:8000/api/courses/instructor/createCourse', {
@@ -137,10 +140,10 @@ function AddNewCourse() {
          <input
            type='text'
            className='form-control'
-           id='Subtitles'
-           name='Subtitles'
-           value={Subtitles}
-           placeholder='Enter Subtitles'
+           id='SubName'
+           name='SubName'
+           value={SubName}
+           placeholder='Enter SubName'
            onChange={onChange}
          />
        </div>
@@ -148,13 +151,47 @@ function AddNewCourse() {
          <input
            type='text'
            className='form-control'
-           id='Exercises'
-           name='Exercises'
-           value={Exercises}
-           placeholder='Enter Exercises'
+           id='Sublength'
+           name='Sublength'
+           value={Sublength}
+           placeholder='Enter Sublength'
            onChange={onChange}
          />
        </div>
+       <div className='form-group'>
+         <input
+           type='text'
+           className='form-control'
+           id='SubUrl'
+           name='SubUrl'
+           value={SubUrl}
+           placeholder='Enter SubUrl'
+           onChange={onChange}
+         />
+       </div>
+       <div className='form-group'>
+         <input
+           type='text'
+           className='form-control'
+           id='Subdesc'
+           name='Subdesc'
+           value={Subdesc}
+           placeholder='Enter Subdesc'
+           onChange={onChange}
+         />
+       </div>
+       <div className='form-group'>
+         <input
+           type='text'
+           className='form-control'
+           id='ExersiceName'
+           name='ExersiceName'
+           value={ExersiceName}
+           placeholder='Enter ExersiceName'
+           onChange={onChange}
+         />
+       </div>
+     
        <div className='form-group'>
          <input
            type='text'

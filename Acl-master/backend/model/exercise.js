@@ -17,9 +17,9 @@ const ExerciseSchema = new Schema({
 
       
 
-      CourseId:{
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
+      CourseTitle:{
+        type: String,
+        
         ref:'Course'
       }
 })  

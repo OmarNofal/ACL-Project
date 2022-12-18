@@ -86,7 +86,7 @@ const createCourseInst = asyncHandler(async (req,res)=>{
             Instructor:course.Instructor,
             Subtitles:course.Subtitles,
             Exercises:course.Exercises,
-            Exercises:course.Exercises,
+         
             Summary:course.Summary,
            // token: generateToken(course._id)
         })
@@ -94,7 +94,7 @@ const createCourseInst = asyncHandler(async (req,res)=>{
         res.status(400)
         throw new Error('Invalid course data')
     }
-    res.json({message : 'create Course'})
+   // res.json({message : 'create Course'})
 })
 
 
