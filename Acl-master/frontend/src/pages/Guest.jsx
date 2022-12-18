@@ -1,6 +1,6 @@
 import React from 'react'
 import SelectCountry from '../components/SelectCountry'
-import ViewAllTitlesCoursesAvailable from '../components/ViewAllTitlesCoursesAvailable'
+import ViewAllTitlesCoursesAvailable from '../components/ViewAllcoursesforcorporatetrainee'
 import { Link, useNavigate } from 'react-router-dom'
 
 
@@ -17,16 +17,10 @@ function Guest() {
               </div>
              
       </div>
+     
       <pre className='goal'>
-             <Link to='/ViewAllTitlesCoursesAvailable'>
-              <t1>                View All Courses available including the total hours of courses and course rating
-              </t1>
-
-              </Link>
-      </pre>
-      <pre className='goal'>
-              <Link to='/ViewThePricesOfEachCourse'>
-                  <t1>                View the prices of each course
+              <Link to='/ViewAllCoursesForINSorTRAINEEorGUEST'>
+                  <t1>                View all courses
                   </t1>
 
               </Link>

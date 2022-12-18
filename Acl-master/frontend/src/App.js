@@ -10,8 +10,8 @@ import Guest from './pages/Guest';
 import InstructorHome from './pages/InstructorHome';
 import IndividualTrainee from './pages/IndividualTrainee';
 import CorporateTrainee from './pages/CorporateTrainee';
-import ViewAllTitlesCoursesAvailable from './components/ViewAllTitlesCoursesAvailable';
-import ViewThePricesofEachCourse from './components/ViewThePricesofEachCourse';
+import ViewAllcoursesforcorporatetrainee from './components/ViewAllcoursesforcorporatetrainee';
+import ViewAllCoursesForINSorTRAINEEorGUEST from './components/ViewAllCoursesForINSorTRAINEEorGUEST';
 import AddAnotherInstructor from './components/AddAnotherInstructor';
 import AddAnotherAdmin from './components/AddAnotherAdmin';
 import AddAnotherCorporateTrainee from './components/AddAnotherCorporateTrainee';
@@ -32,8 +32,8 @@ function App() {
               <Route path='/InstructorHome' element={<InstructorHome />}/>
               <Route path='/IndiviualTrainee' element={<IndividualTrainee />}/>
               <Route path='/CorporateTrainee' element={<CorporateTrainee />}/>
-              <Route path='/ViewAllTitlesCoursesAvailable' element={<ViewAllTitlesCoursesAvailable />}/>
-              <Route path='/ViewThePricesofEachCourse' element={<ViewThePricesofEachCourse />}/>
+              <Route path='/ViewAllcoursesforcorporatetrainee' element={<ViewAllcoursesforcorporatetrainee />}/>
+              <Route path='/ViewAllCoursesForINSorTRAINEEorGUEST' element={<ViewAllCoursesForINSorTRAINEEorGUEST />}/>
               <Route path='/AddAnotherInstructor' element={<AddAnotherInstructor />}/>
               <Route path='/AddAnotherAdmin' element={<AddAnotherAdmin />}/>
               <Route path='/AddAnotherCorporateTrainee' element={<AddAnotherCorporateTrainee />}/>

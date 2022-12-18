@@ -7,15 +7,16 @@ function AddNewCourse() {
 
     const [formData, setFormData] = useState({
         Title:'',
-        Rating:'',
+       
         Price:'',
         Subject:'',
         Instructor:'',
         Subtitles:'',
-        Exercises:''
+        Exercises:'',
+        Hours:''
       })
       const {  Title,
-        Rating,
+      
         Price,
         Subject,
         Instructor,
@@ -24,19 +25,21 @@ function AddNewCourse() {
         ,Subdesc,
         Sublength,
         ExersiceName,
+        Hours,
         Summary } = formData
 
       const navigate = useNavigate()
       const onSubmit = (e) => {
         e.preventDefault()
         const data = { Title:Title,
-            Rating:Rating,
+           
             Price:Price,
             Subject:Subject,
             Instructor:Instructor,
             Subtitles:{Name:SubName, LengthMins: Sublength,VideoURL: SubUrl,VideoDescription: Subdesc},
             Exercises:{Name:ExersiceName,CourseTitle:Title},
-            Summary:Summary };
+            Summary:Summary,
+            Hours:Hours };
 
         fetch('http://localhost:8000/api/courses/instructor/createCourse', {
             method: 'POST', // or 'PUT'
@@ -96,13 +99,15 @@ function AddNewCourse() {
          <input
            type='text'
            className='form-control'
-           id='Rating'
-           name='Rating'
-           value={Rating}
-           placeholder='Enter Rating'
+           id='Hours'
+           name='Hours'
+           value={Hours}
+           placeholder='Enter Hours'
            onChange={onChange}
          />
        </div>
+       
+       
        <div className='form-group'>
          <input
            type='text'
