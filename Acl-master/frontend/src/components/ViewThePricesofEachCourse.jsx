@@ -83,7 +83,8 @@ function ViewThePricesofEachCourse() {
                             }}>View details</button>
                             <div>
                                 {item.Show=="true"?<>
-                                    
+                                    <div>Subtitle:{item.Subtitles[0].Name}</div>
+                             
                                     <div>Price after discount:{Number(item.Price)*
                                         Number(handleCountry())
                                     }</div>

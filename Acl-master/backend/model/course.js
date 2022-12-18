@@ -26,7 +26,7 @@ const CourseSchema = new Schema({
 
   Subject: String,
 
-  InstructorUsername: {
+  Instructor: {
     type: String,
     required: true,
     ref:'User'
