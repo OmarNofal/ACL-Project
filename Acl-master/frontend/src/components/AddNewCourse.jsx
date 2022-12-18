@@ -148,7 +148,7 @@ function AddNewCourse() {
            id='SubName'
            name='SubName'
            value={SubName}
-           placeholder='Enter SubName'
+           placeholder='Enter Subtitle Name'
            onChange={onChange}
          />
        </div>
@@ -159,7 +159,7 @@ function AddNewCourse() {
            id='Sublength'
            name='Sublength'
            value={Sublength}
-           placeholder='Enter Sublength'
+           placeholder='Enter Subtitle length'
            onChange={onChange}
          />
        </div>
@@ -170,7 +170,7 @@ function AddNewCourse() {
            id='SubUrl'
            name='SubUrl'
            value={SubUrl}
-           placeholder='Enter SubUrl'
+           placeholder='Enter Subtitle Url'
            onChange={onChange}
          />
        </div>
@@ -181,7 +181,7 @@ function AddNewCourse() {
            id='Subdesc'
            name='Subdesc'
            value={Subdesc}
-           placeholder='Enter Subdesc'
+           placeholder='Enter Subtitle description'
            onChange={onChange}
          />
        </div>
@@ -192,7 +192,7 @@ function AddNewCourse() {
            id='ExersiceName'
            name='ExersiceName'
            value={ExersiceName}
-           placeholder='Enter ExersiceName'
+           placeholder='Enter Exersice Name'
            onChange={onChange}
          />
        </div>

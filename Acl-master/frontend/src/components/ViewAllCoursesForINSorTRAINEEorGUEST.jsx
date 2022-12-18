@@ -139,9 +139,9 @@ function ViewAllCoursesForINSorTRAINEEorGUEST() {
                                     <div>Subtitle:{item.Subtitles[0].Name}</div>
                                     <div>Exerise:{item.Exercises[0].Name}</div>
                                     <div>Subtitle total length:{item.Subtitles[0].LengthMins}</div>
-                                    <div>Subtitle:{item.Hours}</div>
+                                    <div>Hours:{item.Hours}</div>
 
-                                    <div>Price after discount:{Number(item.Price)*
+                                    <div>Price after discount:${Number(item.Price)*
                                         Number(handleCountry())
                                     }</div>
 
