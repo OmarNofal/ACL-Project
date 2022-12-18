@@ -5,7 +5,6 @@ const isAValidYoutubeVideo = require('./helpers/youtubeVerifier');
 
 const Course = require('../model/course');
 const asyncHandler = require('express-async-handler');
-const { default: mongoose } = require('mongoose');
 
 
 const currentInstName='instructorin' //ttzabat m3 el session
@@ -22,10 +21,10 @@ const filterCoursesInst=asyncHandler(async(req,res)=>{
     const filterType=req.body["FilterType"]
     let filteredCourses
     if(filterType=="Subject"){
-        filteredCourses=await Course.find({"Subject" :req.body["Filter"], "Name": currentInstName })  
+        filteredCourses=await Course.find({"Subject" :req.body["Filter"], "Instructor": currentInstName })  
       }
     else if(filterType=="Price"){
-        filteredCourses=await Course.find({"Price" :req.body["Filter"] ,"Name": currentInstName})
+        filteredCourses=await Course.find({"Price" :req.body["Filter"] ,"Instructor": currentInstName})
     }
     res.send(filteredCourses)
     console.log(filteredCourses)
@@ -36,9 +35,11 @@ const searchCoursesInst=asyncHandler(async(req,res)=>{
    // const searchType=req.body["SearchType"]
     let searchedCourses
     console.log(req.body)
-    searchedCourses=await Course.find({"Subject" :req.body["Search"], "Name": currentInstName })  
+    searchedCourses=await Course.find(
+        {"Subject" :req.body["Search"], "Instructor": currentInstName }
+    )  
     if(searchedCourses.length==0){
-        searchedCourses=await Course.find({"Title" :req.body["Search"] ,"Name": currentInstName})
+        searchedCourses=await Course.find({"Title" :req.body["Search"] ,"Instructor": currentInstName})
     }
     if(!(searchedCourses.length==0)){
         res.send(searchedCourses);
@@ -52,9 +53,19 @@ const searchCoursesInst=asyncHandler(async(req,res)=>{
 
 
 const createCourseInst = asyncHandler(async (req,res)=>{
-    const{ Title,Price,Subject,Instructor,Subtitles,Exercises,Summary,Hours}=req.body
+    
+    const{ 
+        Title,
+        Price,
+        Subject,
+        Instructor,
+        Exercises,
+        Summary,
+        Hours,
+        PreviewVideoURL
+    } = req.body;
 
-    if(!Title|| !Price|| !Subject || !Instructor || !Subtitles || !Exercises || !Summary ||!Hours){
+    if(!Title|| !Price|| !Subject || !Instructor || !Subtitles || !Exercises || !Summary ||!Hours || !PreviewVideoURL){
         res.status(400)
         throw new Error ('please add all fields')
     }
@@ -66,8 +77,15 @@ const createCourseInst = asyncHandler(async (req,res)=>{
         throw new Error('Course already exists')
     }
    
+    const isValid = await isAValidYoutubeVideo(PreviewVideoURL);
+    if (!isValid) {
+        return res.json({
+            result: "error",
+            message: "Video is not a valid youtube video"
+        })
+    }
+
     //create course
-    const zero=0
     const course=await Course.create({
         Title,
         Price,
@@ -76,9 +94,11 @@ const createCourseInst = asyncHandler(async (req,res)=>{
         Subtitles,
         Exercises,
         Summary,
-        
-        Hours
+        Hours,
+        PreviewVideoURL
     })
+
+
     if(course){
         res.status(201).json({
             _id:course.id,
@@ -89,7 +109,7 @@ const createCourseInst = asyncHandler(async (req,res)=>{
             Subtitles:course.Subtitles,
             Exercises:course.Exercises,
             Hours:course.Hours,
-         
+            PreviewVideoURL,
             Summary:course.Summary,
            // token: generateToken(course._id)
         })
@@ -97,7 +117,6 @@ const createCourseInst = asyncHandler(async (req,res)=>{
         res.status(400)
         throw new Error('Invalid course data')
     }
-   // res.json({message : 'create Course'})
 })
 
 
@@ -117,7 +136,7 @@ const searchCourses = asyncHandler( async (req, res) => {
     query = (searchKey != undefined) ? Course.find({$text: {$search: searchKey}}) : Course.find({});
     if (minPrice != undefined) query.where('Price').gte(minPrice)
     if (maxPrice != undefined) query.where('Price').lte(maxPrice)
-    if (minRating != undefined) query.where('Rating').gte(minRating)
+    if (minRating != undefined) query.where('Rating.Score').gte(minRating)
 
     const results = await query.exec();
 
@@ -130,24 +149,35 @@ const getAllCourses = asyncHandler( async (req,res) => {
 
 
 const getCourse = asyncHandler( async (req,res) => {
-    const id=req.body.id
-    var result=await Course.find({_id:id}).exec()
+    const id=req.body.id;
+    var result=await Course.find({_id:id}).exec();
 
     res.json(result);
-
 })
 
 
-const addYoutubeVideoToSubtitle = asyncHandler( async (req, res) => {
+
+const addSubtitleToACourse = asyncHandler( async (req, res) => {
 
     const body = req.body;
 
-    const courseId = body.courseId;
-    const subtitleIndex = body.subtitleIndex;
-    const videoURL = body.videoURL;
-    const videoDescription = body.videoDescription;
 
-    // We check to see if the URL is a valid video
+    const courseId = body.courseId;
+    const subtitleName = body.subtitleName;
+    const videoURL = body.videoURL; // youtube
+    const description = body.description;
+    const lengthMins = body.lenghtMins;
+
+
+    if (await Course.exists({_id: courseId}) == null) {
+        // this course does not exist
+        res.status(404);
+        res.json({
+            result: "error",
+            message: "This course does not exist"
+        })
+    }
+
     const isValid = await isAValidYoutubeVideo(videoURL);
     if (!isValid) {
         return res.json({
@@ -156,18 +186,19 @@ const addYoutubeVideoToSubtitle = asyncHandler( async (req, res) => {
         })
     }
 
-    // video is valid we can procced
-    const videoURLProperty = `Subtitles.${subtitleIndex}.VideoURL`;
-    const videoDescriptionProperty = `Subtitles.${subtitleIndex}.VideoDescription`
+    const subtitle = {
+        Name: subtitleName,
+        LengthMins: lengthMins,
+        VideoURL: videoURL,
+        VideoDescription: description
+    };
+
+
     const result = await Course.updateOne(
-        {_id: courseId}, 
-        {
-            $set: {
-                [videoURLProperty]: videoURL,
-                [videoDescriptionProperty]: videoDescription
-            }
-        }
+        { _id: courseId },
+        { $push: { Subtitles: subtitle } }
     )
+
     if (result.modifiedCount == 1) {
         res.json({
             result: "success"
@@ -175,91 +206,140 @@ const addYoutubeVideoToSubtitle = asyncHandler( async (req, res) => {
     } else {
         res.json({
             result: "error",
-            message: "An error occurred while inserting the URL. Are you sure the subtitle exists?"
+            message: "An error occurred while inserting the URL."
         })
     }
+
 });
 
+// const addYoutubeVideoToSubtitle = asyncHandler( async (req, res) => {
 
-const setCourseYoutubePreview = asyncHandler( async (req, res) => {
+//     const body = req.body;
 
-    const body = req.body;
+//     const courseId = body.courseId;
+//     const subtitleIndex = body.subtitleIndex;
+//     const videoURL = body.videoURL;
+//     const videoDescription = body.videoDescription;
 
-    const courseId = body.courseId;
-    const videoURL = body.videoURL;
+//     // We check to see if the URL is a valid video
+//     const isValid = await isAValidYoutubeVideo(videoURL);
+//     if (!isValid) {
+//         return res.json({
+//             result: "error",
+//             message: "Video is not a valid youtube video"
+//         })
+//     }
 
-    const isValid = await isAValidYoutubeVideo(videoURL);
-    if (!isValid) {
-        return res.json({
-            result: "error",
-            message: "Video is not a valid youtube video"
-        })
-    }
+//     // video is valid we can procced
+//     const videoURLProperty = `Subtitles.${subtitleIndex}.VideoURL`;
+//     const videoDescriptionProperty = `Subtitles.${subtitleIndex}.VideoDescription`
+//     const result = await Course.updateOne(
+//         {_id: courseId}, 
+//         {
+//             $set: {
+//                 [videoURLProperty]: videoURL,
+//                 [videoDescriptionProperty]: videoDescription
+//             }
+//         }
+//     )
+//     if (result.modifiedCount == 1) {
+//         res.json({
+//             result: "success"
+//         })
+//     } else {
+//         res.json({
+//             result: "error",
+//             message: "An error occurred while inserting the URL. Are you sure the subtitle exists?"
+//         })
+//     }
+// });
 
-    const videoURLProperty = `PreviewVideoURL`;
-    const result = await Course.updateOne(
-        {_id: courseId}, 
-        {
-            $set: {
-                [videoURLProperty]: videoURL
-            }
-        }
-    )
-    if (result.modifiedCount == 1) {
-        return res.json(
-            {
-                result: "success",
-            }
-        )
-    } else {
-        return res.json(
-            {
-                result: "error",
-                message: "Failed to add video preview to the course"
-            }
-        )
-    }
-})
+
+// const setCourseYoutubePreview = asyncHandler( async (req, res) => {
+
+//     const body = req.body;
+
+//     const courseId = body.courseId;
+//     const videoURL = body.videoURL;
+
+//     const isValid = await isAValidYoutubeVideo(videoURL);
+//     if (!isValid) {
+//         return res.json({
+//             result: "error",
+//             message: "Video is not a valid youtube video"
+//         })
+//     }
+
+//     const videoURLProperty = `PreviewVideoURL`;
+//     const result = await Course.updateOne(
+//         {_id: courseId}, 
+//         {
+//             $set: {
+//                 [videoURLProperty]: videoURL
+//             }
+//         }
+//     )
+//     if (result.modifiedCount == 1) {
+//         return res.json(
+//             {
+//                 result: "success",
+//             }
+//         )
+//     } else {
+//         return res.json(
+//             {
+//                 result: "error",
+//                 message: "Failed to add video preview to the course"
+//             }
+//         )
+//     }
+// })
 
 
 const addExerciseToCourse = asyncHandler(async (req, res) => {
 
     const body = req.body;
 
-    const courseId = body.courseId;
+    const courseTitle = body.courseTitle;
     const exerciseName = body.exerciseName;
     const exerciseQuestions = body.questions;
     const exercisesChoices = body.choices;
     const answers = body.answersIndices;
 
-    if (!courseId || !exerciseName || !exerciseQuestions || !exercisesChoices || !answers) {
+    if (!courseTitle || !exerciseName || !exerciseQuestions || !exercisesChoices || !answers) {
         return res.json({
             result: "error",
             message: "Please supply all fields"
         });
     }
 
-    const correctAnswers = [];
+    const questions = [];
     for (let i = 0; i < exercisesChoices.length; i++) {
-        correctAnswers.push(exercisesChoices[i][answers[i]]);
+        const question = {
+            Title: exerciseQuestions[i],
+            Choices: exercisesChoices[i],
+            CorrectChoiceIndex: answers[i]
+        }
+        questions.push(question);
     }
 
-    const exercise = await Exercise.create({
+    const exercise = {
         Name: exerciseName,
-        CourseId: courseId,
-        usersScore: [],
-        QuestionTitles: exerciseQuestions,
-        QuestionChoices: exercisesChoices,
-        QuestionCorrect: correctAnswers
-    })
+        Questions: questions,
+        CourseTitle: courseTitle
+    }
 
-    if (exercise) {
+    const result = Course.updateOne(
+        { Title: courseTitle },
+        { $push: { Exercises: exercise } }
+    );
+
+    if (result.modifiedCount == 1) {
         // exercise creation is successful
         return res.json({
             result: "success"
         })
     } else {
-
         return res.json({
             result: "error",
             message: "Couldn't insert your exercise :("
@@ -277,7 +357,5 @@ module.exports = {
     searchCoursesInst, 
     createCourseInst,
     getCourse,
-    addYoutubeVideoToSubtitle,
-    setCourseYoutubePreview,
     addExerciseToCourse
 };

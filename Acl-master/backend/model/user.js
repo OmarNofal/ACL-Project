@@ -18,7 +18,7 @@ const userSchema = new Schema({
 
   LastName: String,
 
-  Gender: String, // True for Men =D
+  Gender: String,
 
   Rating: RatingSchema,
 
