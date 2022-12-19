@@ -517,6 +517,65 @@ const viewGrade=asyncHandler(async (req,res)=>{
     throw new Error ('User not solved this exercise')
 })
 
+
+const viewCourse = asyncHandler (async (req, res)=>{
+    const title=req.body["Title"]
+    currentCourse=await Course.findOne({"Title": title});
+//  res.send(currentCourse);
+    res.send(currentCourse["Videos"]+"\n "+ currentCourse["Exercises"]);
+})
+
+const editEmail = asyncHandler(async (req, res)=>{
+    const email=req.body["Email"]
+
+    const filter = { "Username": "instructor1" };
+    const update = { "Email" : email};
+   let doc= await User.findOneAndUpdate(filter, update);
+   res.send("OK")
+})
+
+
+const editBiography = asyncHandler(async (req, res)=>{
+    const biography=req.body["Biography"]
+    const filter = { "Username": "instructor1" };
+    const update = { "Biography": biography  };
+    await User.findOneAndUpdate(filter, update);
+    res.send("OK")
+})
+
+const viewContract = asyncHandler(async (req, res)=>{
+    res.send("Da contract. saarii l7ad 1/1/2024");
+})
+
+const submitContract = asyncHandler(async (req, res)=>{
+    if(req.body["Agree"] == "Yes"){
+        res.send("He has agreed");
+    }
+    else{
+        res.send("He hasn't agreed");
+    }
+})
+
+const createDiscount = asyncHandler(async(req,res)=>{
+    const discount=req.body["DiscountPercentage"];
+    const day=req.body["Day"];
+    const month=req.body["Month"];
+    const year=req.body["Year"];
+    const date=new Date(year,month-1,day, 0, 0, 0);
+    console.log(day);
+    console.log(month);
+    console.log(year);
+    console.log(date);
+    const filter={"Title":"csen101"} //or whatever
+    const update1={"DiscountPercentage":discount};
+    const update2={"DiscountDeadline":date};
+    await Course.findOneAndUpdate(filter, update1);
+    await Course.findOneAndUpdate(filter, update2);
+    res.send("Ok!");
+})
+
+
+
 module.exports = {
     registerUser,
     loginUser,
@@ -532,5 +591,11 @@ module.exports = {
     submitExercise,
     viewGrade,
     sendEmail,
-    viewRatingsInstructor
+    viewRatingsInstructor,
+    viewCourse, 
+    editEmail, 
+    editBiography,
+    viewContract,
+    submitContract,
+    createDiscount
 }

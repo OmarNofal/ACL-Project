@@ -43,6 +43,8 @@ const CourseSchema = new Schema({
   // in percentage from 0 to 1
   DiscountPercentage: Number,
 
+  DiscountDeadline: Date,
+
   Show: String,
 
   // Youtube Video url for the course preview

@@ -20,6 +20,8 @@ const userSchema = new Schema({
 
   Gender: String,
 
+  Biography: String,
+
   Rating: RatingSchema,
 
   Reviews: [ReviewSchema]

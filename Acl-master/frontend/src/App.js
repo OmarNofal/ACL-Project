@@ -18,6 +18,7 @@ import AddAnotherCorporateTrainee from './components/AddAnotherCorporateTrainee'
 import AddNewCourse from './components/AddNewCourse';
 import ViewInstructorCourse from './components/ViewInstructorCourse';
 import MyCourses from './components/MyCourses';
+import Quiz from './pages/Quiz'
 function App() {
   return (
     <>
@@ -40,6 +41,8 @@ function App() {
               <Route path='/AddNewCourse' element={<AddNewCourse />}/>
               <Route path='/ViewInstructorCourse' element={<ViewInstructorCourse />}/>
               <Route path='/MyCourses' element={<MyCourses />}/>
+              <Route path='/Quiz' element={<Quiz />}/>
+
 
 
               <Route path='/Guest' element={<Guest />}/>
