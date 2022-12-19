@@ -357,5 +357,6 @@ module.exports = {
     searchCoursesInst, 
     createCourseInst,
     getCourse,
+    addSubtitleToACourse,
     addExerciseToCourse
 };
