@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 
 function AddNewCourse() {
-
+  const value=0
     const [formData, setFormData] = useState({
         Title:'',
        
@@ -13,7 +13,8 @@ function AddNewCourse() {
         Instructor:'',
         Subtitles:'',
         Exercises:'',
-        Hours:''
+        Hours:'',
+        PreviewVideoURL:''
       })
       const {  Title,
       
@@ -26,7 +27,7 @@ function AddNewCourse() {
         Sublength,
         ExersiceName,
         Hours,
-        Summary } = formData
+        Summary ,PreviewVideoURL} = formData
 
       const navigate = useNavigate()
       const onSubmit = (e) => {
@@ -39,7 +40,9 @@ function AddNewCourse() {
             Subtitles:{Name:SubName, LengthMins: Sublength,VideoURL: SubUrl,VideoDescription: Subdesc},
             Exercises:{Name:ExersiceName,CourseTitle:Title},
             Summary:Summary,
-            Hours:Hours };
+            Hours:Hours,
+            PreviewVideoURL:PreviewVideoURL ,
+            Rating:{Score:value}};
 
         fetch('http://localhost:8000/api/courses/instructor/createCourse', {
             method: 'POST', // or 'PUT'
@@ -205,6 +208,17 @@ function AddNewCourse() {
            name='Summary'
            value={Summary}
            placeholder='Enter Summary'
+           onChange={onChange}
+         />
+       </div>
+       <div className='form-group'>
+         <input
+           type='text'
+           className='form-control'
+           id='PreviewVideoURL'
+           name='PreviewVideoURL'
+           value={PreviewVideoURL}
+           placeholder='Enter video url'
            onChange={onChange}
          />
        </div>

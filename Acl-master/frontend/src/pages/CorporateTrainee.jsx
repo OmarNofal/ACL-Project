@@ -15,7 +15,11 @@ function CorporateTrainee() {
                 Submit
                 </button>
             </div>
-
+            <Link to="../Quiz">
+                <button type="button" className='btn btn-block'>
+                      Go to Quiz
+                </button>
+            </Link>
 
     </div>
     <pre className='goal'>

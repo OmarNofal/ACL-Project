@@ -61,8 +61,10 @@ const createCourseInst = asyncHandler(async (req,res)=>{
         Instructor,
         Exercises,
         Summary,
+        Subtitles,
         Hours,
-        PreviewVideoURL
+        PreviewVideoURL,
+        Rating
     } = req.body;
 
     if(!Title|| !Price|| !Subject || !Instructor || !Subtitles || !Exercises || !Summary ||!Hours || !PreviewVideoURL){
@@ -95,7 +97,9 @@ const createCourseInst = asyncHandler(async (req,res)=>{
         Exercises,
         Summary,
         Hours,
-        PreviewVideoURL
+        PreviewVideoURL,
+        Rating
+
     })
 
 
@@ -118,7 +122,6 @@ const createCourseInst = asyncHandler(async (req,res)=>{
         throw new Error('Invalid course data')
     }
 })
-
 
 
 const searchCourses = asyncHandler( async (req, res) => {
@@ -329,10 +332,13 @@ const addExerciseToCourse = asyncHandler(async (req, res) => {
         CourseTitle: courseTitle
     }
 
-    const result = Course.updateOne(
+   
+
+    const result = await Course.updateOne(
         { Title: courseTitle },
         { $push: { Exercises: exercise } }
     );
+
 
     if (result.modifiedCount == 1) {
         // exercise creation is successful
@@ -340,9 +346,10 @@ const addExerciseToCourse = asyncHandler(async (req, res) => {
             result: "success"
         })
     } else {
+
         return res.json({
             result: "error",
-            message: "Couldn't insert your exercise :("
+            message: result.modifiedCount
         })
     }
 

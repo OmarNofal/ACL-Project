@@ -39,6 +39,23 @@ export default function Quiz() {
 			],
 		},
 	];
+
+	let questionsString="";
+	for(let i=0;i<questions.length;i++){
+		questionsString=questionsString+'\n';
+		for(let j=0;j<questions[i]["answerOptions"].length;j++){
+			if(questions[i]["answerOptions"][j]["isCorrect"]){
+				let k=i+1
+				questionsString=questionsString+questions[i]["questionText"]+" "+questions[i]["answerOptions"][j]["answerText"] ;
+				if(j!=questions[i]["answerOptions"].length-1){
+					questionsString=questionsString+', ';
+	
+				}
+	
+			}
+			
+		}
+	}
   
 
     const resetStateClick =()=>{
@@ -46,13 +63,14 @@ export default function Quiz() {
         setCurrentQuestion (0)
         setShowScore(false)
         setScore(0)
+		setShowSolutions(false)
     }
 
    
 	const [currentQuestion, setCurrentQuestion] = useState(0);
 	const [showScore, setShowScore] = useState(false);
     const [showSolutions, setShowSolutions] = useState(false);
-	const [score, setScore] = useState(0);
+	const [score, setScore] = useState(0);	
     const [recordedScore, setRecordedScore] = useState(0);
 
 	const handleAnswerOptionClick = (isCorrect) => {
@@ -73,7 +91,8 @@ export default function Quiz() {
            
 			{showScore ? (
 				<div className='score-section'>
-					You scored {score} out of {questions.length}
+					You scored {score} out of {questions.length} <br></br>
+					The solutions are: <br></br> {questionsString} <br></br>
                     <button onClick={resetStateClick}>Retry</button>
                     
 				</div>

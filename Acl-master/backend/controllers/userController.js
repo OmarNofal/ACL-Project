@@ -543,6 +543,7 @@ const editBiography = asyncHandler(async (req, res)=>{
     res.send("OK")
 })
 
+
 const viewContract = asyncHandler(async (req, res)=>{
     res.send("Da contract. saarii l7ad 1/1/2024");
 })
@@ -594,7 +595,6 @@ module.exports = {
     viewRatingsInstructor,
     viewCourse, 
     editEmail, 
-    editBiography,
     viewContract,
     submitContract,
     createDiscount

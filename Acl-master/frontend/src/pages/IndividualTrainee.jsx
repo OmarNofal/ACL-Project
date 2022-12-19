@@ -15,6 +15,14 @@ function IndividualTrainee() {
                 Submit
                 </button>
             </div>
+          
+            <Link to="../Quiz">
+     <button type="button" className='btn btn-block'>
+          Go to Quiz
+     </button>
+ </Link>
+
+            
 
 
     </div>
@@ -37,5 +45,6 @@ function IndividualTrainee() {
     
   )
 }
+
 
 export default IndividualTrainee
