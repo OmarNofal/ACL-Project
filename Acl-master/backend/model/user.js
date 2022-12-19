@@ -1,66 +1,30 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const userSchema = new Schema({
-  Username: {
-    type: String,
-    required: [true ,'Please add a Username'],
-  },
-  Password: {
-    type: String,
-    required: [true ,'Please add a Password']
-  },
-  Type:{
-    type: String,
-    required: [true ,'Please add the required data']
-  },
-  Email:{
-    type: String,
-    required: [true ,'Please add the required data'],
-    // unique:true,
-    // sparse:true,
-    // index:true,
+const ReviewSchema = require('./reviewSchema');
+const RatingSchema = require('./ratingSchema')
 
-  },
-  FirstName:{
-    type: String,
-    
-  },
-  LastName:{
-    type: String,
-    
-  },
-  Gender:{
-    type: String,
-    required: [true ,'Please add the required data']
-  },
-  // Rating:{
-  //   type: [{score: Number, count: Number, sumSoFar:Number, }],
-  //   required: false
-  // },
-  Rating:{
-    type: {Rating: Number, Count: Number},
-    required: false
-  },
-  Score:{
-    type:Number,
-    default:0,
-    required:false
-  },
-  Count:{
-    type:Number,
-    default:0,
-    required:false
-  },
-  SumSoFar:{
-    type:Number,
-    default:0,
-    required:false
-  },
-  Reviews:{
-    type: [String],
-    //required: [true ,'Please add the required data']
-  }
+const userSchema = new Schema({
+
+  Username: String,
+
+  Password: String,
+
+  Type: String,
+
+  Email: String,
+
+  FirstName: String,
+
+  LastName: String,
+
+  Gender: String,
+
+  Biography: String,
+
+  Rating: RatingSchema,
+
+  Reviews: [ReviewSchema]
 
 }, { timestamps: true });
 

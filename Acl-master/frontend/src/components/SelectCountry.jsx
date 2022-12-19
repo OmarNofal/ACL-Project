@@ -17,7 +17,7 @@ function SelectCountry() {
         const getcountryid=event.target.value
         //console.log(getcountryid)
         setCountryid(getcountryid)
-        localStorage.setItem('country',JSON.stringify(getcountryid))
+        localStorage.setItem('country',getcountryid)
 
     }
 

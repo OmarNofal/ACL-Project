@@ -13,6 +13,7 @@ function ViewInstructorCourse() {
     //http://localhost:8000/api/courses/instructor/filterCourses
     const[items,setItems]=useState([])
     const username1=user.Username
+    console.log(username1)
     useEffect(()=>{
         fetch('http://localhost:8000/api/courses/instructor/viewCoursesTitles/'+username1)
         .then(response=>response.json())
@@ -92,11 +93,9 @@ function ViewInstructorCourse() {
                     return<pre className='goal'>
                             
                             <h1>Title: {item.Title}</h1>
-                            <div>Rating: {item.Rating}</div>
                             <div>Price: {item.Price}</div>
                             <div>Subject: {item.Subject}</div>
                             <div>Instructor: {item.Instructor}</div>
-                            <div>Subject: {item.Subtitles}</div>
                          
                         </pre>
                 })

@@ -2,7 +2,7 @@ import React from 'react'
 import SelectCountry from '../components/SelectCountry'
 import { Link, useNavigate } from 'react-router-dom'
 
-import ViewAllTitlesCoursesAvailable from '../components/ViewAllTitlesCoursesAvailable'
+import ViewAllTitlesCoursesAvailable from '../components/ViewAllcoursesforcorporatetrainee'
 function CorporateTrainee() {
   return (
 
@@ -15,12 +15,16 @@ function CorporateTrainee() {
                 Submit
                 </button>
             </div>
-
+            <Link to="../Quiz">
+                <button type="button" className='btn btn-block'>
+                      Go to Quiz
+                </button>
+            </Link>
 
     </div>
     <pre className='goal'>
-    <Link to='/ViewAllTitlesCoursesAvailable'>
-     <t1>                View All Courses available including the total hours of courses and course rating
+    <Link to='/ViewAllcoursesforcorporatetrainee'>
+     <t1>                View All Courses 
      </t1>
 
      </Link>

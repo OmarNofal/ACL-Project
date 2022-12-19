@@ -4,36 +4,45 @@ import { useNavigate } from 'react-router-dom'
 
 
 function AddNewCourse() {
-
+  const value=0
     const [formData, setFormData] = useState({
         Title:'',
-        Rating:'',
+       
         Price:'',
         Subject:'',
         Instructor:'',
         Subtitles:'',
-        Exercises:''
+        Exercises:'',
+        Hours:'',
+        PreviewVideoURL:''
       })
       const {  Title,
-        Rating,
+      
         Price,
         Subject,
         Instructor,
-        Subtitles,
-        Exercises,
-        Summary } = formData
+        SubName,
+        SubUrl
+        ,Subdesc,
+        Sublength,
+        ExersiceName,
+        Hours,
+        Summary ,PreviewVideoURL} = formData
 
       const navigate = useNavigate()
       const onSubmit = (e) => {
         e.preventDefault()
         const data = { Title:Title,
-            Rating:Rating,
+           
             Price:Price,
             Subject:Subject,
             Instructor:Instructor,
-            Subtitles:Subtitles,
-            Exercises:Exercises,
-            Summary:Summary };
+            Subtitles:{Name:SubName, LengthMins: Sublength,VideoURL: SubUrl,VideoDescription: Subdesc},
+            Exercises:{Name:ExersiceName,CourseTitle:Title},
+            Summary:Summary,
+            Hours:Hours,
+            PreviewVideoURL:PreviewVideoURL ,
+            Rating:{Score:value}};
 
         fetch('http://localhost:8000/api/courses/instructor/createCourse', {
             method: 'POST', // or 'PUT'
@@ -93,13 +102,15 @@ function AddNewCourse() {
          <input
            type='text'
            className='form-control'
-           id='Rating'
-           name='Rating'
-           value={Rating}
-           placeholder='Enter Rating'
+           id='Hours'
+           name='Hours'
+           value={Hours}
+           placeholder='Enter Hours'
            onChange={onChange}
          />
        </div>
+       
+       
        <div className='form-group'>
          <input
            type='text'
@@ -137,10 +148,10 @@ function AddNewCourse() {
          <input
            type='text'
            className='form-control'
-           id='Subtitles'
-           name='Subtitles'
-           value={Subtitles}
-           placeholder='Enter Subtitles'
+           id='SubName'
+           name='SubName'
+           value={SubName}
+           placeholder='Enter Subtitle Name'
            onChange={onChange}
          />
        </div>
@@ -148,13 +159,47 @@ function AddNewCourse() {
          <input
            type='text'
            className='form-control'
-           id='Exercises'
-           name='Exercises'
-           value={Exercises}
-           placeholder='Enter Exercises'
+           id='Sublength'
+           name='Sublength'
+           value={Sublength}
+           placeholder='Enter Subtitle length'
            onChange={onChange}
          />
        </div>
+       <div className='form-group'>
+         <input
+           type='text'
+           className='form-control'
+           id='SubUrl'
+           name='SubUrl'
+           value={SubUrl}
+           placeholder='Enter Subtitle Url'
+           onChange={onChange}
+         />
+       </div>
+       <div className='form-group'>
+         <input
+           type='text'
+           className='form-control'
+           id='Subdesc'
+           name='Subdesc'
+           value={Subdesc}
+           placeholder='Enter Subtitle description'
+           onChange={onChange}
+         />
+       </div>
+       <div className='form-group'>
+         <input
+           type='text'
+           className='form-control'
+           id='ExersiceName'
+           name='ExersiceName'
+           value={ExersiceName}
+           placeholder='Enter Exersice Name'
+           onChange={onChange}
+         />
+       </div>
+     
        <div className='form-group'>
          <input
            type='text'
@@ -163,6 +208,17 @@ function AddNewCourse() {
            name='Summary'
            value={Summary}
            placeholder='Enter Summary'
+           onChange={onChange}
+         />
+       </div>
+       <div className='form-group'>
+         <input
+           type='text'
+           className='form-control'
+           id='PreviewVideoURL'
+           name='PreviewVideoURL'
+           value={PreviewVideoURL}
+           placeholder='Enter video url'
            onChange={onChange}
          />
        </div>

@@ -7,8 +7,7 @@ const {
     filterCoursesInst,
     searchCoursesInst, 
     createCourseInst,getCourse,
-    addYoutubeVideoToSubtitle,
-    setCourseYoutubePreview,
+    addSubtitleToACourse,
     addExerciseToCourse
     } = require('../controllers/courseController');
 
@@ -17,8 +16,7 @@ const {
 router.post('/searchCourses', searchCourses);
 router.get('/getAllCourses', getAllCourses);
 router.post('/getCourse',getCourse);
-router.post('/addYoutubeVideoToSubtitle', addYoutubeVideoToSubtitle);
-router.post('/setCourseYoutubePreview', setCourseYoutubePreview);
+router.post('/addSubtitleToACourse', addSubtitleToACourse);
 router.post('/addExerciseToCourse', addExerciseToCourse);
 
 router.get('/instructor/viewCoursesTitles/:Instructor',viewCoursesTitles)

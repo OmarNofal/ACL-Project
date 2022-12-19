@@ -1,78 +1,59 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const courseSchema = new Schema({
+const RatingSchema = require('./ratingSchema');
+const ExerciseSchema = require('./exercise');
+const ReviewSchema = require('./reviewSchema');
+const SubtitleSchema = Schema({
+  Name: String, 
+  LengthMins: Number,
+  VideoURL: String,
+  VideoDescription: String
+});
+
+
+const CourseSchema = new Schema({
 
   Title: {
-    type: String,
-    //required: [true ,'Please add a title']
-  },
-  Score:{
-    type:Number,
-    default:0,
-    required:false
-  },
-  Count:{
-    type:Number,
-    default:0,
-    required:false
-  },
-  SumSoFar:{
-    type:Number,
-    default:0,
-    required:false
-  },
-  Price: { // we will assume price is in USD
-    type: Number,
-    //required: [true ,'Please add a Password']
-  },
-  Reviews:{
-    type: [String],
-    //required: [true ,'Please add the required data']
-  },
-  Subject:{
-    type: String,
-    //required: [true ,'Please add the required data']
+    type: String
   },
 
-  Instructor:{
-    type: mongoose.Schema.Types.ObjectId,
+  Rating: RatingSchema,
+
+  Price: Number, // USD
+
+  Reviews: [ReviewSchema],
+
+  Subject: String,
+
+  Instructor: {
+    type: String,
     required: true,
     ref:'User'
   },
   
-  Subtitles:{
-    type: [
-      {
-        Name: String, 
-        LengthMins: Number,
-        VideoURL: String,
-        VideoDescription: String
-      }
-    ],
-    //required: [true ,'Please add the required data']
-  },
-  Exercises:{
-    type: String    //required: [true ,'Please add the required data']
-  },
-  Summary:{
-    type: String,
-    //required: [true ,'Please add the required data']
-  },
-  Hours:{
-    type:Number,
-  },
-  Discount:{
-    type:Number,
-  },
-  Show:{
-    type:String
-  },
-  PreviewVideoURL: {
-    type: String
-  }
+  Subtitles: [SubtitleSchema],
+
+  Exercises: [ExerciseSchema],
+
+  Summary: String,
+
+  Hours: Number,
+
+  // in percentage from 0 to 1
+  DiscountPercentage: Number,
+
+  DiscountDeadline: Date,
+
+  Show: String,
+
+  // Youtube Video url for the course preview
+  PreviewVideoURL: String
 
 }, { timestamps: true });
 
-const Course = mongoose.model('Course', courseSchema);
+
+
+
+const Course = mongoose.model('Course', CourseSchema);
 module.exports = Course;
