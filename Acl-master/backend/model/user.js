@@ -24,7 +24,16 @@ const userSchema = new Schema({
 
   Rating: RatingSchema,
 
-  Reviews: [ReviewSchema]
+  Reviews: [ReviewSchema],
+
+  Courses:{
+    type:[{title:String,dataEnrolled:Date,purchasedFor:Number,progress:Number,notes:String}],
+  },
+
+  Wallet:{
+    type:Number,
+    default:0
+  }
 
 }, { timestamps: true });
 
