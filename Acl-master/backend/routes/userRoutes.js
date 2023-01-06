@@ -26,6 +26,15 @@ router.get('/instructor/viewContract', viewContract)
 router.post('/instructor/submitContract', submitContract)
 router.post('/instructor/createDiscount', createDiscount)
 
+router.get('/viewEnrolledCourses',viewEnrolledCourses)
+router.get('/viewWallet',viewWallet)
+router.post('/reportProblem',reportProblem)
+router.get('/seeReportsTrainee',seeReportsTrainee)
+router.get('/seeReportsAdmin',seeReportsAdmin)
+router.post('/changeReportsStatusAdmin',changeReportsStatusAdmin)
+router.post('/followUpProblem',followUpProblem)
+router.post('/acceptRefundAdmin',acceptRefundAdmin)
+
 
 
 module.exports=router

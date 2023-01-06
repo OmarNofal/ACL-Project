@@ -8,6 +8,9 @@ const Course = require('../model/course')
 const RatingInstructor=require('../model/ratingInstructorModel')
 const RatingCourse=require('../model/ratingCourseModel')
 const Exercise=require('../model/exercise')
+const RefundRequests=require('../model/refundRequests')
+const Report = require('../model/report')
+
 const mongoose = require('mongoose');
 
 //const Trainees = require('../model/Trainees')
@@ -575,7 +578,273 @@ const createDiscount = asyncHandler(async(req,res)=>{
     res.send("Ok!");
 })
 
+const viewEnrolledCourses=asyncHandler(async(req,res)=>{
+    const {username}=req.body
 
+    const user = await User.find({Username:username})
+    if(!user){
+        res.status(400)
+        throw new Error ('User not found')
+    }
+    const coursesEnrolled=User.Courses
+    res.status(200).send(coursesEnrolled)
+})
+
+
+
+const viewProgressInCourse=asyncHandler(async(req,res)=>{
+    const {username,courseTitle}=req.body
+
+    const user = await User.find({Username:username})
+    if(!user){
+        res.status(400)
+        throw new Error ('User not found')
+    }
+
+    const course=await Course.find({Title:courseTitle})
+    if(!course){
+        res.status(400)
+        throw new Error ('Course not found')
+    }
+
+    var flag=0
+    let index=0;
+    for(; index < user.Courses.length; index++)
+    {
+       const courseTitle2 = user.Courses[index].title
+       if (courseTitle===courseTitle2)
+       {
+        flag=1;
+        break;
+       }
+    }   
+
+    if(flag===0)
+    {
+        res.status(400)
+        throw new Error ('User not enrolled in this course')
+    }
+
+    const progress=user.Courses[index].progress
+    res.status(200).send(progress)
+})
+
+
+const requestRefundTrainee=asyncHandler(async(req,res)=>{
+    const {username,courseTitle}=req.body
+
+    const user = await User.find({Username:username})
+    if(!user){
+        res.status(400)
+        throw new Error ('User not found')
+    }
+
+    const course=await Course.find({Title:courseTitle})
+    if(!course){
+        res.status(400)
+        throw new Error ('Course not found')
+    }
+
+    var flag=0
+    let index=0;
+    var purchasedfor=0;
+    for(; index < user.Courses.length; index++)
+    {
+       const courseTitle2 = user.Courses[index].title
+       if (courseTitle===courseTitle2)
+       {
+        flag=1;
+        purchasedfor=user.Courses[index].purchasedFor
+        break;
+       }
+    }   
+
+    if(flag===0)
+    {
+        res.status(400)
+        throw new Error ('User not enrolled in this course')
+    }
+
+    const previousReport=RefundRequests.find({Username:username},{Title:courseTitle})
+    //IF ERROR CHECK THIS
+    if(previousReport){
+        res.status(400).send('You have requested before')
+    }
+
+    const progress=user.Courses[index].progress
+    if(progress>0.5)
+    {
+        res.status(400)
+        throw new Error ('Refund not possible as more than 50% has been attended')
+    }
+
+    
+    const request=RefundRequests.create({
+        Username:username,
+        Title:courseTitle,
+        RefundedAmount:purchasedfor 
+     })
+
+     res.status(200).send(request)
+
+    
+
+    // const course2= user.Courses.pull({title:courseTitle})
+    // const newFunds=course2.purchasedFor
+    // const wallet= user.Wallet
+    // const refunded=newFunds+wallet
+    // const user2= await user.findOneAndUpdate({Username:username,Wallet:refunded})
+    // res.status(200).send('Refuned was accepted')
+})
+
+
+
+const viewWallet=asyncHandler(async(req,res)=>{
+    const {username}=req.body
+
+    const user = await User.find({Username:username})
+    if(!user){
+        res.status(400)
+        throw new Error ('User not found')
+    }
+
+    res.status(200).send(user.Wallet)
+})
+
+
+
+const reportProblem=asyncHandler(async(req,res)=>{
+    const {username,title,type}=req.body
+    
+    if(!username||!title||!type)
+    {
+        res.status(400).send('Error in reporting problem')
+    }
+
+    const user = await User.find({Username:username})
+    if(!user){
+        res.status(400)
+        throw new Error ('User not found')
+    }
+
+    const course=await Course.find({Title:courseTitle})
+    if(!course){
+        res.status(400)
+        throw new Error ('Course not found')
+    }
+
+    var flag=0
+    let index=0;
+    for(; index < user.Courses.length; index++)
+    {
+       const courseTitle2 = user.Courses[index].title
+       if (title===courseTitle2)
+       {
+        flag=1;
+        break;
+       }
+    }   
+
+    if(flag===0)
+    {
+        res.status(400)
+        throw new Error ('User not enrolled in this course')
+    }
+
+    const report=await Report.create({
+        Username:username,
+        Title:title,
+        Type:type 
+     })
+
+     res.status(200).send(report)
+})
+
+
+
+const seeReportsTrainee=asyncHandler(async(req,res)=>{
+    const {username}=req.body
+    if(!username)
+    {
+        res.status(400)
+        throw new Error('Error while seeing problem')
+    }
+    const user = await User.find({Username:username})
+    if(!user){
+        res.status(400)
+        throw new Error ('User not found')
+    }
+
+    const reports=await Report.find({Username:username})
+    res.status(200).send(reports)
+
+})
+
+const seeReportsAdmin=asyncHandler(async(req,res)=>{
+
+    const status='unseen'
+    const reports = await Report.find({Status:status})
+    res.status(200).send(reports)
+})
+
+
+const changeReportsStatusAdmin=asyncHandler(async(req,res)=>{
+    const {id,status}=req.body
+    if(!id||!status)
+    {
+        res.status(400)
+        throw new Error('Error while changing statu')
+    }
+    const report=Report.findByIdAndUpdate({_id:id},{Status:status})
+    res.status(200).send(report)
+})
+
+const acceptRefundAdmin=asyncHandler(async(req,res)=>{
+    const {username,courseTitle}=req.body
+
+    const user = await User.find({Username:username})
+    if(!user){
+        res.status(400)
+        throw new Error ('User not found')
+    }
+
+    const course=await Course.find({Title:courseTitle})
+    if(!course){
+        res.status(400)
+        throw new Error ('Course not found')
+    }
+
+    const refundrequest=await RefundRequests.find({Username:username},{Title:title})
+    if(!refundrequest)
+    {
+        res.status(400)
+        throw new Error ('User didnot request')
+    }
+    const refundedamount=refundrequest.RefundedAmount
+    const newAmount=user.Wallet+refundedamount
+    const user2=User.findOneAndUpdate({Username:username},{Wallet:newAmount})
+    res.status(200).send(user2)
+
+})
+
+const followUpProblem=asyncHandler(async(req,res)=>{
+    const {id,followUp}=req.body
+
+    if(!id||!followUp){
+        res.status(400)
+        throw new Error('Error in the Follow Up')
+    }
+    const report = Report.findById({_id:id})
+    const status=report.Status
+    if(status==='resolved'||status==='Resolved')
+    {
+        res.status(400)
+        throw new Error('Problem has been resolved')
+    }
+    report.FollowUp.push(followUp);
+    report.save();
+    
+})
 
 module.exports = {
     registerUser,
@@ -594,8 +863,19 @@ module.exports = {
     sendEmail,
     viewRatingsInstructor,
     viewCourse, 
-    editEmail, 
+    editEmail,
+    editBiography, 
     viewContract,
     submitContract,
-    createDiscount
+    createDiscount,
+    viewEnrolledCourses,
+    requestRefundTrainee,
+    viewWallet,
+    reportProblem,
+    seeReportsTrainee,
+    seeReportsAdmin,
+    changeReportsStatusAdmin,
+    followUpProblem,
+    acceptRefundAdmin,
+    viewProgressInCourse
 }
