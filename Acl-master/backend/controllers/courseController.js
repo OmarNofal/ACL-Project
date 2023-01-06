@@ -356,6 +356,48 @@ const addExerciseToCourse = asyncHandler(async (req, res) => {
 });
 
 
+
+const setPromotionForCourses = asyncHandler(async (req, res) => {
+
+    const {
+        allCourses, // bool
+        coursesTitles, // array of course titles
+        promotionAmount, // from 0 to 1
+        discountDeadline, // timestamp
+    } = req.body;
+
+
+    // we are setting a promotion for all courses
+    if (allCourses == true) {
+        global.coursesPromotion = promotionAmount
+        global.discountDeadline = discountDeadline
+        return res.json({result: "ok"})
+    }
+
+    // setting promotion for specifc courses
+    else {
+
+        const result = await Course.updateMany(
+            {
+                Title: { $in: coursesTitles }
+            },
+            {
+                $set: { DiscountPercentage: promotionAmount, DiscountDeadline:  discountDeadline},
+            }
+        )
+
+        if (result.modifiedCount > 0) {
+            res.json({result: "ok"})
+        } else {
+            console.log(result);
+            res.json({result: "error", message: "Unable to update the documents. Maybe they do not exist"});
+        }
+
+    }
+
+});
+
+
 module.exports = {
     searchCourses,
     getAllCourses,
@@ -365,5 +407,6 @@ module.exports = {
     createCourseInst,
     getCourse,
     addSubtitleToACourse,
-    addExerciseToCourse
+    addExerciseToCourse,
+    setPromotionForCourses
 };

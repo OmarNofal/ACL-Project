@@ -8,7 +8,8 @@ const {
     searchCoursesInst, 
     createCourseInst,getCourse,
     addSubtitleToACourse,
-    addExerciseToCourse
+    addExerciseToCourse,
+    setPromotionForCourses
     } = require('../controllers/courseController');
 
 
@@ -24,5 +25,6 @@ router.get('/instructor/filterCourses',filterCoursesInst)
 router.get('/instructor/searchCourses', searchCoursesInst)
 router.post('/instructor/createCourse', createCourseInst)
 
+router.post('/admin/setPromotionForCourses', setPromotionForCourses)
 
 module.exports = router;

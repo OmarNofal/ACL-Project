@@ -1,6 +1,37 @@
 const express = require('express')
 const router =express.Router()
-const { registerUser,loginUser, getMe,addInstructor,addTrainees,addAdmin,selectCountry, rateInstructor ,rateCourse,viewRatingsCourse,changePasswordUser,submitExercise,viewGrade,sendEmail,viewRatingsInstructor, viewCourse, editEmail,  viewContract, submitContract, createDiscount}=require('../controllers/userController')
+const { 
+    registerUser,
+    loginUser, 
+    getMe,
+    addInstructor,
+    addTrainees,
+    addAdmin,
+    selectCountry, 
+    rateInstructor ,
+    rateCourse,
+    viewRatingsCourse,
+    changePasswordUser,
+    submitExercise,
+    viewGrade,
+    sendEmail,
+    viewRatingsInstructor,
+    viewCourse, 
+    editEmail,  
+    viewContract, 
+    submitContract, 
+    createDiscount,
+    viewEnrolledCourses,
+    requestRefundTrainee,
+    viewWallet,
+    reportProblem,
+    seeReportsTrainee,
+    seeReportsAdmin,
+    changeReportsStatusAdmin,
+    followUpProblem,
+    acceptRefundAdmin,
+    viewProgressInCourse
+}=require('../controllers/userController')
 
 const { protect } = require('../middleware/authMiddleware')
 
