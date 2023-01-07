@@ -2,6 +2,7 @@ require('dotenv').config();
 
 
 global.coursesPromotion = 0
+global.commisionPercentage = 0.1
 
 const axios = require('axios');
 const Exercise = require('../model/exercise');
@@ -463,13 +464,14 @@ const buyCourse = asyncHandler(async (req, res) => {
 
     const purchase = new Purchase(
         {
-            DateOfPurchase: Date.now(),
+            DateOfPurchase: new Date('2015-03-25'),
             IsConfirmed: false,
             Username: username,
             InstructorName: instructorName,
             CourseTitle: courseTitle,
             StripeId: session.id,
-            PurchaseAmount: Math.floor(coursePrice)
+            TotalPaid: Math.floor(coursePrice),
+            TotalCommission: Math.floor(coursePrice) * global.commisionPercentage
         }
     )
     await purchase.save();

@@ -15,6 +15,7 @@ const mongoose = require('mongoose');
 const emailTransporter = require('./helpers/EmailTransporter');
 const crypto = require('crypto');
 const { ok } = require('assert')
+const Purchase = require('../model/purchase')
 
 
 //const Trainees = require('../model/Trainees')
@@ -894,6 +895,48 @@ const followUpProblem=asyncHandler(async(req,res)=>{
 })
 
 
+const getEarningsData = asyncHandler(async (req, res) => {
+
+    const allPurchases = await Purchase.aggregate(
+        [
+            {
+                $project: {
+                    TotalPaid: 1,
+                    TotalCommission: 1,
+                    month: { $month: "$DateOfPurchase" },
+                    year: { $year: "$DateOfPurchase" }
+                }
+            }, 
+            {
+                $group: {
+                    _id: { month: "$month", year: "$year" },
+                    GrossEarnings: { $sum: "$TotalPaid" },
+                    Commissions: { $sum: "$TotalCommission"}
+                }
+            },
+            {
+                $set: {
+                    NetEarnings: { $subtract: ["$GrossEarnings", "$Commissions"] },
+                    MonthNumber: "$_id.month",
+                    Year: "$_id.year",
+                    MonthName: {
+                        $arrayElemAt: [ ["", "January","February","March","April","May","June","July",
+                        "August","September","October","November","December"], "$_id.month"]
+                    }
+                }
+            },
+            {
+                $unset: "_id"
+            }
+            
+        ]
+    )
+
+    res.json(allPurchases)
+
+})
+
+
 module.exports = {
     registerUser,
     loginUser,
@@ -926,5 +969,6 @@ module.exports = {
     followUpProblem,
     acceptRefundAdmin,
     viewProgressInCourse,
-    verifyUser
+    verifyUser,
+    getEarningsData
 }

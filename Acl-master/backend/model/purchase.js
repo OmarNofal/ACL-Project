@@ -14,7 +14,9 @@ const PurchaseSchema = new Schema({
     CourseTitle: String,
     IsConfirmed: Boolean, // whether the user actually paid or not
     StripeId: String,
-    PurchaseAmount: Number
+    TotalPaid: Number, // the money the user paid, including the commission which will be deducted
+    TotalCommission: Number, // money deducted from TotalPaid and goes to us
+    
 })
 
 const Purchase = model('Purchase', PurchaseSchema);
