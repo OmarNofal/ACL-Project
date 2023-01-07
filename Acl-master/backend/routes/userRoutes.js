@@ -30,12 +30,14 @@ const {
     changeReportsStatusAdmin,
     followUpProblem,
     acceptRefundAdmin,
-    viewProgressInCourse
+    viewProgressInCourse,
+    verifyUser
 }=require('../controllers/userController')
 
 const { protect } = require('../middleware/authMiddleware')
 
-router.post('/',registerUser)
+router.post('/registerUser',registerUser)
+router.get('/verifyUser', verifyUser);
 router.post('/login',loginUser)
 router.get('/me',protect,getMe)
 router.post('/addInstructor',addInstructor)
@@ -65,7 +67,6 @@ router.get('/seeReportsAdmin',seeReportsAdmin)
 router.post('/changeReportsStatusAdmin',changeReportsStatusAdmin)
 router.post('/followUpProblem',followUpProblem)
 router.post('/acceptRefundAdmin',acceptRefundAdmin)
-
 
 
 module.exports=router

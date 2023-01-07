@@ -26,6 +26,10 @@ const userSchema = new Schema({
 
   Reviews: [ReviewSchema],
 
+  IsVerified: Boolean,
+
+  VerificationHash: String,
+
   Courses:{
     type:[{title:String,dataEnrolled:Date,purchasedFor:Number,progress:Number,notes:String}],
   },
