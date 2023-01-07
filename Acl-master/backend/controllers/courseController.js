@@ -1,10 +1,20 @@
+require('dotenv').config();
+
+
+global.coursesPromotion = 0
+global.commisionPercentage = 0.1
+
 const axios = require('axios');
 const Exercise = require('../model/exercise');
 
 const isAValidYoutubeVideo = require('./helpers/youtubeVerifier');
 
 const Course = require('../model/course');
+const User = require('../model/user')
 const asyncHandler = require('express-async-handler');
+const Purchase = require('../model/purchase');
+
+const stripe = require('stripe')(process.env.STRIPE_API_KEY)
 
 
 const currentInstName='instructorin' //ttzabat m3 el session
@@ -356,6 +366,150 @@ const addExerciseToCourse = asyncHandler(async (req, res) => {
 });
 
 
+
+const setPromotionForCourses = asyncHandler(async (req, res) => {
+
+    const {
+        allCourses, // bool
+        coursesTitles, // array of course titles
+        promotionAmount, // from 0 to 1
+        discountDeadline, // timestamp
+    } = req.body;
+
+
+    // we are setting a promotion for all courses
+    if (allCourses == true) {
+        global.coursesPromotion = promotionAmount
+        global.discountDeadline = discountDeadline
+        return res.json({result: "ok"})
+    }
+
+    // setting promotion for specifc courses
+    else {
+
+        const result = await Course.updateMany(
+            {
+                Title: { $in: coursesTitles }
+            },
+            {
+                $set: { DiscountPercentage: promotionAmount, DiscountDeadline:  discountDeadline},
+            }
+        )
+
+        if (result.modifiedCount > 0) {
+            res.json({result: "ok"})
+        } else {
+            console.log(result);
+            res.json({result: "error", message: "Unable to update the documents. Maybe they do not exist"});
+        }
+
+    }
+
+});
+
+
+
+const buyCourse = asyncHandler(async (req, res) => {
+
+
+    const body = req.body;
+
+    const courseTitle = body.courseTitle;
+    const username = body.username;
+
+
+    const courseInfo = await Course.findOne({Title: courseTitle})
+    if (!courseInfo) {
+        return res.json({result: "error", message: "Course not found"})
+    } 
+
+    console.log(courseInfo.DiscountPercentage + " " + global.coursesPromotion)
+
+    const instructorName = courseInfo.Instructor;
+
+    var discountPercentage = 0.0;
+    if (courseInfo.DiscountPercentage > global.coursesPromotion
+        && Date.parse(courseInfo.DiscountDeadline) - Date.parse(new Date()) > 0) {
+        discountPercentage = courseInfo.DiscountPercentage
+    } else {
+        if (global.coursesPromotion > 0 && global.discountDeadline - Date.parse(new Date()) > 0)
+        {
+            discountPercentage = global.coursesPromotion
+        }
+    }
+    
+    const coursePrice = courseInfo.Price * (1 - discountPercentage);
+
+    const session = await stripe.checkout.sessions.create({
+        payment_method_types: ["card"],
+        mode: "payment",
+        line_items: [{
+            price_data: {
+              currency: "usd",
+              product_data: {
+                name: courseTitle,
+              },
+              unit_amount: Math.floor(coursePrice * 100), // stripe expects it in cents
+            },
+            quantity: 1,
+        }],
+        // TODO implement cancel webpage
+        success_url: `http://localhost:8000/api/courses/coursePaid?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `http://localhost:8000/cancel.html`,
+      })
+
+    if (!session) {
+        return res.json({result: "error", message: "There was a problem with the Stripe API"})
+    }
+
+    const purchase = new Purchase(
+        {
+            DateOfPurchase: new Date('2015-03-25'),
+            IsConfirmed: false,
+            Username: username,
+            InstructorName: instructorName,
+            CourseTitle: courseTitle,
+            StripeId: session.id,
+            TotalPaid: Math.floor(coursePrice),
+            TotalCommission: Math.floor(coursePrice) * global.commisionPercentage
+        }
+    )
+    await purchase.save();
+
+    res.send(session.url);
+})
+
+
+
+const coursePaid = asyncHandler(async (req, res) => {
+
+    const params = req.query;
+
+    const session_id = params.session_id;
+
+    const purchase = await Purchase.findOne({StripeId: session_id})
+    if (!purchase) {
+        return res.json({result: "error", message: "This checkout session does not exist"})
+    }
+
+    purchase.IsConfirmed = true;
+    purchase.save();
+    
+    await User.updateOne(
+        {
+            Username: purchase.Username
+        },
+        {
+            $push: {
+                Courses: {title: purchase.CourseTitle, dataEnrolled: new Date()},
+            }
+        }
+    )
+
+    res.status(200).send("You successfuly purchased the course")
+});
+
+
 module.exports = {
     searchCourses,
     getAllCourses,
@@ -365,5 +519,8 @@ module.exports = {
     createCourseInst,
     getCourse,
     addSubtitleToACourse,
-    addExerciseToCourse
+    addExerciseToCourse,
+    setPromotionForCourses,
+    buyCourse,
+    coursePaid
 };

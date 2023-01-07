@@ -10,8 +10,13 @@ const RatingCourse=require('../model/ratingCourseModel')
 const Exercise=require('../model/exercise')
 const RefundRequests=require('../model/refundRequests')
 const Report = require('../model/report')
-
+const nodemailer = require('nodemailer')
 const mongoose = require('mongoose');
+const emailTransporter = require('./helpers/EmailTransporter');
+const crypto = require('crypto');
+const { ok } = require('assert')
+const Purchase = require('../model/purchase')
+
 
 //const Trainees = require('../model/Trainees')
 const registerUser = asyncHandler(async (req,res)=>{
@@ -39,13 +44,30 @@ const registerUser = asyncHandler(async (req,res)=>{
     const hashedPassword = await bcrypt.hash(Password,salt)
 
     //create user
+    const verificationHash = crypto.randomBytes(20).toString('hex'); // used for email verification
     const user=await User.create({
         Username,
         Email,
         Password:hashedPassword,
-        Type,FirstName,Gender,LastName
+        Type,
+        FirstName,
+        Gender,
+        LastName,
+        IsVerified: false,
+        VerificationHash: verificationHash
     })
     if(user){
+        
+        
+        emailTransporter.sendMail({
+            from: "ACL Coursera <omar.nofal@student.guc.edu.eg>",
+            to: Email,
+            subject: "Email Verification",
+            text: `Hello ${user.Username} and welcome to ACL Coursera\n`
+            + "We are happy to have you onboard, we request you to verify your email from here\n"
+            + `http://localhost:8000/api/users/verifyUser?username=${user.Username}&hash=${verificationHash}`
+        });
+
         res.status(201).json({
             _id:user.id,
             Username:user.Username,
@@ -62,9 +84,35 @@ const registerUser = asyncHandler(async (req,res)=>{
         res.status(400)
         throw new Error('Invalid user data')
     }
-    res.json({message : 'register user'})
 })
 
+
+const verifyUser = asyncHandler(async (req, res)=> {
+
+    const params = req.query;
+
+    const username = params.username;
+    const verificationHash = params.hash;
+
+    const user = await User.findOne({Username: username})
+    if (!user || user.IsVerified) {
+        return res.status(401).json({
+            result: "error",
+            message: "This username does not exist or is already verified"
+        })
+    }
+    else {
+        if (user.VerificationHash == verificationHash) {
+            user.IsVerified = true;
+            user.VerificationHash = undefined;
+            await user.save();
+            return res.json({result: "ok", message: "You have been successfuly verified"})
+        } else {
+            return res.json({result: "error", message: "Incorrect verification hash"})
+        }
+    }
+
+}) 
 
 
 const loginUser = asyncHandler(async (req,res)=>{
@@ -846,6 +894,49 @@ const followUpProblem=asyncHandler(async(req,res)=>{
     
 })
 
+
+const getEarningsData = asyncHandler(async (req, res) => {
+
+    const allPurchases = await Purchase.aggregate(
+        [
+            {
+                $project: {
+                    TotalPaid: 1,
+                    TotalCommission: 1,
+                    month: { $month: "$DateOfPurchase" },
+                    year: { $year: "$DateOfPurchase" }
+                }
+            }, 
+            {
+                $group: {
+                    _id: { month: "$month", year: "$year" },
+                    GrossEarnings: { $sum: "$TotalPaid" },
+                    Commissions: { $sum: "$TotalCommission"}
+                }
+            },
+            {
+                $set: {
+                    NetEarnings: { $subtract: ["$GrossEarnings", "$Commissions"] },
+                    MonthNumber: "$_id.month",
+                    Year: "$_id.year",
+                    MonthName: {
+                        $arrayElemAt: [ ["", "January","February","March","April","May","June","July",
+                        "August","September","October","November","December"], "$_id.month"]
+                    }
+                }
+            },
+            {
+                $unset: "_id"
+            }
+            
+        ]
+    )
+
+    res.json(allPurchases)
+
+})
+
+
 module.exports = {
     registerUser,
     loginUser,
@@ -877,5 +968,7 @@ module.exports = {
     changeReportsStatusAdmin,
     followUpProblem,
     acceptRefundAdmin,
-    viewProgressInCourse
+    viewProgressInCourse,
+    verifyUser,
+    getEarningsData
 }

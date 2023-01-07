@@ -7,10 +7,10 @@ const port =process.env.port || 8000
 const cookieParser = require('cookie-parser')
 const {errorHandler} = require('./middleware/error')
 const router=require('./routes/userRoutes')
-//const connectDB= require('./config/db')
-//connectDB()
+
 const app=express()
 app.use(cookieParser());
+app.use(express.static('public'));
 app.use(cors());
 const MongoURI =  "mongodb+srv://omar:nofal@cluster0.ggpyeec.mongodb.net/?retryWrites=true&w=majority"
 
@@ -26,11 +26,9 @@ mongoose.connect(MongoURI)
 app.use(express.json())
 app.use(express.urlencoded({ extended:false}))
 
-//app.use('/api/goals',require('./routes/goalRoutes'))
 app.use('/api/users', require('./routes/userRoutes'))
 app.use('/api/courses', require('./routes/courseRoutes'))
 
 app.use(errorHandler)
-//app.listen(port,()=>console.log("Server started on port "+port))
 
 
