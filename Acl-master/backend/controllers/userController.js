@@ -10,8 +10,13 @@ const RatingCourse=require('../model/ratingCourseModel')
 const Exercise=require('../model/exercise')
 const RefundRequests=require('../model/refundRequests')
 const Report = require('../model/report')
-
+const nodemailer = require('nodemailer')
 const mongoose = require('mongoose');
+const emailTransporter = require('./helpers/EmailTransporter');
+const crypto = require('crypto');
+const { ok } = require('assert')
+const Purchase = require('../model/purchase')
+const CorporateRequest=require('../model/corporateRequests')
 
 //const Trainees = require('../model/Trainees')
 const registerUser = asyncHandler(async (req,res)=>{
@@ -581,13 +586,13 @@ const createDiscount = asyncHandler(async(req,res)=>{
 const viewEnrolledCourses=asyncHandler(async(req,res)=>{
     const {username}=req.body
 
-    const user = await User.find({Username:username})
+    const user = await User.findOne({Username:username})
     if(!user){
         res.status(400)
         throw new Error ('User not found')
     }
-    const coursesEnrolled=User.Courses
-    res.status(200).send(coursesEnrolled)
+    const coursesEnrolled=user.Courses
+    res.status(200).json(coursesEnrolled)
 })
 
 
@@ -630,16 +635,20 @@ const viewProgressInCourse=asyncHandler(async(req,res)=>{
 })
 
 
+const viewAllRequestRefund=asyncHandler(async(req,res)=>{
+    const request=await RefundRequests.find()
+    res.status(200).json(request)
+})
 const requestRefundTrainee=asyncHandler(async(req,res)=>{
     const {username,courseTitle}=req.body
 
-    const user = await User.find({Username:username})
+    const user = await User.findOne({Username:username})
     if(!user){
         res.status(400)
         throw new Error ('User not found')
     }
 
-    const course=await Course.find({Title:courseTitle})
+    const course=await Course.findOne({Title:courseTitle})
     if(!course){
         res.status(400)
         throw new Error ('Course not found')
@@ -665,10 +674,12 @@ const requestRefundTrainee=asyncHandler(async(req,res)=>{
         throw new Error ('User not enrolled in this course')
     }
 
-    const previousReport=RefundRequests.find({Username:username},{Title:courseTitle})
+    const previousReport=await RefundRequests.find({Username:username,Title:courseTitle})
+    
     //IF ERROR CHECK THIS
-    if(previousReport){
-        res.status(400).send('You have requested before')
+    if(previousReport.length>0){
+        res.status(400)
+        throw new Error('You have requested before')
     }
 
     const progress=user.Courses[index].progress
@@ -679,13 +690,14 @@ const requestRefundTrainee=asyncHandler(async(req,res)=>{
     }
 
     
-    const request=RefundRequests.create({
+    const request=await RefundRequests.create({
         Username:username,
         Title:courseTitle,
         RefundedAmount:purchasedfor 
      })
+     
 
-     res.status(200).send(request)
+     res.status(200).json(request)
 
     
 
@@ -702,13 +714,20 @@ const requestRefundTrainee=asyncHandler(async(req,res)=>{
 const viewWallet=asyncHandler(async(req,res)=>{
     const {username}=req.body
 
-    const user = await User.find({Username:username})
-    if(!user){
+    if(!username)
+    {
+        res.status(400)
+        throw new Error ('Username not typed')
+    }
+    const user = await User.findOne({Username:username})
+    if(user===null){
         res.status(400)
         throw new Error ('User not found')
     }
 
-    res.status(200).send(user.Wallet)
+    const wallet=user.Wallet
+
+    res.status(200).json(wallet)
 })
 
 
@@ -721,30 +740,32 @@ const reportProblem=asyncHandler(async(req,res)=>{
         res.status(400).send('Error in reporting problem')
     }
 
-    const user = await User.find({Username:username})
-    if(!user){
+    const user = await User.findOne({Username:username})
+    if(user===null){
         res.status(400)
         throw new Error ('User not found')
     }
 
-    const course=await Course.find({Title:courseTitle})
-    if(!course){
+    const course=await Course.findOne({Title:title})
+    if(course===null){
         res.status(400)
         throw new Error ('Course not found')
     }
 
     var flag=0
     let index=0;
-    for(; index < user.Courses.length; index++)
-    {
-       const courseTitle2 = user.Courses[index].title
-       if (title===courseTitle2)
-       {
-        flag=1;
-        break;
-       }
-    }   
-
+    if(user.Courses){
+        const len= user.Courses.length
+        for(; index < len; index++)
+        {
+        const courseTitle2 = user.Courses[index].title
+        if (title===courseTitle2)
+        {
+            flag=1;
+            break;
+        }
+        }   
+    }
     if(flag===0)
     {
         res.status(400)
@@ -754,7 +775,8 @@ const reportProblem=asyncHandler(async(req,res)=>{
     const report=await Report.create({
         Username:username,
         Title:title,
-        Type:type 
+        Type:type ,
+        FollowUp:[]
      })
 
      res.status(200).send(report)
@@ -769,13 +791,13 @@ const seeReportsTrainee=asyncHandler(async(req,res)=>{
         res.status(400)
         throw new Error('Error while seeing problem')
     }
-    const user = await User.find({Username:username})
+    const user = await User.findOne({Username:username})
     if(!user){
         res.status(400)
         throw new Error ('User not found')
     }
 
-    const reports=await Report.find({Username:username})
+    const reports=await Report.findOne({Username:username})
     res.status(200).send(reports)
 
 })
@@ -793,36 +815,39 @@ const changeReportsStatusAdmin=asyncHandler(async(req,res)=>{
     if(!id||!status)
     {
         res.status(400)
-        throw new Error('Error while changing statu')
+        throw new Error('Error while changing status')
     }
-    const report=Report.findByIdAndUpdate({_id:id},{Status:status})
-    res.status(200).send(report)
+    const report=await Report.findByIdAndUpdate({_id:id},{Status:status})
+    res.status(200).json(report)
 })
 
 const acceptRefundAdmin=asyncHandler(async(req,res)=>{
     const {username,courseTitle}=req.body
 
-    const user = await User.find({Username:username})
+    const user = await User.findOne({Username:username})
     if(!user){
         res.status(400)
         throw new Error ('User not found')
     }
 
-    const course=await Course.find({Title:courseTitle})
+    const course=await Course.findOne({Title:courseTitle})
     if(!course){
         res.status(400)
         throw new Error ('Course not found')
     }
 
-    const refundrequest=await RefundRequests.find({Username:username},{Title:title})
-    if(!refundrequest)
+    const refundrequest=await RefundRequests.find({Username:username,Title:courseTitle})
+    if(refundrequest.length===0)
     {
         res.status(400)
         throw new Error ('User didnot request')
     }
-    const refundedamount=refundrequest.RefundedAmount
+    
+    const refundedamount=refundrequest[0].RefundedAmount
+    console.log(refundedamount)
     const newAmount=user.Wallet+refundedamount
-    const user2=User.findOneAndUpdate({Username:username},{Wallet:newAmount})
+    console.log(newAmount)
+    const user2=await User.findOneAndUpdate({Username:username},{Wallet:newAmount})
     res.status(200).send(user2)
 
 })
@@ -834,16 +859,151 @@ const followUpProblem=asyncHandler(async(req,res)=>{
         res.status(400)
         throw new Error('Error in the Follow Up')
     }
-    const report = Report.findById({_id:id})
+    const report =await Report.findById({_id:id})
+    if(report===null)
+    {
+        res.status(400)
+        throw new Error('Cannot find report')
+    }
     const status=report.Status
     if(status==='resolved'||status==='Resolved')
     {
         res.status(400)
         throw new Error('Problem has been resolved')
     }
-    report.FollowUp.push(followUp);
-    report.save();
     
+    report.FollowUp.push(followUp)
+    await report.save();
+    res.status(200).json(followUp)
+})
+
+
+const getEarningsData = asyncHandler(async (req, res) => {
+
+    const allPurchases = await Purchase.aggregate(
+        [
+            {
+                $project: {
+                    TotalPaid: 1,
+                    TotalCommission: 1,
+                    month: { $month: "$DateOfPurchase" },
+                    year: { $year: "$DateOfPurchase" }
+                }
+            }, 
+            {
+                $group: {
+                    _id: { month: "$month", year: "$year" },
+                    GrossEarnings: { $sum: "$TotalPaid" },
+                    Commissions: { $sum: "$TotalCommission"}
+                }
+            },
+            {
+                $set: {
+                    NetEarnings: { $subtract: ["$GrossEarnings", "$Commissions"] },
+                    MonthNumber: "$_id.month",
+                    Year: "$_id.year",
+                    MonthName: {
+                        $arrayElemAt: [ ["", "January","February","March","April","May","June","July",
+                        "August","September","October","November","December"], "$_id.month"]
+                    }
+                }
+            },
+            {
+                $unset: "_id"
+            }
+            
+        ]
+    )
+
+    res.json(allPurchases)
+
+})
+
+const requestAccessCorporate=asyncHandler(async(req,res)=>{
+    const {username,title}=req.body
+
+    const user = await User.find({Username:username})
+    if(!user){
+        res.status(400)
+        throw new Error ('User not found')
+    }
+
+    const course=await Course.find({Title:title})
+    if(!course){
+        res.status(400)
+        throw new Error ('Course not found')
+    }
+
+    const corporaterequest=await CorporateRequest.find({Username:username,Title:title})
+
+    if(corporaterequest.length>0)
+    {
+        res.status(400)
+        throw new Error ('You have requested before')
+    }
+    const request=await CorporateRequest.create({
+        Username:username,
+        Title:title
+    })
+    res.status(200).send(request)
+})  
+
+const viewRequestAccessCorporate=asyncHandler(async(req,res)=>{
+    const request= await CorporateRequest.find()
+    
+    res.status(200).json(request)
+})
+
+const acceptRequestAccessCorporate=asyncHandler(async(req,res)=>{
+    const {id}=req.body
+    
+    const request=await CorporateRequest.findById({_id:id})
+    
+    
+    if(request===null)
+    {
+        res.status(400)
+        throw new Error('No such id exists')
+    }
+    const username=request.Username
+    const coursetitle=request.Title
+    const request2=await CorporateRequest.findByIdAndDelete({_id:id})
+    const user=await User.findOne({Username:username})
+    console.log(username)
+    console.log(coursetitle)
+   console.log(request2)
+   console.log(user)
+    if(user.length===0)
+    {
+        res.status(400)
+        throw new Error('User doesnot exist')
+    }
+    const course={
+        title:coursetitle,
+        dataEnrolled:Date.now(),
+        purchasedFor:0,
+        progress:0,
+        notes:""
+    }
+    user.Courses.push(course);
+    await user.save();
+    res.status(200).send(user.Courses)
+})
+
+
+const rejectRequestAccessCorporate=asyncHandler(async(req,res)=>{
+    const {id}=req.body
+    
+    const request=await CorporateRequest.findById({_id:id})
+    
+    if(!request)
+    {
+        res.status(400)
+        throw new Error('No such id exists')
+    }
+ 
+    const request2=await CorporateRequest.findByIdAndDelete({_id:id})
+    res.status(200).send(request2)
 })
 
 module.exports = {
@@ -877,5 +1037,12 @@ module.exports = {
     changeReportsStatusAdmin,
     followUpProblem,
     acceptRefundAdmin,
-    viewProgressInCourse
+    viewProgressInCourse,
+    verifyUser,
+    getEarningsData,
+    requestAccessCorporate,
+    viewRequestAccessCorporate,
+    acceptRequestAccessCorporate,
+    rejectRequestAccessCorporate,
+    viewAllRequestRefund
 }

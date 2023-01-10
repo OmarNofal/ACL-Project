@@ -1,6 +1,45 @@
 const express = require('express')
 const router =express.Router()
-const { registerUser,loginUser, getMe,addInstructor,addTrainees,addAdmin,selectCountry, rateInstructor ,rateCourse,viewRatingsCourse,changePasswordUser,submitExercise,viewGrade,sendEmail,viewRatingsInstructor, viewCourse, editEmail,  viewContract, submitContract, createDiscount}=require('../controllers/userController')
+const { 
+    registerUser,
+    loginUser, 
+    getMe,
+    addInstructor,
+    addTrainees,
+    addAdmin,
+    selectCountry, 
+    rateInstructor ,
+    rateCourse,
+    viewRatingsCourse,
+    changePasswordUser,
+    submitExercise,
+    viewGrade,
+    sendEmail,
+    viewRatingsInstructor,
+    viewCourse, 
+    editEmail,  
+    viewContract, 
+    submitContract, 
+    createDiscount,
+    viewEnrolledCourses,
+    requestRefundTrainee,
+    viewWallet,
+    reportProblem,
+    seeReportsTrainee,
+    seeReportsAdmin,
+    changeReportsStatusAdmin,
+    followUpProblem,
+    acceptRefundAdmin,
+    viewProgressInCourse,
+    verifyUser,
+    getEarningsData,
+    acceptRequestAccessCorporate,
+    requestAccessCorporate,
+    viewRequestAccessCorporate,
+    rejectRequestAccessCorporate,
+    viewAllRequestRefund
+    
+}=require('../controllers/userController')
 
 const { protect } = require('../middleware/authMiddleware')
 
@@ -34,7 +73,13 @@ router.get('/seeReportsAdmin',seeReportsAdmin)
 router.post('/changeReportsStatusAdmin',changeReportsStatusAdmin)
 router.post('/followUpProblem',followUpProblem)
 router.post('/acceptRefundAdmin',acceptRefundAdmin)
+router.get('/viewProgressInCourse',viewProgressInCourse)
+router.get('/viewAllRequestRefund',viewAllRequestRefund)
 
 
-
+router.post('/requestRefundTrainee',requestRefundTrainee)
+router.post('/requestAccessCorporate',requestAccessCorporate)
+router.get('/viewRequestAccessCorporate',viewRequestAccessCorporate)
+router.post('/acceptRequestAccessCorporate',acceptRequestAccessCorporate)
+router.post('/rejectRequestAccessCorporate',rejectRequestAccessCorporate)
 module.exports=router
