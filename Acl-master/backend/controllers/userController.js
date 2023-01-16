@@ -343,7 +343,7 @@ const rateCourse=asyncHandler(async (req,res)=>{
 
     course.Reviews.push(review)
     await course.save()
-
+``
     var sumSoFar=course.Rating.SumSoFar
     var count=course.Rating.ReviewCounts
 
