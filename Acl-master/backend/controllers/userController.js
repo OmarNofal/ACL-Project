@@ -16,6 +16,7 @@ const emailTransporter = require('./helpers/EmailTransporter');
 const crypto = require('crypto');
 const { ok } = require('assert')
 const Purchase = require('../model/purchase')
+const CorporateRequest=require('../model/corporateRequests')
 
 
 //const Trainees = require('../model/Trainees')
@@ -634,7 +635,7 @@ const viewEnrolledCourses=asyncHandler(async(req,res)=>{
         res.status(400)
         throw new Error ('User not found')
     }
-    const coursesEnrolled=User.Courses
+    const coursesEnrolled=user.Courses
     res.status(200).send(coursesEnrolled)
 })
 
@@ -936,6 +937,98 @@ const getEarningsData = asyncHandler(async (req, res) => {
 
 })
 
+const requestAccessCorporate=asyncHandler(async(req,res)=>{
+    const {username,title}=req.body
+
+    const user = await User.find({Username:username})
+    if(!user){
+        res.status(400)
+        throw new Error ('User not found')
+    }
+
+    const course=await Course.find({Title:title})
+    if(!course){
+        res.status(400)
+        throw new Error ('Course not found')
+    }
+
+    const corporaterequest=await CorporateRequest.find({Username:username,Title:title})
+
+    if(corporaterequest.length>0)
+    {
+        res.status(400)
+        throw new Error ('You have requested before')
+    }
+    const request=await CorporateRequest.create({
+        Username:username,
+        Title:title
+    })
+    res.status(200).send(request)
+})  
+
+const viewRequestAccessCorporate=asyncHandler(async(req,res)=>{
+    const request= await CorporateRequest.find()
+    
+    res.status(200).json(request)
+})
+
+const acceptRequestAccessCorporate=asyncHandler(async(req,res)=>{
+    const {id}=req.body
+    
+    const request=await CorporateRequest.findById({_id:id})
+    
+    
+    if(request===null)
+    {
+        res.status(400)
+        throw new Error('No such id exists')
+    }
+    const username=request.Username
+    const coursetitle=request.Title
+    const request2=await CorporateRequest.findByIdAndDelete({_id:id})
+    const user=await User.findOne({Username:username})
+    console.log(username)
+    console.log(coursetitle)
+   console.log(request2)
+   console.log(user)
+    if(user.length===0)
+    {
+        res.status(400)
+        throw new Error('User doesnot exist')
+    }
+    const course={
+        title:coursetitle,
+        dataEnrolled:Date.now(),
+        purchasedFor:0,
+        progress:0,
+        notes:""
+    }
+    user.Courses.push(course);
+    await user.save();
+    res.status(200).send(user.Courses)
+})
+
+
+const rejectRequestAccessCorporate=asyncHandler(async(req,res)=>{
+    const {id}=req.body
+    
+    const request=await CorporateRequest.findById({_id:id})
+    
+    if(!request)
+    {
+        res.status(400)
+        throw new Error('No such id exists')
+    }
+ 
+    const request2=await CorporateRequest.findByIdAndDelete({_id:id})
+    res.status(200).send(request2)
+})
+
+const viewAllRequestRefund=asyncHandler(async(req,res)=>{
+    const request=await RefundRequests.find()
+    res.status(200).json(request)
+})
+
 
 module.exports = {
     registerUser,
@@ -970,5 +1063,10 @@ module.exports = {
     acceptRefundAdmin,
     viewProgressInCourse,
     verifyUser,
-    getEarningsData
+    getEarningsData,
+    requestAccessCorporate,
+    viewRequestAccessCorporate,
+    acceptRequestAccessCorporate,
+    rejectRequestAccessCorporate,
+    viewAllRequestRefund
 }
