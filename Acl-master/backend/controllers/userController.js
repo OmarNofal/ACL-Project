@@ -17,6 +17,7 @@ const crypto = require('crypto');
 const { ok } = require('assert')
 const Purchase = require('../model/purchase')
 const CorporateRequest=require('../model/corporateRequests')
+const { transporter } = require('./helpers/EmailTransporter')
 
 
 //const Trainees = require('../model/Trainees')
@@ -263,118 +264,99 @@ const addTrainees = asyncHandler(async (req,res)=>{
 })
 
 
-const selectCountry=asyncHandler(async (req,res)=>{
-    const usernamee= req.body.Username
+const selectCountry = asyncHandler(async (req,res)=>{
+    const username = req.body.user.Username
     const country=req.body.country
-    var result=await user.findOneAndUpdate({Username:username},{Country:country,})
+    var result=await User.findOneAndUpdate({Username:username},{Country:country,})
     res.send(result)
 })
 
-//@desc
-//@route P
-//@access Private
-// const rateInstructor=asyncHandler(async (req,res)=>{
-//     const rating=req.body
-// })
 
-const viewRatingsCourse=asyncHandler((async (req,res)=>{
-   const {id}=req.body
-   //const instructor=await Course.find(Instructor:)
-    const coursesGivenByInstructor=await Course.find({Instructor:id})
-   // let instructorFound=mongoose.Types.ObjectId(req.query.id)
+// this will return all courses of the instructor
+const viewRatingsCourse = asyncHandler((async (req,res)=>{
+    const {Username} = req.body.user;
+
+    const coursesGivenByInstructor = await Course.findOne({Instructor:Username});
    
     if(!coursesGivenByInstructor)
     {
         res.status(400)
-        throw new Error ('Please Try again')
+        res.json({res: "error", message: "No courses were found!"});
     }
-    res.status(200).json(coursesGivenByInstructor)
-    
 
+    res.status(200).json(coursesGivenByInstructor);
 }))
 
 const viewRatingsInstructor=asyncHandler((async (req,res)=>{
-    const {id}=req.body
-    //const instructor=await Course.find(Instructor:)
-     const instructor=await User.find({_id:id})
+    const {InstructorName} = req.body;
+    const instructor=await User.findOne({Username: InstructorName});
    
-    
      if(!instructor)
      {
          res.status(400)
-         throw new Error ('Please Try again')
+         res.json({res: "error", message: "No courses were found!"});
      }
-     res.status(200).json(instructor)
-     
- 
- }))
+     res.status(200).json(instructor.Rating);
+}))
 
 const rateCourse=asyncHandler(async (req,res)=>{
-    const {idUser,titleCourse,rating,review}=req.body
-    if(!idUser || !titleCourse||!rating || !review){
-        res.status(400)
-        throw new Error ('Please Try again 2')
-    }
-    const userExists=await User.findById(idUser)
-    if(!userExists)
-    {
-        res.status(400)
-        throw new Error ('User doesnot exist')
-    }
-    const course=await Course.findOne({Title:titleCourse})
-   
-    var courseId=course._id
-    if(!courseId)
-    {
-        res.status(400)
-        throw new Error ('Please Try again 3')
-    }
-    const reviewedBefore=await RatingCourse.find({UserReviewerId:idUser,CourseId:courseId})
+    const { Username } = req.body.user;
+    const { titleCourse, rating, review } = req.body
 
-    
-    
+    if(!titleCourse||!rating || !review){
+        res.status(400)
+        res.json({res: "error", message: "Missing fields"});
+    }
+
+    const course=await Course.findOne({Title:titleCourse})
+    if (!course) {        
+        res.json({res: "error", message: "Course doesnot exist"});
+        return
+    }
+
+    const reviewedBefore = await RatingCourse.find(
+        {
+            ReviewerUsername: Username, CourseTitle: course.Title
+        }
+    )
+
     if(reviewedBefore.length!==0)
     {
         res.status(400)
-        console.log(course.Score)
-        throw new Error ('You already reviewed the course before')
+        res.json({res: "error", message: "Course already reviewed"});
+        return
     }
+
     if(rating<1||rating>5)
     {
         res.status(400)
-        throw new Error ('Invalid Rating input')
+        res.json({res: "error", message: "Invalid Rating!"});
+        return
     }
-    const ratingCourse=await RatingCourse.create({
+
+    RatingCourse.create({
        RatingGiven:rating,
        Review:review,
-       CourseId:courseId,
-       UserReviewerId:idUser
+       CourseTitle: course.Title,
+       ReviewerUsername: Username
     })
 
-    if(!ratingCourse)
-    {
-        res.status(400)
-        throw new Error ('Please Try again 4')
-    }
-    if(review!=="")
-    {
-        course.Reviews.push(review)
-        course.save()
-    }
-    var sumSoFar=course.SumSoFar
-    var count=course.Count
+    course.Reviews.push(review)
+    await course.save()
+
+    var sumSoFar=course.Rating.SumSoFar
+    var count=course.Rating.ReviewCounts
+
     count++
-    sumSoFar=sumSoFar+rating
+    sumSoFar= sumSoFar + rating
+
     var score=sumSoFar/count
-    var object = {score,count,sumSoFar}
-    const updatedCourse =await Course.findOneAndUpdate({Title:titleCourse},{SumSoFar:sumSoFar})
-    const updatedCourse2 =await Course.findOneAndUpdate({Title:titleCourse},{Count:count})
-    const updatedCourse3 =await Course.findOneAndUpdate({Title:titleCourse},{Score:score})
-    //console.log(updatedCourse.Rating.count)
-    console.log(updatedCourse3.Count)
-    res.status(200).send(updatedCourse3)
-    
-    
+    const result = await Course.updateOne(
+        {Title: titleCourse},
+        {
+            $set: { "$Rating.SumSoFar": sumSoFar, "$Rating.ReviewCounts": count}
+        }
+    )
 })
 
 const rateInstructor=asyncHandler(async (req,res)=>{
@@ -1028,6 +1010,17 @@ const viewAllRequestRefund=asyncHandler(async(req,res)=>{
     const request=await RefundRequests.find()
     res.status(200).json(request)
 })
+
+
+// const changePassword = asyncHandler(async (req, res) => {
+
+//     const {Username} = req.body.user;
+
+//     const hash = crypto.randomBytes(20).toString('hex');
+    
+//     emailTransporter.sen()
+
+// })
 
 
 module.exports = {
