@@ -356,8 +356,6 @@ const addExerciseToCourse = asyncHandler(async (req, res) => {
 });
 
 
-<<<<<<< Updated upstream
-=======
 
 const setPromotionForCourses = asyncHandler(async (req, res) => {
 
@@ -505,7 +503,6 @@ const coursePaid = asyncHandler(async (req, res) => {
 });
 
 
->>>>>>> Stashed changes
 module.exports = {
     searchCourses,
     getAllCourses,
@@ -515,5 +512,8 @@ module.exports = {
     createCourseInst,
     getCourse,
     addSubtitleToACourse,
-    addExerciseToCourse
+    addExerciseToCourse,
+    setPromotionForCourses,
+    coursePaid,
+    buyCourse
 };

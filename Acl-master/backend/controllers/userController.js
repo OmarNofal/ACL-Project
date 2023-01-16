@@ -103,7 +103,32 @@ const getMe =asyncHandler( async (req,res)=>{
 
 
 
+const verifyUser = asyncHandler(async (req, res)=> {
 
+    const params = req.query;
+
+    const username = params.username;
+    const verificationHash = params.hash;
+
+    const user = await User.findOne({Username: username})
+    if (!user || user.IsVerified) {
+        return res.status(401).json({
+            result: "error",
+            message: "This username does not exist or is already verified"
+        })
+    }
+    else {
+        if (user.VerificationHash == verificationHash) {
+            user.IsVerified = true;
+            user.VerificationHash = undefined;
+            await user.save();
+            return res.json({result: "ok", message: "You have been successfuly verified"})
+        } else {
+            return res.json({result: "error", message: "Incorrect verification hash"})
+        }
+    }
+
+}) 
 
 const addAdmin = asyncHandler(async (req,res)=>{
     const{Username,Password,Email}=req.body
