@@ -40,21 +40,34 @@ const {
     viewAllRequestRefund
 }=require('../controllers/userController')
 
-const { protect } = require('../middleware/authMiddleware')
+const {
+    verifyLoggedIn,
+} = require('../middleware/authentication');
 
+const  {
+    requireIsAdmin
+} = require('../middleware/authorization')
+
+
+
+// changed and tested
+
+// changed but not tested
+router.post('/addInstructor', verifyLoggedIn, requireIsAdmin, addInstructor)
+router.post('/addTrainees', verifyLoggedIn, requireIsAdmin, addTrainees)
+router.post('/addAdmin', verifyLoggedIn, requireIsAdmin, addAdmin)
+router.post('/rateCourse', verifyLoggedIn, rateCourse)
+
+
+// not changed
 router.post('/registerUser',registerUser)
 router.get('/verifyUser', verifyUser);
-
-router.post('/login',loginUser)
-router.get('/me',protect,getMe)
-router.post('/addInstructor',addInstructor)
-router.post('/addTrainees',addTrainees)
-router.post('/addAdmin',addAdmin)
+router.post('/login', loginUser)
+router.get('/me', getMe)
 router.post('/selectCountry',selectCountry)
-router.post('/rateInstructor',rateInstructor)
-router.post('/rateCourse',rateCourse)
-router.get('/viewRatingsCourse',viewRatingsCourse)
-router.get('/viewRatingsInstructor',viewRatingsInstructor)
+router.post('/rateInstructor', rateInstructor)
+router.get('/viewRatingsCourse', verifyLoggedIn, viewRatingsCourse)
+router.get('/viewRatingsInstructor', viewRatingsInstructor)
 router.post('/changePasswordUser',changePasswordUser)
 router.post('/submitExercise',submitExercise)
 router.get('/viewGrade',viewGrade)

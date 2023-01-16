@@ -10,12 +10,12 @@ const ratingSchema = new Schema({
         type:String,
         required:false
     },
-    CourseId:{
+    CourseTitle:{
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref:'Course'
       },
-    UserReviewerId:{
+    ReviewerUsername:{
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref:'User'
