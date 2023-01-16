@@ -5,23 +5,75 @@ import { toast } from 'react-toastify'
 import { FaUser } from 'react-icons/fa'
 import { register, reset } from '../features/auth/authSlice'
 import Spinner from '../components/Spinner'
+import * as React from 'react';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import { getType } from '@reduxjs/toolkit'
 
+
+const theme = createTheme();
+const options = [
+  'Trainee', 'Instructor'
+];
+const options2 = [
+  'Male', 'Female'
+];
+const type1='';
+const gender1='';
 function Register() {
   const [formData, setFormData] = useState({
     Username: '',
     Email: '',
     Password: '',
     Password2: '',
-    Type:'',
-  
+   Type:'',
   FirstName:'',
   LastName:'',
   Gender:''
   })
 
 
+  const[type,setType]=useState([])
 
-  const { Username, Email, Password, Password2,Type,FirstName,LastName,Gender } = formData
+  const[type2,setType2]=useState()
+
+  const[type3,setType3]=useState([])
+
+  const[type4,setType4]=useState()
+
+  const handleCountry=(event)=>{
+    const getcountryid=event.target.value
+    type1=getcountryid;
+    //console.log(getcountryid)
+    setType2(getcountryid)
+    localStorage.setItem('Type',getcountryid)
+
+}
+
+const handleCountry2=(event)=>{
+  const getcountryid2=event.target.value
+  setType4(getcountryid2)
+  gender1=getcountryid2;
+  //console.log(gender1) 
+  localStorage.setItem('Gender',getcountryid2)
+
+}
+
+
+
+  const { Username, Email, Password, Password2,FirstName,LastName}= formData;
 
   const navigate=useNavigate()
   const dispatch=useDispatch()
@@ -30,7 +82,11 @@ function Register() {
     (state) => state.auth
   )
 
+
  useEffect(()=>{
+    setType(options)
+    setType3(options2)
+
     if(isError){
         toast.error(message)
     }
@@ -49,6 +105,7 @@ function Register() {
       [e.target.name]: e.target.value,
     }))
   }
+  
 
   const onSubmit = (e) => {
     e.preventDefault()
@@ -61,23 +118,184 @@ function Register() {
           Username,
           Email,
           Password,
-          Type,
+          Type:type1,
         
           FirstName,
           LastName,
-          Gender
+          Gender:gender1
         }
 
         dispatch(register(userData))
     }
     
   }
+  
 
   if(isLoading){
     return <Spinner />
   }
-
   return (
+    <ThemeProvider theme={theme}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: '' }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign up
+          </Typography>
+          <Box component="form" noValidate onSubmit={onSubmit} sx={{ mt: 3 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={12}>
+
+              
+                <TextField
+                  autoComplete="given-name"
+                  name="Username"
+                  required
+                  fullWidth
+                  id="Username"
+                  label="Username"
+                  onChange={onChange}
+                  value={Username}
+
+
+                  autoFocus
+                />
+              </Grid>
+
+              
+
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="Email"
+                  value={Email}
+                  autoComplete="email"
+                  onChange={onChange}
+
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="Password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="new-password"
+                  value={Password}
+                  onChange={onChange}
+
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="Password2"
+                  label="Password2"
+                  type="password"
+                  id="password2"
+                  autoComplete="new-password"
+                  value={Password2}
+                  onChange={onChange}
+
+                />
+              </Grid>
+              
+              <Grid item xs={12}>
+              <label>Type: </label>
+                  <select onChange={(e)=>handleCountry(e)}>
+                      <option value="">Select Type</option>
+                      {options.map(items=><option value={items} key={items}>{items}</option>)}
+                  </select>
+              </Grid>
+
+              <Grid item xs={12} sm={12}>
+
+              
+                <TextField
+                  required
+                  autoComplete="given-name"
+                  name="FirstName"
+                  fullWidth
+                  id="FirstName"
+                  label="FirstName"
+                  onChange={onChange}
+                  value={FirstName}
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={12} sm={12}>
+
+              
+                <TextField
+
+
+
+                  autoComplete="given-name"
+                  name="LastName"
+                  required
+                  fullWidth
+                  id="LastName"
+                  label="LastName"
+                  onChange={onChange}
+                  value={LastName}
+
+
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={12}>
+              <label>Gender: </label>
+                  <select onChange={(e)=>handleCountry2(e)}>
+                      <option value="">Select Gender</option>
+                      {options2.map(items=><option value={items} key={items}>{items}</option>)}
+                  </select>
+              </Grid>
+              
+              
+            </Grid>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Sign Up
+            </Button>
+            <Grid container justifyContent="flex-end">
+              <Grid item>
+                <Link href="#" variant="body2">
+                  Already have an account? Sign in
+                </Link>
+              </Grid>
+            </Grid>
+          </Box>
+        </Box>
+      </Container>
+    </ThemeProvider>
+  );
+ 
+}
+
+export default Register
+
+/*
+ return (
     <>
       <section className='heading'>
         <h1>
@@ -88,85 +306,15 @@ function Register() {
 
       <section className='form'>
         <form onSubmit={onSubmit}>
+          
+              
+         
+        
+          
+        
           <div className='form-group'>
             <input
-              type='text'
-              className='form-control'
-              id='name'
-              name='Username'
-              value={Username}
-              placeholder='Enter your name'
-              onChange={onChange}
-            />
-          </div>
-          <div className='form-group'>
-            <input
-              type='email'
-              className='form-control'
-              id='email'
-              name='Email'
-              value={Email}
-              placeholder='Enter your email'
-              onChange={onChange}
-            />
-          </div>
-          <div className='form-group'>
-            <input
-              type='password'
-              className='form-control'
-              id='password'
-              name='Password'
-              value={Password}
-              placeholder='Enter password'
-              onChange={onChange}
-            />
-          </div>
-          <div className='form-group'>
-            <input
-              type='password'
-              className='form-control'
-              id='password2'
-              name='Password2'
-              value={Password2}
-              placeholder='Confirm password'
-              onChange={onChange}
-            />
-          </div>
-          <div className='form-group'>
-            <input
-              type='text'
-              className='form-control'
-              id='Type'
-              name='Type'
-              value={Type}
-              placeholder='Enter Type'
-              onChange={onChange}
-            />
-          </div>
-          <div className='form-group'>
-            <input
-              type='text'
-              className='form-control'
-              id='FirstName'
-              name='FirstName'
-              value={FirstName}
-              placeholder='FirstName'
-              onChange={onChange}
-            />
-          </div>
-          <div className='form-group'>
-            <input
-              type='text'
-              className='form-control'
-              id='LastName'
-              name='LastName'
-              value={LastName}
-              placeholder='LastName'
-              onChange={onChange}
-            />
-          </div>
-          <div className='form-group'>
-            <input
+              required
               type='Gender'
               className='form-control'
               id='Gender'
@@ -180,11 +328,10 @@ function Register() {
             <button type='submit' className='btn btn-block'>
               Submit
             </button>
+            
           </div>
         </form>
       </section>
     </>
   )
-}
-
-export default Register
+*/
