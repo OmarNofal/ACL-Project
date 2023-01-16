@@ -37,7 +37,9 @@ const {
     requestAccessCorporate,
     viewRequestAccessCorporate,
     rejectRequestAccessCorporate,
-    viewAllRequestRefund
+    viewAllRequestRefund,
+    resetPassword,
+    requestPasswordChange
 }=require('../controllers/userController')
 
 const {
@@ -57,14 +59,14 @@ router.post('/addInstructor', verifyLoggedIn, requireIsAdmin, addInstructor)
 router.post('/addTrainees', verifyLoggedIn, requireIsAdmin, addTrainees)
 router.post('/addAdmin', verifyLoggedIn, requireIsAdmin, addAdmin)
 router.post('/rateCourse', verifyLoggedIn, rateCourse)
+router.post('/registerUser',registerUser)
+router.get('/verifyUser', verifyUser);
+router.post('/selectCountry',selectCountry)
 
 
 // not changed
-router.post('/registerUser',registerUser)
-router.get('/verifyUser', verifyUser);
 router.post('/login', loginUser)
 router.get('/me', getMe)
-router.post('/selectCountry',selectCountry)
 router.post('/rateInstructor', rateInstructor)
 router.get('/viewRatingsCourse', verifyLoggedIn, viewRatingsCourse)
 router.get('/viewRatingsInstructor', viewRatingsInstructor)
@@ -96,5 +98,8 @@ router.post('/requestAccessCorporate',requestAccessCorporate)
 router.get('/viewRequestAccessCorporate',viewRequestAccessCorporate)
 router.post('/acceptRequestAccessCorporate',acceptRequestAccessCorporate)
 router.post('/rejectRequestAccessCorporate',rejectRequestAccessCorporate)
+
+router.post('/requestPasswordChange', requestPasswordChange);
+router.get('/resetPassword', resetPassword);
 
 module.exports=router

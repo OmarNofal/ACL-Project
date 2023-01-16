@@ -11,14 +11,10 @@ const ratingSchema = new Schema({
         required:false
     },
     CourseTitle:{
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref:'Course'
+        type: String
       },
     ReviewerUsername:{
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref:'User'
+        type: String
       }
 }, {timestamps: true });
 

@@ -343,7 +343,7 @@ const rateCourse=asyncHandler(async (req,res)=>{
 
     course.Reviews.push(review)
     await course.save()
-``
+
     var sumSoFar=course.Rating.SumSoFar
     var count=course.Rating.ReviewCounts
 
@@ -1012,16 +1012,36 @@ const viewAllRequestRefund=asyncHandler(async(req,res)=>{
 })
 
 
-// const changePassword = asyncHandler(async (req, res) => {
+const requestPasswordChange = asyncHandler(async (req, res) => {
 
-//     const {Username} = req.body.user;
+    const {Username} = req.body.user;
 
-//     const hash = crypto.randomBytes(20).toString('hex');
+    const hash = crypto.randomBytes(20).toString('hex');
     
-//     emailTransporter.sen()
 
-// })
+    User.updateOne(
+        {Username: Username},
+        {$set: {PasswordResetHash: hash}}
+    )
 
+    emailTransporter.sendMail({
+        from: "ACL Coursera <omarwalidhamed@gmail.com>",
+        to: "omar.nofal@student.guc.edu.eg",
+        subject: "Reset your password",
+        html: "<html>Please click <a href='http://localhost:8000/api/users/resetPassword?username=${Username}&hash=${hash}'>here</a> to reset your password.\n"
+        + "If you did not request this, then please ignore this email.</html>"
+    })
+
+    res.json({result: "ok"});
+})
+
+
+const resetPassword = asyncHandler(async (req, res) => {
+
+    const params = req.query;
+
+    res.send(`User ${params.username} is changing his password`)
+})
 
 module.exports = {
     registerUser,
@@ -1061,5 +1081,7 @@ module.exports = {
     viewRequestAccessCorporate,
     acceptRequestAccessCorporate,
     rejectRequestAccessCorporate,
-    viewAllRequestRefund
+    viewAllRequestRefund,
+    requestPasswordChange,
+    resetPassword
 }
