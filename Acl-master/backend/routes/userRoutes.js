@@ -62,12 +62,12 @@ router.post('/rateCourse', verifyLoggedIn, rateCourse)
 router.post('/registerUser',registerUser)
 router.get('/verifyUser', verifyUser);
 router.post('/selectCountry',selectCountry)
+router.post('/rateInstructor', verifyLoggedIn, rateInstructor)
+router.post('/login', loginUser)
 
 
 // not changed
-router.post('/login', loginUser)
 router.get('/me', getMe)
-router.post('/rateInstructor', rateInstructor)
 router.get('/viewRatingsCourse', verifyLoggedIn, viewRatingsCourse)
 router.get('/viewRatingsInstructor', viewRatingsInstructor)
 router.post('/changePasswordUser',changePasswordUser)

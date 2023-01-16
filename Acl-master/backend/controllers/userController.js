@@ -272,7 +272,7 @@ const selectCountry = asyncHandler(async (req,res)=>{
 })
 
 
-// this will return all courses of the instructor
+// this will return all courses of the instructor, go get the ratings by yourself
 const viewRatingsCourse = asyncHandler((async (req,res)=>{
     const {Username} = req.body.user;
 
@@ -282,6 +282,7 @@ const viewRatingsCourse = asyncHandler((async (req,res)=>{
     {
         res.status(400)
         res.json({res: "error", message: "No courses were found!"});
+        return;
     }
 
     res.status(200).json(coursesGivenByInstructor);
@@ -360,31 +361,30 @@ const rateCourse=asyncHandler(async (req,res)=>{
 })
 
 const rateInstructor=asyncHandler(async (req,res)=>{
-    const {idUser,usernameInstructor,rating,review}=req.body
-    if(!idUser || !usernameInstructor||!rating || !review){
+    
+    const {
+        Username
+    } = req.body.user;
+    
+    const {
+        instructorName,
+        rating,
+        review
+    } = req.body;
+
+    if(!instructorName||!rating || !review){
         res.status(400)
-        throw new Error ('Please Try again 2')
+        res.json({res: "error", message: "Fill all fields"})
+        return
     }
-    const userExists=await User.findById(idUser)
-    if(!userExists)
-    {
-        res.status(400)
-        throw new Error ('User doesnot exist')
-    }
-    const instructor=await User.findOne({Username:usernameInstructor})
-   
-    var instructorId=instructor._id
-    if(!instructorId)
-    {
-        res.status(400)
-        throw new Error ('Please Try again 3')
-    }
-    const reviewedBefore=await RatingInstructor.find({UserReviewerId:idUser,InstructorId:instructorId})
+
+    const reviewedBefore=await RatingInstructor.find({ReviewerUsername: Username, InstructorName: instructorName})
     
     if(reviewedBefore.length!==0)
     {
         res.status(400)
-        throw new Error ('You already reviewed the instructor before')
+        res.json({res: "error", message: "You already reviewed him 🤡"})
+        return
     }
 
     if(rating<1||rating>5)
@@ -394,36 +394,41 @@ const rateInstructor=asyncHandler(async (req,res)=>{
     }
 
     const ratingInstructor=await RatingInstructor.create({
-       RatingGiven:rating,
-       Review:review,
-       InstructorId:instructorId,
-       UserReviewerId:idUser
+       RatingGiven: rating,
+       Review: review,
+       InstructorName: instructorName,
+       ReviewerUsername: Username
     })
 
     if(!ratingInstructor)
     {
         res.status(400)
-        throw new Error ('Please Try again 4')
+        res.json({res: "error", message: "Something went wrong 😢"})
+        return
     }
+    
     if(review!=="")
     {
-        instructor.Reviews.push(review)
-        instructor.save()
+        User.updateOne(
+            {
+                Username: instructorName
+            },
+            {
+                $push: { "Reviews": [review] }
+            }
+        )
     }
-    var sumSoFar=instructor.SumSoFar
-    var count=instructor.Count
-    count++
-    sumSoFar=sumSoFar+rating
-    var score=sumSoFar/count
 
-    const updatedInstructor =await User.findOneAndUpdate({Username:usernameInstructor},{SumSoFar:sumSoFar})
-    const updatedInstructor2 =await User.findOneAndUpdate({Username:usernameInstructor},{Count:count})
-    const updatedInstructor3 =await User.findOneAndUpdate({Username:usernameInstructor},{Score:score})
-    //console.log(updatedCourse.Rating.count)
-    console.log(updatedInstructor3.Score)
-    res.status(200).send(updatedInstructor3)
+
+    const instructor = await User.findOne({Username: instructorName});
+
+
+    instructor.Rating.SumSoFar += rating
+    instructor.Rating.ReviewCounts++
+    instructor.Rating.Score = instructor.Rating.SumSoFar / instructor.Rating.ReviewCounts
+    instructor.save();
     
-    
+    res.json({res: 'ok'})
 })
 
 
