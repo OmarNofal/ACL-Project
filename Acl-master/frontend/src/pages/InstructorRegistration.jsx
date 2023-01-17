@@ -24,15 +24,8 @@ import { getType } from '@reduxjs/toolkit'
 
 
 const theme = createTheme();
-// const options = [
-//   'Trainee', 'Instructor'
-// ];
-// const options2 = [
-//   'Male', 'Female'
-// ];
-// const type1='';
-// const gender1='';
-function Register() {
+
+function InstructorRegistration() {
   const [formData, setFormData] = useState({
     Username: '',
     Email: '',
@@ -43,33 +36,10 @@ function Register() {
   LastName:'',
   Gender:''
   })
+  const[name,setName]=useState(false)
+  const[name2,setName2]=useState(false)
 
 
-//   const[type,setType]=useState([])
-
-//   const[type2,setType2]=useState()
-
-//   const[type3,setType3]=useState([])
-
-//   const[type4,setType4]=useState()
-
-//   const handleCountry=(event)=>{
-//     const getcountryid=event.target.value
-//     type1=getcountryid;
-//     //console.log(getcountryid)
-//     setType2(getcountryid)
-//     localStorage.setItem('Type',getcountryid)
-
-// }
-
-// const handleCountry2=(event)=>{
-//   const getcountryid2=event.target.value
-//   setType4(getcountryid2)
-//   gender1=getcountryid2;
-//   //console.log(gender1) 
-//   localStorage.setItem('Gender',getcountryid2)
-
-// }
 
 
 
@@ -84,13 +54,11 @@ function Register() {
 
 
  useEffect(()=>{
-    // setType(options)
-    // setType3(options2)
 
     if(isError){
         toast.error(message)
     }
-    if(isSuccess||user){
+    if((isSuccess||user)&&name==true&& name2==true){
    
         navigate('/Login')
     }
@@ -114,19 +82,22 @@ function Register() {
 
     if(Password!=Password2){
         toast.error('password not match')
-    }else{
-        const userData={
-          Username,
-          Email,
-          Password,
-          Type,
-        
-          FirstName,
-          LastName,
-          Gender
+    }else {
+        if((name==true)&&(name2==true)){
+            const userData={
+                Username,
+                Email,
+                Password,
+                Type:'Instructor',
+              
+                FirstName,
+                LastName,
+                Gender
+              }
+      
+              dispatch(register(userData))
         }
-
-        dispatch(register(userData))
+       
     }
     
   }
@@ -216,7 +187,7 @@ function Register() {
 
                 />
               </Grid>
-              <Grid item xs={12} sm={12}>
+              {/* <Grid item xs={12} sm={12}>
 
               
                 <TextField
@@ -230,7 +201,7 @@ function Register() {
                   value={Type}
                   autoFocus
                 />
-              </Grid>
+              </Grid> */}
               <Grid item xs={12} sm={12}>
 
               
@@ -281,6 +252,31 @@ function Register() {
                   autoFocus
                 />
               </Grid>
+              <Grid item xs={12}>
+                <FormControlLabel
+                
+                  control={<Checkbox value="allowExtraEmails" color="primary" onChange={(e)=>setName(e.target.checked)} />}
+                  
+                  label="I accept the website/ company refund/ payment policy"
+                />
+                
+                <Link href="/WebsitePolicy" variant="body2">
+                View website policy
+                </Link>
+              </Grid>
+              
+              <Grid item xs={12}>
+                <FormControlLabel
+                
+                  control={<Checkbox                 required
+                    value="allowExtraEmails" color="primary"    onChange={(e)=>setName2(e.target.checked)}/>}
+                  label="I accept the contract which includes all the rights to the posted videos and materials as well as the % taken by the company on each video per registered trainee"
+                  
+                />
+                <Link href="/InstructorSecondContract" variant="body2">
+              View contract
+                </Link>
+              </Grid>
               
               
             </Grid>
@@ -290,7 +286,7 @@ function Register() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-             Continue Signing Up
+             Sign Up
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
@@ -307,7 +303,7 @@ function Register() {
  
 }
 
-export default Register
+export default InstructorRegistration
 
 /*
  return (

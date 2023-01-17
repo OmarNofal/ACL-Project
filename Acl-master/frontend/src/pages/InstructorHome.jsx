@@ -22,21 +22,35 @@ function InstructorHome() {
 
       <pre className='goal'>
               <Link to='/ViewAllCoursesForINSorTRAINEEorGUEST'>
-                  <t1>                View all courses
+                  <t1>View all courses
                   </t1>
 
               </Link>
       </pre>
       <pre className='goal'>
               <Link to='/AddNewCourse'>
-                  <t1>                Add New Course
+                  <t1>Add New Course
                   </t1>
 
               </Link>
       </pre>
       <pre className='goal'>
               <Link to='/ViewInstructorCourse'>
-                  <t1>               View my courses
+                  <t1>View my courses
+                  </t1>
+
+              </Link>
+      </pre>
+      <pre className='goal'>
+              <Link to='/CreateExam'>
+                  <t1>Create Exam
+                  </t1>
+
+              </Link>
+      </pre>
+      <pre className='goal'>
+              <Link to='/EditbioOrEmail'>
+                  <t1>Edit my Bio or Email
                   </t1>
 
               </Link>

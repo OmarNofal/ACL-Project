@@ -38,6 +38,7 @@ const {
     viewRequestAccessCorporate,
     rejectRequestAccessCorporate,
     viewAllRequestRefund,
+    editBiography,
     resetPassword,
     requestPasswordChange
 }=require('../controllers/userController')
@@ -75,8 +76,8 @@ router.post('/submitExercise',submitExercise)
 router.get('/viewGrade',viewGrade)
 router.post('/sendEmail',sendEmail)
 router.get('/trainee/viewCourses/viewCourse', viewCourse)
-router.post('/instructor/editEmail', editEmail)
-//router.post('/instructor/editBiography', editBiography)
+router.post('/instructor/editEmail/:Username', editEmail)
+router.post('/instructor/editBiography/:Username', editBiography)
 router.get('/instructor/viewContract', viewContract)
 router.post('/instructor/submitContract', submitContract)
 router.post('/instructor/createDiscount', createDiscount)

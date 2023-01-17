@@ -6,7 +6,7 @@ const API_URL='/api/users/'
 //register user
 
 const register=async(userData)=>{
-    const response=await axios.post(API_URL,userData)
+    const response=await axios.post('/api/users/registerUser',userData)
     if(response.data){
         localStorage.setItem('user',JSON.stringify(response.data))
     }
@@ -15,7 +15,7 @@ const register=async(userData)=>{
 
 //login
 const login=async(userData)=>{
-    const response=await axios.post('/api/users/Login',userData)
+    const response=await axios.post('/api/users/login',userData)
     if(response.data){
         localStorage.setItem('user',JSON.stringify(response.data))
     }
