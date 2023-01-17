@@ -30,6 +30,8 @@ const userSchema = new Schema({
 
   VerificationHash: String,
 
+  PasswordResetHash: String,
+
   Courses:{
     type:[{title:String,dataEnrolled:Date,purchasedFor:Number,progress:Number,notes:String}],
   },

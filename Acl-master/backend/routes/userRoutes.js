@@ -101,6 +101,6 @@ router.post('/acceptRequestAccessCorporate',acceptRequestAccessCorporate)
 router.post('/rejectRequestAccessCorporate',rejectRequestAccessCorporate)
 
 router.post('/requestPasswordChange', requestPasswordChange);
-router.get('/resetPassword', resetPassword);
+router.post('/resetPassword', resetPassword);
 
 module.exports=router

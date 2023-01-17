@@ -1046,21 +1046,21 @@ const viewAllRequestRefund=asyncHandler(async(req,res)=>{
 
 const requestPasswordChange = asyncHandler(async (req, res) => {
 
-    const {Username} = req.body.user;
+    const Email = req.body.Email;
 
     const hash = crypto.randomBytes(20).toString('hex');
     
 
-    User.updateOne(
-        {Username: Username},
+    const user = await User.findOneAndUpdate(
+        {Email: Email},
         {$set: {PasswordResetHash: hash}}
     )
 
     emailTransporter.sendMail({
         from: "ACL Coursera <omarwalidhamed@gmail.com>",
-        to: "omar.nofal@student.guc.edu.eg",
+        to: Email,
         subject: "Reset your password",
-        html: "<html>Please click <a href='http://localhost:8000/api/users/resetPassword?username=${Username}&hash=${hash}'>here</a> to reset your password.\n"
+        html: `<html>Please click <a href='http://localhost:3000/resetPassword?username=${user.Username}&hash=${hash}'>here</a> to reset your password.\n`
         + "If you did not request this, then please ignore this email.</html>"
     })
 
@@ -1070,9 +1070,30 @@ const requestPasswordChange = asyncHandler(async (req, res) => {
 
 const resetPassword = asyncHandler(async (req, res) => {
 
-    const params = req.query;
+    const {username, hash, newPassword}= req.body;
 
-    res.send(`User ${params.username} is changing his password`)
+    
+    const user = await User.findOne({Username: username});
+    if (!user) {
+        res.status(400);
+        res.json({result: "error", message: "Invalid username"})
+        return;
+    }
+
+
+    if (!user.PasswordResetHash || user.PasswordResetHash != hash) {
+        res.status(400);
+        res.json({result: "error", message: "Invalid password change request"})
+        return;
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt)
+
+    user.Password = hashedPassword;
+    user.save();
+
+    res.json({result: "ok"})
 })
 
 module.exports = {

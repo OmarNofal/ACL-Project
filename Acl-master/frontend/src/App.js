@@ -31,6 +31,7 @@ import EditbioOrEmail from './components/EditbioOrEmail';
 // Lydo's stuff
 import InstructionEarnings from './pages/InstructorEarnings';
 import UserVerified from './pages/UserVerified';
+import ResetPasswordPage from './pages/ResetPassword';
 
 
 function App() {
@@ -71,6 +72,7 @@ function App() {
               {/* Lydo's stuff*/}
               <Route path='/myEarnings' element={<InstructionEarnings/>}/>
               <Route path='/verifyUser' element={<UserVerified/>}/>
+              <Route path='/resetPassword' element={<ResetPasswordPage/>}/>
 
             </Routes>
           </div>
