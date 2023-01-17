@@ -27,6 +27,35 @@ function test() {
 
               </Link>
       </pre>
+      <pre className='goal'>
+             <Link to='/AddAnotherInstructor'>
+              <t1> Add Another Instructor
+              </t1>
+
+              </Link>
+      </pre>
+      <pre className='goal'>
+             <Link to='/ViewUnseenReportsAdmin'>
+              <t1> View unseen Reports
+              </t1>
+
+              </Link>
+      </pre>
+      <pre className='goal'>
+             <Link to='/ViewRequestRefundAdmin'>
+              <t1> View Refund Requests
+              </t1>
+
+              </Link>
+      </pre>
+
+      <pre className='goal'>
+             <Link to='/ViewCorporateRequests'>
+              <t1> View Corporate Requests
+              </t1>
+
+              </Link>
+      </pre>
 
 
     </div>

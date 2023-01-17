@@ -14,26 +14,26 @@ import Paper from '@mui/material/Paper';
  
 
 
-function ViewRequestRefundAdmin (){
+function ViewCorporateRequests (){
    
     const [requests, setViewRequests] = useState([]);
    
     const accept = async (event) => {
          
         //alert(event.target.getAttribute('id'))
-      await axios.post('http://localhost:8000/api/users/acceptRefundAdmin',{username : event.target.getAttribute('username') , courseTitle :event.target.getAttribute('courseTitle') })
+      await axios.post('http://localhost:8000/api/users/acceptRequestAccessCorporate',{username : event.target.getAttribute('id')})
      //  console.log(res);
     }
 
     const reject = async (event) => {
          
         //alert(event.target.getAttribute('id'))
-      await axios.post('http://localhost:8000/api/users/rejectRefundAdmin',{username : event.target.getAttribute('username') , courseTitle :event.target.getAttribute('courseTitle') })
+      await axios.post('http://localhost:8000/api/users/rejectRequestAccessCorporate',{username : event.target.getAttribute('id') })
      //  console.log(res);
     }
 
     useEffect(() => {
-        axios.get('http://localhost:8000/api/users/viewAllRequestRefund').then(
+        axios.get('http://localhost:8000/api/users/viewRequestAccessCorporate').then(
         (res) => { 
             const response = res.data
             setViewRequests(response)
@@ -44,7 +44,7 @@ function ViewRequestRefundAdmin (){
     <div>
         
         <div>
-        <Typography variant="h2"> Refund Requests</Typography>
+        <Typography variant="h2"> Corporate Requests</Typography>
         </div>
         <div> </div>
         <div> </div>
@@ -53,12 +53,13 @@ function ViewRequestRefundAdmin (){
     <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
+                
             <TableRow>
             <TableCell>Username</TableCell>
-                <TableCell align="right">Course Title</TableCell>
-                <TableCell align="right">Refunded Amount</TableCell>
-                <TableCell align="right"> </TableCell>
-                <TableCell align="right"> </TableCell>
+            <TableCell align="right">Course Title</TableCell>
+                
+                <TableCell align="right">  </TableCell>
+                <TableCell align="right">   </TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>
@@ -71,10 +72,10 @@ function ViewRequestRefundAdmin (){
                     {request.Username}
                 </TableCell>
                 <TableCell align="right">{request.Title}</TableCell>
-    
-                <TableCell align="right" >  <Button username={request.Username} courseTitle={request.Title} onClick={accept} variant="contained" color="success"> Accept Request </Button>
+                <TableCell align="right">{request.RefundedAmount}</TableCell>
+                <TableCell align="right" >  <Button id={request._id} onClick={accept} variant="contained" color="success"> Accept Refund </Button>
                 </TableCell>
-                <TableCell align="right" >  <Button username={request.Username} courseTitle={request.Title} onClick={reject} variant="outlined" color="error" > Reject Request </Button>
+                <TableCell align="right" >  <Button id={request._id} onClick={reject} variant="outlined" color="error" > Reject Refund </Button>
                 </TableCell>
                 </TableRow>
                 
@@ -94,6 +95,6 @@ function ViewRequestRefundAdmin (){
 
   
 
-export default ViewRequestRefundAdmin;
+export default ViewCorporateRequests;
 
 

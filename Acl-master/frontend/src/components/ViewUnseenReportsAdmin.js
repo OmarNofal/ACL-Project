@@ -39,8 +39,7 @@ function ViewUnseenReportsAdmin (){
         <Typography variant="h2"> Reports</Typography>
         </div>
 
-        <div> <Button   variant="contained" sx={{bgcolor:'#FFFF00'}}> Pending </Button></div>
-
+        
     <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
