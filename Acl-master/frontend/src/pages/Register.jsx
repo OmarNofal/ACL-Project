@@ -92,7 +92,8 @@ function Register() {
     }
     if(isSuccess||user){
    
-        navigate('/Login')
+        //navigate('/Login')
+        toast.success("success you have to verify your account then log in")
     }
     dispatch(reset())
 

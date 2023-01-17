@@ -70,7 +70,7 @@ function TraineeRegistration() {
     }
     if((isSuccess||user)&&name==true){
    
-        navigate('/Login')
+      toast.success("success you have to verify your account then log in")
     }
     dispatch(reset())
 
@@ -285,7 +285,7 @@ function TraineeRegistration() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/Login" variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>

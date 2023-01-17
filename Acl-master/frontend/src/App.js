@@ -34,7 +34,11 @@ import UserVerified from './pages/UserVerified';
 import ResetPasswordPage from './pages/ResetPassword';
 
 
+import ChangePassword from './components/ChangePassword';
+import SelectGender from './components/SelectGender';
+import Buy from './pages/Buy';
 function App() {
+  
   return (
     <>
       <Router>
@@ -59,7 +63,8 @@ function App() {
               <Route path='/Quiz' element={<Quiz />}/>
               <Route path='/InstructorRegistration' element={<InstructorRegistration />}/>
               <Route path='/TraineeRegistration' element={<TraineeRegistration />}/>
-              
+              <Route path='/SelectGender' element={<SelectGender />}/>
+
               <Route path='/WebsitePolicy' element={<WebsitePolicy />}/>
               <Route path='/InstructorSecondContract' element={<InstructorSecondContract />}/>
 
@@ -67,7 +72,14 @@ function App() {
               <Route path='/EditACourse' element={<EditACourse />}/>
               <Route path='/CreateExam' element={<CreateExam />}/>
               <Route path='/EditbioOrEmail' element={<EditbioOrEmail />}/>
+              <Route path='/ChangePassword' element={<ChangePassword />}/>
+              <Route path='/Buy' element={<Buy />}/>
+
               <Route path='/Guest' element={<Guest />}/>
+              <Route path='/ChangePassword' element={<ChangePassword />}/>
+              <Route path='/Buy' element={<Buy />}/>
+
+
 
               {/* Lydo's stuff*/}
               <Route path='/myEarnings' element={<InstructionEarnings/>}/>

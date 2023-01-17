@@ -89,13 +89,13 @@ const createCourseInst = asyncHandler(async (req,res)=>{
         throw new Error('Course already exists')
     }
    
-    const isValid = await isAValidYoutubeVideo(PreviewVideoURL);
-    if (!isValid) {
-        return res.json({
-            result: "error",
-            message: "Video is not a valid youtube video"
-        })
-    }
+    // const isValid = await isAValidYoutubeVideo(PreviewVideoURL);
+    // if (!isValid) {
+    //     return res.json({
+    //         result: "error",
+    //         message: "Video is not a valid youtube video"
+    //     })
+    // }
 
     //create course
     const course=await Course.create({
@@ -409,6 +409,7 @@ const setPromotionForCourses = asyncHandler(async (req, res) => {
 
 
 
+
 const buyCourse = asyncHandler(async (req, res) => {
 
 
@@ -416,7 +417,6 @@ const buyCourse = asyncHandler(async (req, res) => {
 
     const courseTitle = body.courseTitle;
     const username = body.username;
-
 
     const courseInfo = await Course.findOne({Title: courseTitle})
     if (!courseInfo) {
@@ -476,7 +476,7 @@ const buyCourse = asyncHandler(async (req, res) => {
     )
     await purchase.save();
 
-    res.send(session.url);
+    res.send("session.url");
 })
 
 
