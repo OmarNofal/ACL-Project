@@ -59,8 +59,14 @@ async function verifyLoggedIn(req, res, next) {
         res.redirect(reactAppAddress);
     } else {
         const userModel = await User.findOne({Username: user.Username})
-        if (!userModel) res.redirect(reactAppAddress)
-        if (userModel.Password != user.Password) res.redirect(reactAppAddress)
+        if (userModel == null) {
+            res.redirect(reactAppAddress)
+            return;
+        }
+        if (userModel.Password != user.Password)  {
+            res.redirect(reactAppAddress) 
+            return;
+        }
         req.body.user = userModel;
         next();
     }

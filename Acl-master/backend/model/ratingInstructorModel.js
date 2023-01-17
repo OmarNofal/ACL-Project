@@ -3,22 +3,16 @@ const Schema = mongoose.Schema;
 
 const ratingInstructorSchema = new Schema({
     RatingGiven:{
-        type:Number,
-        required:true
+        type:Number
     },
     Review:{
-        type:String,
-        required:false
+        type:String
     },
-    InstructorId:{
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref:'User'
+    InstructorName:{
+        type: String
       },
-    UserReviewerId:{
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref:'User'
+    ReviewerUsername:{
+        type: String
       }
 }, {timestamps: true });
 
