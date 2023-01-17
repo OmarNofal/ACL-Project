@@ -577,10 +577,19 @@ const viewCourse = asyncHandler (async (req, res)=>{
     res.send(currentCourse["Videos"]+"\n "+ currentCourse["Exercises"]);
 })
 
+// const viewCoursesTitles=asyncHandler(async(req,res)=>{  
+//     const courses=await Course.find({Instructor:req.params.Instructor})
+//     console.log(courses)
+//     res.json(courses)
+ 
+// })
+
 const editEmail = asyncHandler(async (req, res)=>{
+    // const courses=await Course.find({Instructor:req.params.Instructor})
+
     const email=req.body["Email"]
 
-    const filter = { "Username": "admin1" };
+    const filter = { "Username":req.params.Username };
     const update = { "Email" : email};
    let doc= await User.findOneAndUpdate(filter, update);
    res.send("OK")
@@ -589,7 +598,7 @@ const editEmail = asyncHandler(async (req, res)=>{
 
 const editBiography = asyncHandler(async (req, res)=>{
     const biography=req.body["Biography"]
-    const filter = { "Username": "admin1" };
+    const filter = { "Username":req.params.Username };
     const update = { "Biography": biography  };
     await User.findOneAndUpdate(filter, update);
     res.send("OK")

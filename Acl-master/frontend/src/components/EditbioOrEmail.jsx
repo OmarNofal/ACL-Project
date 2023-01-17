@@ -4,6 +4,9 @@ import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
 function EditbioOrEmail() {
+    const{user}=useSelector((state)=>state.auth)
+    const username1=user.Username
+
     const [formData, setFormData] = useState({
         Email:''
       })
@@ -23,7 +26,7 @@ function EditbioOrEmail() {
         e.preventDefault()
         const data = {Email:Email};
 
-        fetch('http://localhost:8000/api/users/instructor/editEmail', {
+        fetch('http://localhost:8000/api/users/instructor/editEmail/'+username1, {
             method: 'POST', // or 'PUT'
             headers: {
                 'Content-Type': 'application/json;chaerset=UTF-8'
@@ -47,7 +50,7 @@ function EditbioOrEmail() {
       const onSubmit2 = (e) => {
         e.preventDefault()
         const data = {Biography:Biography};
-        fetch('http://localhost:8000/api/users/instructor/editBiography', {
+        fetch('http://localhost:8000/api/users/instructor/editBiography/'+username1, {
             method: 'POST', // or 'PUT'
             headers: {
                 'Content-Type': 'application/json;chaerset=UTF-8'
