@@ -831,7 +831,9 @@ const changeReportsStatusAdmin=asyncHandler(async(req,res)=>{
         res.status(400)
         throw new Error('Error while changing statu')
     }
-    const report=Report.findByIdAndUpdate({_id:id},{Status:status})
+    
+    const report=await Report.findByIdAndUpdate({_id:id},{Status:status})
+    console.log(report)
     res.status(200).send(report)
 })
 
