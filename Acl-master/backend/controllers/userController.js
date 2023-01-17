@@ -897,6 +897,11 @@ const getEarningsData = asyncHandler(async (req, res) => {
     const allPurchases = await Purchase.aggregate(
         [
             {
+                $match: {
+                    InstructorName: req.body.user.Username
+                }
+            },
+            {
                 $project: {
                     TotalPaid: 1,
                     TotalCommission: 1,

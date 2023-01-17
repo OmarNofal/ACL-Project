@@ -65,6 +65,7 @@ router.get('/verifyUser', verifyUser);
 router.post('/selectCountry',selectCountry)
 router.post('/rateInstructor', verifyLoggedIn, rateInstructor)
 router.post('/login', loginUser)
+router.post('/instructor/getEarningsData', verifyLoggedIn, getEarningsData)
 
 
 // not changed
@@ -81,7 +82,6 @@ router.post('/instructor/editBiography/:Username', editBiography)
 router.get('/instructor/viewContract', viewContract)
 router.post('/instructor/submitContract', submitContract)
 router.post('/instructor/createDiscount', createDiscount)
-router.get('/instructor/getEarningsData', getEarningsData)
 router.get('/viewEnrolledCourses',viewEnrolledCourses)
 router.get('/viewWallet',viewWallet)
 router.post('/reportProblem',reportProblem)

@@ -464,7 +464,7 @@ const buyCourse = asyncHandler(async (req, res) => {
 
     const purchase = new Purchase(
         {
-            DateOfPurchase: new Date('2015-03-25'),
+            DateOfPurchase: new Date(),
             IsConfirmed: false,
             Username: username,
             InstructorName: instructorName,
