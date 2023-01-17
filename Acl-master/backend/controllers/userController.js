@@ -833,7 +833,7 @@ const changeReportsStatusAdmin=asyncHandler(async(req,res)=>{
     }
     
     const report=await Report.findByIdAndUpdate({_id:id},{Status:status})
-    console.log(report)
+    
     res.status(200).send(report)
 })
 
@@ -846,13 +846,13 @@ const acceptRefundAdmin=asyncHandler(async(req,res)=>{
         res.status(400)
         throw new Error ('User not found')
     }
-    console.log(user.Username)
+    
     const course=await Course.findOne({Title:courseTitle})
     if(!course){
         res.status(400)
         throw new Error ('Course not found')
     }
-    console.log(course.Title)
+ 
     const refundrequest=await RefundRequests.findOneAndDelete({Username:username,Title:courseTitle})
     if(!refundrequest)
     {
@@ -863,10 +863,36 @@ const acceptRefundAdmin=asyncHandler(async(req,res)=>{
 
     const refundedamount=refundrequest.RefundedAmount
     const newAmount=user.Wallet+refundedamount
-    console.log(newAmount)
+
     const user2=await User.findOneAndUpdate({Username:username},{Wallet:newAmount})
-    console.log(user2.Wallet)
+
     res.status(200).send(user2)
+
+})
+
+const rejectRefundAdmin=asyncHandler(async(req,res)=>{
+    const {username,courseTitle}=req.body
+
+    
+    const user = await User.findOne({Username:username})
+    if(!user){
+        res.status(400)
+        throw new Error ('User not found')
+    }
+    
+    const course=await Course.findOne({Title:courseTitle})
+    if(!course){
+        res.status(400)
+        throw new Error ('Course not found')
+    }
+
+    const refundrequest=await RefundRequests.findOneAndDelete({Username:username,Title:courseTitle})
+    if(!refundrequest)
+    {
+        res.status(400)
+        throw new Error ('User didnot request')
+    }
+    res.status(200).send("rejected")
 
 })
 
@@ -1095,5 +1121,6 @@ module.exports = {
     rejectRequestAccessCorporate,
     viewAllRequestRefund,
     requestPasswordChange,
-    resetPassword
+    resetPassword,
+    rejectRefundAdmin
 }

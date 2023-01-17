@@ -3,7 +3,7 @@ import React from "react";
 import Typography from '@mui/material/Typography';
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { TextField,Button } from "@mui/material";
+import { Button } from "@mui/material";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -21,7 +21,14 @@ function ViewRequestRefundAdmin (){
     const accept = async (event) => {
          
         //alert(event.target.getAttribute('id'))
-      let res = await axios.post('http://localhost:8000/api/users/acceptRefundAdmin',{username : event.target.getAttribute('username') , courseTitle :event.target.getAttribute('courseTitle') })
+      await axios.post('http://localhost:8000/api/users/acceptRefundAdmin',{username : event.target.getAttribute('username') , courseTitle :event.target.getAttribute('courseTitle') })
+     //  console.log(res);
+    }
+
+    const reject = async (event) => {
+         
+        //alert(event.target.getAttribute('id'))
+      await axios.post('http://localhost:8000/api/users/rejectRefundAdmin',{username : event.target.getAttribute('username') , courseTitle :event.target.getAttribute('courseTitle') })
      //  console.log(res);
     }
 
@@ -67,21 +74,17 @@ function ViewRequestRefundAdmin (){
                 <TableCell align="right">{request.RefundedAmount}</TableCell>
                 <TableCell align="right" >  <Button username={request.Username} courseTitle={request.Title} onClick={accept} variant="contained" color="success"> Accept Refund </Button>
                 </TableCell>
+                <TableCell align="right" >  <Button username={request.Username} courseTitle={request.Title} onClick={reject} variant="outlined" color="error" > Reject Refund </Button>
+                </TableCell>
                 </TableRow>
+                
             ))}
             </TableBody>
         </Table>
         </TableContainer>
     </div>
  );
-    
-    {/* {/* //  {reports.map((report) =>(
 
-    //         <Typography  variant="h6" gutterBottom align="left" >
-    //         {report.Username}
-    //         </Typography>
-    //           ))} */}
-    
 
    
 }

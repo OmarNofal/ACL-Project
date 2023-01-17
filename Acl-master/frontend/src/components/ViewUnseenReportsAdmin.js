@@ -38,9 +38,8 @@ function ViewUnseenReportsAdmin (){
         <div>
         <Typography variant="h2"> Reports</Typography>
         </div>
-        <div> </div>
-        <div> </div>
-        <div> </div>
+
+        <div> <Button   variant="contained" sx={{bgcolor:'#FFFF00'}}> Pending </Button></div>
 
     <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -68,7 +67,7 @@ function ViewUnseenReportsAdmin (){
                 <TableCell align="right">{report.FollowUps}</TableCell>
                 <TableCell align="right" >  <Button id={report._id} onClick={resolve} variant="contained" color="success"> Resolve </Button>
                 </TableCell>
-                <TableCell align="right">   <Button   variant="contained" color="secondary"> Pending </Button>
+                <TableCell align="right">   <Button   variant="contained" sx={{bgcolor:'#FFFF00'}}> Pending </Button>
                 </TableCell>
                 </TableRow>
             ))}
