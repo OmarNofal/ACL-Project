@@ -153,7 +153,8 @@ const Buy = () => {
      const username1=localStorage.getItem('buyerUsername')
         e.preventDefault();
         try {
-            const res = await axios.post('/api/courses/buyCourse', { courseTitle:title, username:username1 });
+            const res = await axios.post('http://localhost:8000/api/courses/buyCourse', { courseTitle:title, username:username1 });
+            console.log(res.data);
             setUrl(res.data);
         } catch (err) {
             console.error(err);

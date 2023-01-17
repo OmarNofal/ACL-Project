@@ -454,8 +454,8 @@ const buyCourse = asyncHandler(async (req, res) => {
             quantity: 1,
         }],
         // TODO implement cancel webpage
-        success_url: `http://localhost:8000/api/courses/coursePaid?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `http://localhost:8000/cancel.html`,
+        success_url: `http://localhost:3000/success`,
+        cancel_url: `http://localhost:3000/cancel`,
       })
 
     if (!session) {
@@ -476,7 +476,7 @@ const buyCourse = asyncHandler(async (req, res) => {
     )
     await purchase.save();
 
-    res.send("session.url");
+    res.send(session.url);
 })
 
 

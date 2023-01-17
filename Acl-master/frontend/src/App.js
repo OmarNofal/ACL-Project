@@ -41,6 +41,7 @@ import ResetPasswordPage from './pages/ResetPassword';
 import ChangePassword from './components/ChangePassword';
 import SelectGender from './components/SelectGender';
 import Buy from './pages/Buy';
+import PurchaseSuccess from './pages/PurchaseSuccess';
 function App() {
   
   return (
@@ -87,6 +88,7 @@ function App() {
               <Route path='/myEarnings' element={<InstructionEarnings/>}/>
               <Route path='/verifyUser' element={<UserVerified/>}/>
               <Route path='/resetPassword' element={<ResetPasswordPage/>}/>
+              <Route path='/success' element={<PurchaseSuccess/>}/>
 
             </Routes>
           </div>

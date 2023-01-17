@@ -639,7 +639,6 @@ const createDiscount = asyncHandler(async(req,res)=>{
     console.log(year);
     console.log(date);
     const filter={"Title":course} //or whatever
-    const filter={"Title":course} //or whatever
     const update1={"DiscountPercentage":discount};
     const update2={"DiscountDeadline":date};
     await Course.findOneAndUpdate(filter, update1);

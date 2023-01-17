@@ -9,6 +9,7 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
+import axios from "axios";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -26,6 +27,20 @@ function Login() {
     (state) => state.auth
   )
 
+
+  const onForgotPasswordClicked = () => {
+    axios({
+      method: "POST",
+      url: "http://localhost:8000/api/users/requestPasswordChange",
+      data: {
+        Email: Email
+      }
+    }).then(
+      res => {toast.success("An email has been sent to you")}
+    ).catch(
+      res => {toast.error("An error ocurred")}
+    )
+  }
   
  useEffect(()=>{
   if(isError){
@@ -124,7 +139,7 @@ function Login() {
               Sign In
             </Button>
             <Grid item xs>
-                <Link href="/ForgotMyPassword" variant="body2">
+                <Link href="#" variant="body2" onClick={onForgotPasswordClicked}>
                   Forgot password?
                 </Link>
               </Grid>
