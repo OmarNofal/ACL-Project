@@ -28,10 +28,10 @@ import EditACourse from './components/EditACourse';
 import CreateExam from './components/CreateExam';
 import EditbioOrEmail from './components/EditbioOrEmail';
 
-
-
 // Lydo's stuff
 import InstructionEarnings from './pages/InstructorEarnings';
+import UserVerified from './pages/UserVerified';
+
 
 function App() {
   return (
@@ -66,19 +66,12 @@ function App() {
               <Route path='/EditACourse' element={<EditACourse />}/>
               <Route path='/CreateExam' element={<CreateExam />}/>
               <Route path='/EditbioOrEmail' element={<EditbioOrEmail />}/>
-
+              <Route path='/Guest' element={<Guest />}/>
 
               {/* Lydo's stuff*/}
               <Route path='/myEarnings' element={<InstructionEarnings/>}/>
+              <Route path='/verifyUser' element={<UserVerified/>}/>
 
-
-
-       
-
-
-
-
-              <Route path='/Guest' element={<Guest />}/>
             </Routes>
           </div>
       </Router>

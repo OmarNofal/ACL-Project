@@ -1,11 +1,14 @@
+require('dotenv')
 const nodemailer = require('nodemailer')
+const env = process.env;
+
 
 const transporter = nodemailer.createTransport({
-  host: "smtp-relay.sendinblue.com",
+  host: "smtp.gmail.com",
   port: 587,
   auth: {
     user: "omarwalidhamed@gmail.com",
-    pass: "XVW4QykPcCTbq70t"
+    pass: env.GMAIL_PASSWORD
   }
 });
 function sendEmailTest() {
@@ -17,4 +20,4 @@ function sendEmailTest() {
     });
 }
 
-module.exports = transporter;
+module.exports =  transporter;

@@ -67,7 +67,7 @@ const registerUser = asyncHandler(async (req,res)=>{
             subject: "Email Verification",
             text: `Hello ${user.Username} and welcome to ACL Coursera\n`
             + "We are happy to have you onboard, we request you to verify your email from here\n"
-            + `http://localhost:8000/api/users/verifyUser?username=${user.Username}&hash=${verificationHash}`
+            + `http://localhost:3000/verifyUser?username=${user.Username}&hash=${verificationHash}`
         });
 
         res.status(201).json({
@@ -121,7 +121,13 @@ const loginUser = asyncHandler(async (req,res)=>{
     const{Email,Password}=req.body
     const user =await User.findOne({Email})
 
-    if(user&&(await bcrypt.compare(Password,user.Password))){
+    if(
+        user
+        &&
+        (await bcrypt.compare(Password,user.Password))
+        &&
+        user.IsVerified != false
+        ){
         res.status(201).json({
             _id:user.id,
             Username:user.Username,
@@ -134,9 +140,16 @@ const loginUser = asyncHandler(async (req,res)=>{
            
             token: generateToken(user._id)
         })
-    }else{
+    } else if (!user) {
         res.status(400)
-        throw new Error('Invalid credentials')
+        res.json({result: "error", message: "Invalid credentials"});
+    }
+    else if (user.IsVerified == false) {
+        res.status(400)
+        res.json({result: "error", message: "You are not verified"});
+    } else {
+        res.status(400)
+        res.json({result:"error", message: "Invalid credentials"})
     }
    // res.json({message : 'login user'})
 })

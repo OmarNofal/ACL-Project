@@ -213,3 +213,12 @@ h3 {
     font-size: 1.5rem;
   }
 }
+
+
+.center-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
+}
