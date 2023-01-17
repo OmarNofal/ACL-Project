@@ -102,7 +102,7 @@ function ViewInstructorCourse() {
                             <button type='click' className='btn:hover' onClick={()=>{
                               navigate('/EditACourse')  
                               localStorage.setItem('courseName',item.Title)
-                            }}>Edit this course</button>
+                            }}>Add discount to this course</button>
                          
                         </pre>
                 })

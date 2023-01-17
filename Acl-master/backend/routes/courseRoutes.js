@@ -25,7 +25,7 @@ router.post('/addExerciseToCourse', addExerciseToCourse);
 router.get('/instructor/viewCoursesTitles/:Instructor',viewCoursesTitles)
 router.get('/instructor/filterCourses',filterCoursesInst)
 router.get('/instructor/searchCourses', searchCoursesInst)
-router.get('/buyCourse', buyCourse);
+router.post('/buyCourse', buyCourse);
 router.post('/instructor/createCourse', createCourseInst)
 
 router.post('/admin/setPromotionForCourses', setPromotionForCourses)

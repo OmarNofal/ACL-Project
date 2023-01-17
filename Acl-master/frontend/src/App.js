@@ -29,6 +29,7 @@ import CreateExam from './components/CreateExam';
 import EditbioOrEmail from './components/EditbioOrEmail';
 import ChangePassword from './components/ChangePassword';
 import SelectGender from './components/SelectGender';
+import Buy from './pages/Buy';
 function App() {
   
   return (
@@ -65,6 +66,8 @@ function App() {
               <Route path='/CreateExam' element={<CreateExam />}/>
               <Route path='/EditbioOrEmail' element={<EditbioOrEmail />}/>
               <Route path='/ChangePassword' element={<ChangePassword />}/>
+              <Route path='/Buy' element={<Buy />}/>
+
 
 
               

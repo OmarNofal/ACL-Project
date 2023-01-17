@@ -1,11 +1,16 @@
 import React from 'react'
 import { useEffect,useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { toast } from 'react-toastify'
 
 
 
 
 function ViewAllCoursesForINSorTRAINEEorGUEST() {
+
+    const { user } = useSelector((state) => state.auth)
+
     const[items,setItems]=useState([])
     const [search,setSearch]=useState('')
     const [search1,setSearch1]=useState('')
@@ -135,6 +140,7 @@ function ViewAllCoursesForINSorTRAINEEorGUEST() {
                             </div>
                            <div>
                            <button type='click' className='btn:hover' onClick={()=>{
+                                     
                                 localStorage.setItem('url',item.PreviewVideoURL)
                                 navigate('/MyCourses')
                             }}>View a preview video</button>
@@ -151,6 +157,20 @@ function ViewAllCoursesForINSorTRAINEEorGUEST() {
                                 </>
                                 :null}
                             </div>
+                            <div>
+                           <button type='click' className='btn:hover' onClick={()=>{
+                                     
+                                localStorage.setItem('courseTitle',item.Title)
+                                if(user.Username){
+                                    localStorage.setItem('buyerUsername',user.Username)
+
+                                }else{
+                                        toast.error("Please sign up")
+                                }
+
+                                navigate('/Buy')
+                            }}>Buy this course</button>
+                           </div>
                         </pre>
                 })
             }
