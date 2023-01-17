@@ -19,6 +19,8 @@ import AddNewCourse from './components/AddNewCourse';
 import ViewInstructorCourse from './components/ViewInstructorCourse';
 import MyCourses from './components/MyCourses';
 import Quiz from './pages/Quiz'
+import ViewUnseenReportsAdmin from './components/ViewUnseenReportsAdmin'
+import ViewRequestRefundAdmin from './components/ViewRequestRefundAdmin'
 function App() {
   return (
     <>
@@ -42,6 +44,8 @@ function App() {
               <Route path='/ViewInstructorCourse' element={<ViewInstructorCourse />}/>
               <Route path='/MyCourses' element={<MyCourses />}/>
               <Route path='/Quiz' element={<Quiz />}/>
+              <Route path='/ViewUnseenReportsAdmin' element={<ViewUnseenReportsAdmin />}/>
+              <Route path='/ViewRequestRefundAdmin' element={<ViewRequestRefundAdmin />}/>
 
 
 

@@ -840,27 +840,32 @@ const changeReportsStatusAdmin=asyncHandler(async(req,res)=>{
 const acceptRefundAdmin=asyncHandler(async(req,res)=>{
     const {username,courseTitle}=req.body
 
-    const user = await User.find({Username:username})
+    
+    const user = await User.findOne({Username:username})
     if(!user){
         res.status(400)
         throw new Error ('User not found')
     }
-
-    const course=await Course.find({Title:courseTitle})
+    console.log(user.Username)
+    const course=await Course.findOne({Title:courseTitle})
     if(!course){
         res.status(400)
         throw new Error ('Course not found')
     }
-
-    const refundrequest=await RefundRequests.find({Username:username},{Title:title})
+    console.log(course.Title)
+    const refundrequest=await RefundRequests.findOneAndDelete({Username:username,Title:courseTitle})
     if(!refundrequest)
     {
         res.status(400)
         throw new Error ('User didnot request')
     }
+    
+
     const refundedamount=refundrequest.RefundedAmount
     const newAmount=user.Wallet+refundedamount
-    const user2=User.findOneAndUpdate({Username:username},{Wallet:newAmount})
+    console.log(newAmount)
+    const user2=await User.findOneAndUpdate({Username:username},{Wallet:newAmount})
+    console.log(user2.Wallet)
     res.status(200).send(user2)
 
 })
