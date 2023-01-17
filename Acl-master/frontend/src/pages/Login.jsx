@@ -134,7 +134,7 @@ function Login() {
               Sign In
             </Button>
             <Grid item xs>
-                <Link href="#" variant="body2">
+                <Link href="/ForgotMyPassword" variant="body2">
                   Forgot password?
                 </Link>
               </Grid>
