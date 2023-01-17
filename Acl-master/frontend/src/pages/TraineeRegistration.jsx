@@ -70,7 +70,7 @@ function TraineeRegistration() {
     }
     if((isSuccess||user)&&name==true){
    
-        navigate('/Login')
+      toast.success("success you have to verify your account then log in")
     }
     dispatch(reset())
 

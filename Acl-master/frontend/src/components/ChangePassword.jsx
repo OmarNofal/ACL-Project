@@ -37,7 +37,7 @@ function ChangePassword() {
               console.error('Error:', error);
           });
           
-          navigate('/InstructorHome')  
+          //navigate('/InstructorHome')  
         } 
   
         const onChange = (e) => {

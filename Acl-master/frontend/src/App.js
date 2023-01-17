@@ -28,8 +28,9 @@ import EditACourse from './components/EditACourse';
 import CreateExam from './components/CreateExam';
 import EditbioOrEmail from './components/EditbioOrEmail';
 import ChangePassword from './components/ChangePassword';
-
+import SelectGender from './components/SelectGender';
 function App() {
+  
   return (
     <>
       <Router>
@@ -54,7 +55,8 @@ function App() {
               <Route path='/Quiz' element={<Quiz />}/>
               <Route path='/InstructorRegistration' element={<InstructorRegistration />}/>
               <Route path='/TraineeRegistration' element={<TraineeRegistration />}/>
-              
+              <Route path='/SelectGender' element={<SelectGender />}/>
+
               <Route path='/WebsitePolicy' element={<WebsitePolicy />}/>
               <Route path='/InstructorSecondContract' element={<InstructorSecondContract />}/>
 

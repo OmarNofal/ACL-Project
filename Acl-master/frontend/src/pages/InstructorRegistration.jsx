@@ -60,7 +60,7 @@ function InstructorRegistration() {
     }
     if((isSuccess||user)&&name==true&& name2==true){
    
-        navigate('/Login')
+      toast.success("success you have to verify your account then log in")
     }
     dispatch(reset())
 
