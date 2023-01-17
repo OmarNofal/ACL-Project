@@ -76,10 +76,6 @@ function App() {
               <Route path='/Buy' element={<Buy />}/>
 
               <Route path='/Guest' element={<Guest />}/>
-              <Route path='/ChangePassword' element={<ChangePassword />}/>
-              <Route path='/Buy' element={<Buy />}/>
-
-
 
               {/* Lydo's stuff*/}
               <Route path='/myEarnings' element={<InstructionEarnings/>}/>
