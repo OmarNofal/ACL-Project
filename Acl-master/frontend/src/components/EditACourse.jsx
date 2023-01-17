@@ -53,6 +53,7 @@ function EditACourse() {
             console.error('Error:', error);
         });
         
+        
         navigate('/InstructorHome')  
       } 
 

@@ -15,8 +15,10 @@ function IndividualTrainee() {
                 Submit
                 </button>
             </div>
+
           
             <Link to="../Quiz">
+
      <button type="button" className='btn btn-block'>
           Go to Quiz
      </button>
@@ -41,6 +43,13 @@ function IndividualTrainee() {
 
                   </Link>
           </pre>
+          <pre className='goal'>
+              <Link to='/ChangePassword'>
+                  <t1>Change my Password
+                  </t1>
+
+              </Link>
+      </pre>
     </>
     
   )
