@@ -597,16 +597,22 @@ const submitContract = asyncHandler(async (req, res)=>{
 })
 
 const createDiscount = asyncHandler(async(req,res)=>{
+    console.log('here')
     const discount=req.body["DiscountPercentage"];
     const day=req.body["Day"];
     const month=req.body["Month"];
     const year=req.body["Year"];
+    const course=req.body["Course"]
+    console.log(course);
+    console.log(year);
     const date=new Date(year,month-1,day, 0, 0, 0);
+   
+    
     console.log(day);
     console.log(month);
     console.log(year);
     console.log(date);
-    const filter={"Title":"csen101"} //or whatever
+    const filter={"Title":course} //or whatever
     const update1={"DiscountPercentage":discount};
     const update2={"DiscountDeadline":date};
     await Course.findOneAndUpdate(filter, update1);
@@ -1124,3 +1130,5 @@ module.exports = {
     resetPassword,
     rejectRefundAdmin
 }
+
+

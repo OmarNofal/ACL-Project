@@ -56,6 +56,13 @@ function test() {
 
               </Link>
       </pre>
+      <pre className='goal'>
+             <Link to='/CreateDiscountAdmin'>
+              <t1> Issue Discount on Courses
+              </t1>
+
+              </Link>
+      </pre>
 
 
     </div>

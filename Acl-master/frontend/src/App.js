@@ -22,6 +22,7 @@ import Quiz from './pages/Quiz'
 import ViewUnseenReportsAdmin from './components/ViewUnseenReportsAdmin'
 import ViewRequestRefundAdmin from './components/ViewRequestRefundAdmin'
 import ViewCorporateRequests from './components/ViewCorporateRequests'
+import CreateDiscountAdmin from './components/CreateDiscountAdmin'
 function App() {
   return (
     <>
@@ -48,7 +49,7 @@ function App() {
               <Route path='/ViewUnseenReportsAdmin' element={<ViewUnseenReportsAdmin />}/>
               <Route path='/ViewRequestRefundAdmin' element={<ViewRequestRefundAdmin />}/>
               <Route path='/ViewCorporateRequests' element={<ViewCorporateRequests />}/>
-              
+              <Route path='/CreateDiscountAdmin' element={<CreateDiscountAdmin />}/>
 
               <Route path='/Guest' element={<Guest />}/>
             </Routes>
