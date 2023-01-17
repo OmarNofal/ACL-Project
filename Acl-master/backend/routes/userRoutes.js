@@ -40,7 +40,8 @@ const {
     viewAllRequestRefund,
     editBiography,
     resetPassword,
-    requestPasswordChange
+    requestPasswordChange,
+    rejectRefundAdmin
 }=require('../controllers/userController')
 
 const {
@@ -102,5 +103,6 @@ router.post('/rejectRequestAccessCorporate',rejectRequestAccessCorporate)
 
 router.post('/requestPasswordChange', requestPasswordChange);
 router.post('/resetPassword', resetPassword);
+router.post('/rejectRefundAdmin', rejectRefundAdmin);
 
 module.exports=router

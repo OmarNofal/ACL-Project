@@ -19,6 +19,10 @@ import AddNewCourse from './components/AddNewCourse';
 import ViewInstructorCourse from './components/ViewInstructorCourse';
 import MyCourses from './components/MyCourses';
 import Quiz from './pages/Quiz'
+import ViewUnseenReportsAdmin from './components/ViewUnseenReportsAdmin'
+import ViewRequestRefundAdmin from './components/ViewRequestRefundAdmin'
+import ViewCorporateRequests from './components/ViewCorporateRequests'
+import CreateDiscountAdmin from './components/CreateDiscountAdmin'
 import InstructorRegistration from './pages/InstructorRegistration';
 import TraineeRegistration from './pages/TraineeRegistration';
 import WebsitePolicy from './components/WebsitePolicy';
@@ -61,11 +65,13 @@ function App() {
               <Route path='/ViewInstructorCourse' element={<ViewInstructorCourse />}/>
               <Route path='/MyCourses' element={<MyCourses />}/>
               <Route path='/Quiz' element={<Quiz />}/>
-              <Route path='/InstructorRegistration' element={<InstructorRegistration />}/>
+              <Route path='/ViewUnseenReportsAdmin' element={<ViewUnseenReportsAdmin />}/>
+              <Route path='/ViewRequestRefundAdmin' element={<ViewRequestRefundAdmin />}/>
+              <Route path='/ViewCorporateRequests' element={<ViewCorporateRequests />}/>              <Route path='/InstructorRegistration' element={<InstructorRegistration />}/>
               <Route path='/TraineeRegistration' element={<TraineeRegistration />}/>
               <Route path='/SelectGender' element={<SelectGender />}/>
 
-              <Route path='/WebsitePolicy' element={<WebsitePolicy />}/>
+              <Route path='/CreateDiscountAdmin' element={<CreateDiscountAdmin />}/>              <Route path='/WebsitePolicy' element={<WebsitePolicy />}/>
               <Route path='/InstructorSecondContract' element={<InstructorSecondContract />}/>
 
               <Route path='/ForgotMyPassword' element={<ForgotMyPassword />}/>

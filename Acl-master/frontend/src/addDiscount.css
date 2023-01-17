@@ -1,0 +1,28 @@
+.discountValue{
+    display: flex;
+}
+
+.parent{
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.24),
+      0 17px 50px 0 rgba(0, 0, 0, 0.19);
+      margin:20px;
+      border-radius: 4px;
+      padding: 10px;
+      padding-left: 40px;
+      align-items: center;
+}
+
+.parent:hover{
+    box-shadow: 0 16px 16px 0 rgba(0, 0, 0, 0.24),
+      0 17px 50px 0 rgba(0, 0, 0, 0.19);
+}
+
+
+.courseComponent{
+    padding: 20px;
+    
+    background-color: white; 
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    color: #f4976c;
+  }
