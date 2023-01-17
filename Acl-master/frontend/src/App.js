@@ -19,6 +19,10 @@ import AddNewCourse from './components/AddNewCourse';
 import ViewInstructorCourse from './components/ViewInstructorCourse';
 import MyCourses from './components/MyCourses';
 import Quiz from './pages/Quiz'
+import InstructorRegistration from './pages/InstructorRegistration';
+import TraineeRegistration from './pages/TraineeRegistration';
+import WebsitePolicy from './components/WebsitePolicy';
+import InstructorSecondContract from './pages/InstructorSecondContract';
 function App() {
   return (
     <>
@@ -42,6 +46,13 @@ function App() {
               <Route path='/ViewInstructorCourse' element={<ViewInstructorCourse />}/>
               <Route path='/MyCourses' element={<MyCourses />}/>
               <Route path='/Quiz' element={<Quiz />}/>
+              <Route path='/InstructorRegistration' element={<InstructorRegistration />}/>
+              <Route path='/TraineeRegistration' element={<TraineeRegistration />}/>
+              
+              <Route path='/WebsitePolicy' element={<WebsitePolicy />}/>
+              <Route path='/InstructorSecondContract' element={<InstructorSecondContract />}/>
+       
+
 
 
 

@@ -23,6 +23,7 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import { getType } from '@reduxjs/toolkit'
 
 
+
 const theme = createTheme();
 // const options = [
 //   'Trainee', 'Instructor'
@@ -32,7 +33,7 @@ const theme = createTheme();
 // ];
 // const type1='';
 // const gender1='';
-function Register() {
+function TraineeRegistration() {
   const [formData, setFormData] = useState({
     Username: '',
     Email: '',
@@ -44,32 +45,9 @@ function Register() {
   Gender:''
   })
 
+  const[name,setName]=useState(false)
 
-//   const[type,setType]=useState([])
 
-//   const[type2,setType2]=useState()
-
-//   const[type3,setType3]=useState([])
-
-//   const[type4,setType4]=useState()
-
-//   const handleCountry=(event)=>{
-//     const getcountryid=event.target.value
-//     type1=getcountryid;
-//     //console.log(getcountryid)
-//     setType2(getcountryid)
-//     localStorage.setItem('Type',getcountryid)
-
-// }
-
-// const handleCountry2=(event)=>{
-//   const getcountryid2=event.target.value
-//   setType4(getcountryid2)
-//   gender1=getcountryid2;
-//   //console.log(gender1) 
-//   localStorage.setItem('Gender',getcountryid2)
-
-// }
 
 
 
@@ -90,7 +68,7 @@ function Register() {
     if(isError){
         toast.error(message)
     }
-    if(isSuccess||user){
+    if((isSuccess||user)&&name==true){
    
         navigate('/Login')
     }
@@ -115,18 +93,22 @@ function Register() {
     if(Password!=Password2){
         toast.error('password not match')
     }else{
-        const userData={
-          Username,
-          Email,
-          Password,
-          Type,
-        
-          FirstName,
-          LastName,
-          Gender
+        if(name==true)
+        {
+            const userData={
+                Username,
+                Email,
+                Password,
+                Type:'IndividualTrainee',
+              
+                FirstName,
+                LastName,
+                Gender
+        }
+        dispatch(register(userData))
+
         }
 
-        dispatch(register(userData))
     }
     
   }
@@ -216,7 +198,7 @@ function Register() {
 
                 />
               </Grid>
-              <Grid item xs={12} sm={12}>
+              {/* <Grid item xs={12} sm={12}>
 
               
                 <TextField
@@ -230,7 +212,7 @@ function Register() {
                   value={Type}
                   autoFocus
                 />
-              </Grid>
+              </Grid> */}
               <Grid item xs={12} sm={12}>
 
               
@@ -281,7 +263,16 @@ function Register() {
                   autoFocus
                 />
               </Grid>
-              
+              <Grid item xs={12}>
+                <FormControlLabel
+                required
+                  control={<Checkbox value="allowExtraEmails" color="primary" onChange={(e)=>setName(e.target.checked)}/>}
+                  label="I accept the website/ company refund/ payment policy"
+                />
+                <Link href="/WebsitePolicy" variant="body2">
+                View website policy
+                </Link>
+              </Grid>
               
             </Grid>
             <Button
@@ -294,7 +285,7 @@ function Register() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="/Login" variant="body2">
+                <Link href="#" variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>
@@ -307,7 +298,7 @@ function Register() {
  
 }
 
-export default Register
+export default TraineeRegistration
 
 /*
  return (

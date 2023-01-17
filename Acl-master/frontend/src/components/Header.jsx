@@ -39,8 +39,13 @@ function Header() {
               </Link>
             </li>
             <li>
-              <Link to='/register'>
-                <FaUser /> Register
+              <Link to='/TraineeRegistration'>
+                <FaUser /> Trainee Registerion
+              </Link>
+            </li>
+            <li>
+              <Link to='/InstructorRegistration'>
+                <FaUser /> Instructor Registerion
               </Link>
             </li>
           </>
