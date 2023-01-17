@@ -1,5 +1,7 @@
 import React from 'react'
 import { useEffect,useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+
 
 
 
@@ -11,8 +13,7 @@ function ViewAllCoursesForINSorTRAINEEorGUEST() {
     const [search3,setSearch3]=useState('')
     const [search4,setSearch4]=useState('')
     const [show,setShow]=useState(false)
-
-
+    const [show2,setShow2]=useState(false)
     useEffect(()=>{
         fetch('http://localhost:8000/api/courses/getAllCourses')
         .then(response=>response.json())
@@ -20,8 +21,6 @@ function ViewAllCoursesForINSorTRAINEEorGUEST() {
         const countryname=localStorage.getItem('country')
         console.log(countryname)
     },[])
-
-
     const handleCountry=()=>{
         if(localStorage.getItem('country')=="Egypt" ){
             return .6
@@ -29,6 +28,8 @@ function ViewAllCoursesForINSorTRAINEEorGUEST() {
             return 7
         }
     }
+    const navigate=useNavigate()
+
     return (
 
         <div >
@@ -113,17 +114,16 @@ function ViewAllCoursesForINSorTRAINEEorGUEST() {
                     return search2.toLocaleLowerCase()===''
                     ?item
                     :(item.Price<=search2)
-                }).map(item=>{
-                    
-                    return<pre className='goal'>
-                            
+                }).map(item=>{ 
+                    return<pre className='goal'> 
                             <h1>{item.Title}</h1>
                             <div>Rating:{item.Rating.Score}</div>
                             <div>Hours:{item.Hours}</div>
                             <div>Subject:{item.Subject}</div>
                             <div>Instructor:{item.Instructor}</div>
                             <div>Prices:${item.Price}</div>
-
+                            
+                            <div>
                             <button type='click' className='btn:hover' onClick={()=>{
                                 setShow(!show)
                                 if(item.Show=="true"){
@@ -131,26 +131,26 @@ function ViewAllCoursesForINSorTRAINEEorGUEST() {
                                 }else{
                                     item.Show="true"
                                 }
-                                
-                            
                             }}>View details</button>
+                            </div>
+                           <div>
+                           <button type='click' className='btn:hover' onClick={()=>{
+                                localStorage.setItem('url',item.PreviewVideoURL)
+                                navigate('/MyCourses')
+                            }}>View a preview video</button>
+                           </div>
                             <div>
                                 {item.Show=="true"?<>
                                     <div>Subtitle:{item.Subtitles[0].Name}</div>
                                     <div>Exerise:{item.Exercises[0].Name}</div>
                                     <div>Subtitle total length:{item.Subtitles[0].LengthMins}</div>
                                     <div>Hours:{item.Hours}</div>
-
                                     <div>Price after discount:${Number(item.Price)*
                                         Number(handleCountry())
                                     }</div>
-
-                                
                                 </>
-                                
                                 :null}
                             </div>
-                           
                         </pre>
                 })
             }

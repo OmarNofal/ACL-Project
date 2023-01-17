@@ -13,7 +13,7 @@ function AddNewCourse() {
        
         Price:'',
         Subject:'',
-        Instructor:'',
+      
         Subtitles:'',
         Exercises:'',
         Hours:'',
@@ -23,7 +23,7 @@ function AddNewCourse() {
       
         Price,
         Subject,
-      
+        Instructor,
         SubName,
         SubUrl
         ,Subdesc,
@@ -34,7 +34,11 @@ function AddNewCourse() {
 
       const navigate = useNavigate()
       const onSubmit = (e) => {
-
+        
+        //const t=localStorage.getItem('user').Email
+        //const v=t.Username;
+        
+        //console.log(user.Email)
         e.preventDefault()
         const data = { Title:Title,
            
@@ -137,7 +141,7 @@ function AddNewCourse() {
            onChange={onChange}
          />
        </div>
-       
+      
        <div className='form-group'>
          <input
            type='text'

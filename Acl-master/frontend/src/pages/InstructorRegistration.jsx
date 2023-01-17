@@ -96,6 +96,7 @@ function InstructorRegistration() {
               }
       
               dispatch(register(userData))
+              
         }
        
     }
