@@ -41,6 +41,13 @@ function InstructorHome() {
 
               </Link>
       </pre>
+      <pre className='goal'>
+              <Link to='/CreateExam'>
+                  <t1>               Create Exam
+                  </t1>
+
+              </Link>
+      </pre>
     </>
     
   )

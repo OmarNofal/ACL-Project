@@ -24,6 +24,8 @@ import TraineeRegistration from './pages/TraineeRegistration';
 import WebsitePolicy from './components/WebsitePolicy';
 import InstructorSecondContract from './pages/InstructorSecondContract';
 import ForgotMyPassword from './pages/ForgotMyPassword';
+import EditACourse from './components/EditACourse';
+import CreateExam from './components/CreateExam';
 function App() {
   return (
     <>
@@ -54,6 +56,10 @@ function App() {
               <Route path='/InstructorSecondContract' element={<InstructorSecondContract />}/>
 
               <Route path='/ForgotMyPassword' element={<ForgotMyPassword />}/>
+              <Route path='/EditACourse' element={<EditACourse />}/>
+              <Route path='/CreateExam' element={<CreateExam />}/>
+
+
 
        
 

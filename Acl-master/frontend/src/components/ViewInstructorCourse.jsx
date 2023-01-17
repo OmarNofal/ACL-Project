@@ -1,6 +1,7 @@
 import React from 'react'
 import { useEffect,useState } from 'react'
 import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 function ViewInstructorCourse() {
     const [search,setSearch]=useState('')
@@ -10,6 +11,8 @@ function ViewInstructorCourse() {
 
 
     const{user}=useSelector((state)=>state.auth)
+    const navigate = useNavigate()
+
     //http://localhost:8000/api/courses/instructor/filterCourses
     const[items,setItems]=useState([])
     const username1=user.Username
@@ -96,6 +99,9 @@ function ViewInstructorCourse() {
                             <div>Price: {item.Price}</div>
                             <div>Subject: {item.Subject}</div>
                             <div>Instructor: {item.Instructor}</div>
+                            <button type='click' className='btn:hover' onClick={()=>{
+                              navigate('/EditACourse')  
+                            }}>Edit this course</button>
                          
                         </pre>
                 })
