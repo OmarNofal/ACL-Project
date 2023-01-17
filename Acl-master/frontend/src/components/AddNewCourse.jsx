@@ -1,10 +1,13 @@
 import React from 'react'
 import { useRef,useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 
 function AddNewCourse() {
   const value=0
+  const{user}=useSelector((state)=>state.auth)
+
     const [formData, setFormData] = useState({
         Title:'',
        
@@ -20,7 +23,7 @@ function AddNewCourse() {
       
         Price,
         Subject,
-        Instructor,
+      
         SubName,
         SubUrl
         ,Subdesc,
@@ -31,12 +34,17 @@ function AddNewCourse() {
 
       const navigate = useNavigate()
       const onSubmit = (e) => {
+        
+        //const t=localStorage.getItem('user').Email
+        //const v=t.Username;
+        
+//console.log(usEmailer.)
         e.preventDefault()
         const data = { Title:Title,
            
             Price:Price,
             Subject:Subject,
-            Instructor:Instructor,
+            Instructor:user.Username,
             Subtitles:{Name:SubName, LengthMins: Sublength,VideoURL: SubUrl,VideoDescription: Subdesc},
             Exercises:{Name:ExersiceName,CourseTitle:Title},
             Summary:Summary,
@@ -133,17 +141,7 @@ function AddNewCourse() {
            onChange={onChange}
          />
        </div>
-       <div className='form-group'>
-         <input
-           type='text'
-           className='form-control'
-           id='Instructor'
-           name='Instructor'
-           value={Instructor}
-           placeholder='Enter Instructor'
-           onChange={onChange}
-         />
-       </div>
+       
        <div className='form-group'>
          <input
            type='text'
