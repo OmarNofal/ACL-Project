@@ -42,6 +42,9 @@ import ChangePassword from './components/ChangePassword';
 import SelectGender from './components/SelectGender';
 import Buy from './pages/Buy';
 import PurchaseSuccess from './pages/PurchaseSuccess';
+import Test from './pages/Test'
+import Course from './pages/Course'
+
 function App() {
   
   return (
@@ -80,6 +83,7 @@ function App() {
               <Route path='/CreateExam' element={<CreateExam />}/>
               <Route path='/EditbioOrEmail' element={<EditbioOrEmail />}/>
               <Route path='/ChangePassword' element={<ChangePassword />}/>
+              <Route path='/Course' element={<Course />}/>
               <Route path='/Buy' element={<Buy />}/>
 
               <Route path='/Guest' element={<Guest />}/>
