@@ -34,11 +34,7 @@ function AddNewCourse() {
 
       const navigate = useNavigate()
       const onSubmit = (e) => {
-        
-        //const t=localStorage.getItem('user').Email
-        //const v=t.Username;
-        
-//console.log(usEmailer.)
+
         e.preventDefault()
         const data = { Title:Title,
            

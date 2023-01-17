@@ -37,7 +37,8 @@ const {
     requestAccessCorporate,
     viewRequestAccessCorporate,
     rejectRequestAccessCorporate,
-    viewAllRequestRefund
+    viewAllRequestRefund,
+    editBiography
 }=require('../controllers/userController')
 
 const { protect } = require('../middleware/authMiddleware')
@@ -61,7 +62,7 @@ router.get('/viewGrade',viewGrade)
 router.post('/sendEmail',sendEmail)
 router.get('/trainee/viewCourses/viewCourse', viewCourse)
 router.post('/instructor/editEmail', editEmail)
-//router.post('/instructor/editBiography', editBiography)
+router.post('/instructor/editBiography', editBiography)
 router.get('/instructor/viewContract', viewContract)
 router.post('/instructor/submitContract', submitContract)
 router.post('/instructor/createDiscount', createDiscount)
