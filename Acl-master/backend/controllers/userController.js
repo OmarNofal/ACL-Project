@@ -18,6 +18,11 @@ const { ok } = require('assert')
 const Purchase = require('../model/purchase')
 const CorporateRequest=require('../model/corporateRequests')
 const { transporter } = require('./helpers/EmailTransporter')
+//const { PDFDocument, StandardFonts, rgb } =require('pdf-lib')
+const PDFDocument = require('pdfkit');
+var fs = require('fs');
+var mailer=require('nodemailer')
+
 
 
 //const Trainees = require('../model/Trainees')
@@ -315,9 +320,9 @@ const viewRatingsInstructor=asyncHandler((async (req,res)=>{
 
 const rateCourse=asyncHandler(async (req,res)=>{
     const { Username } = req.body.user;
-    const { titleCourse, rating, review } = req.body
+    const { titleCourse, rating} = req.body
 
-    if(!titleCourse||!rating || !review){
+    if(!titleCourse||!rating ){
         res.status(400)
         res.json({res: "error", message: "Missing fields"});
     }
@@ -350,13 +355,12 @@ const rateCourse=asyncHandler(async (req,res)=>{
 
     RatingCourse.create({
        RatingGiven:rating,
-       Review:review,
        CourseTitle: course.Title,
        ReviewerUsername: Username
     })
 
-    course.Reviews.push(review)
-    await course.save()
+//    course.Reviews.push(review)
+//    await course.save()
 
     var sumSoFar=course.Rating.SumSoFar
     var count=course.Rating.ReviewCounts
@@ -716,6 +720,8 @@ const requestRefundTrainee=asyncHandler(async(req,res)=>{
     var flag=0
     let index=0;
     var purchasedfor=0;
+    console.log(user)
+    /*
     for(; index < user.Courses.length; index++)
     {
        const courseTitle2 = user.Courses[index].title
@@ -733,27 +739,28 @@ const requestRefundTrainee=asyncHandler(async(req,res)=>{
         throw new Error ('User not enrolled in this course')
     }
 
-    const previousReport=RefundRequests.find({Username:username},{Title:courseTitle})
+   
+    console.log(previousReport)
     //IF ERROR CHECK THIS
-    if(previousReport){
+    if(RefundRequests.find({Username:username},{Title:courseTitle})){
         res.status(400).send('You have requested before')
     }
 
     const progress=user.Courses[index].progress
-    if(progress>0.5)
+  /*  if(progress>0.5)
     {
         res.status(400)
         throw new Error ('Refund not possible as more than 50% has been attended')
-    }
+    }  */
 
     
     const request=RefundRequests.create({
         Username:username,
         Title:courseTitle,
-        RefundedAmount:purchasedfor 
+        RefundedAmount:50 
      })
 
-     res.status(200).send(request)
+     res.send('Ok')
 
     
 
@@ -782,26 +789,28 @@ const viewWallet=asyncHandler(async(req,res)=>{
 
 
 const reportProblem=asyncHandler(async(req,res)=>{
-    const {username,title,type}=req.body
-    
+    const username=req.body["username"] 
+    const title=req.body["title"];
+    const type=req.body["type"]   
     if(!username||!title||!type)
     {
         res.status(400).send('Error in reporting problem')
     }
-
-    const user = await User.find({Username:username})
+    console.log(username)
+ /*   const user = await User.find({Username:username})
+    console.log(user.Courses);
     if(!user){
         res.status(400)
         throw new Error ('User not found')
     }
+    console.log("hi");
 
-    const course=await Course.find({Title:courseTitle})
+    const course=await Course.find({Title:title})
     if(!course){
         res.status(400)
         throw new Error ('Course not found')
     }
-
-    var flag=0
+    var flag=0;
     let index=0;
     for(; index < user.Courses.length; index++)
     {
@@ -817,7 +826,7 @@ const reportProblem=asyncHandler(async(req,res)=>{
     {
         res.status(400)
         throw new Error ('User not enrolled in this course')
-    }
+    } */
 
     const report=await Report.create({
         Username:username,
@@ -1139,6 +1148,104 @@ const resetPassword = asyncHandler(async (req, res) => {
     res.json({result: "ok"})
 })
 
+const recieveCertificate = asyncHandler(async(req,res)=>{
+
+    const doc = new PDFDocument();
+    doc.pipe(fs.createWriteStream('certificate.pdf'));
+    doc.fontSize(25).text("You have completed the course!", 100, 100);
+//  doc.addPage().fontSize(15).text('Congrats', 100,100);
+    doc.image('CertificateImage.jpg', {
+        fit: [500, 500],
+        align: 'center',
+        valign: 'center'
+    });
+    doc.end();
+
+
+
+
+
+        var transporter=mailer.createTransport({
+            host: 'smtp.gmail.com', 
+            port: 587,
+            service: "gmail",
+            auth: {
+                user: 'anayahiagalal@gmail.com', 
+                pass: 'jcdegdszxyidocny'
+            },
+            secure: false
+        });
+
+
+        var mailOptions = {
+            from: 'ACL <anayahiagalal@gmail.com>',
+            to: 'samameselhy154@gmail.com',
+            subject: 'Course Completion Certificate',
+            html: '<h1>Congratulations</h1><p>You have completed a course in our website. You can find the certificate as a pdf attached to this mail</p>',
+            attachments: [
+                  { 
+                      filename: 'certificate.pdf',
+                      path: './certificate.pdf'
+                  }
+              ]
+          };
+          
+          transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+              console.log(error);
+            } else {
+              console.log('Email sent: ' + info.response);
+            }
+          });
+
+
+   res.send("Email Sent!");
+
+})
+
+
+const downloadNotes = asyncHandler(async(req,res)=>{
+    const doc = new PDFDocument();
+    doc.pipe(fs.createWriteStream('notes.pdf'));
+
+    doc.fontSize(25).text("These are the notes!", 100, 100);
+    
+    doc.end();
+//    const fs=require("fs");
+    const download=require('download')
+
+    const url='https://codeload.github.com/OmarNofal/Rocket-League-Remastered/zip/refs/heads/master'
+
+    ;(async ()=> {
+        await download('./notes.pdf', '..\downloads');
+    })
+    res.send("Downloaded!")  
+})
+
+const downloadCertificate  = asyncHandler(async(req,res)=>{
+
+    const doc = new PDFDocument();
+    doc.pipe(fs.createWriteStream('certificate.pdf'));
+    doc.fontSize(25).text("You have completed the course!", 100, 100);
+//  doc.addPage().fontSize(15).text('Congrats', 100,100);
+    doc.image('CertificateImage.jpg', {
+        fit: [500, 500],
+        align: 'center',
+        valign: 'center'
+    });
+    doc.end();
+
+
+//    const fs=require("fs");
+    const download=require('download')
+
+
+    ;(async ()=> {
+        await download('./certificate.pdf', '..\downloads');
+    })
+    res.send("Downloaded!" )  
+})
+
 module.exports = {
     registerUser,
     loginUser,
@@ -1180,7 +1287,10 @@ module.exports = {
     viewAllRequestRefund,
     requestPasswordChange,
     resetPassword,
-    rejectRefundAdmin
+    rejectRefundAdmin,
+    recieveCertificate,
+    downloadNotes,
+    downloadCertificate
 }
 
 

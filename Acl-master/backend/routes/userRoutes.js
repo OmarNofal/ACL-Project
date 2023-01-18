@@ -41,7 +41,10 @@ const {
     editBiography,
     resetPassword,
     requestPasswordChange,
-    rejectRefundAdmin
+    rejectRefundAdmin,
+    recieveCertificate,
+    downloadCertificate,
+    downloadNotes
 }=require('../controllers/userController')
 
 const {
@@ -104,5 +107,9 @@ router.post('/rejectRequestAccessCorporate',rejectRequestAccessCorporate)
 router.post('/requestPasswordChange', requestPasswordChange);
 router.post('/resetPassword', resetPassword);
 router.post('/rejectRefundAdmin', rejectRefundAdmin);
+
+router.get('/recieveCertificate', recieveCertificate);
+router.get('/downloadNotes', downloadNotes);
+router.get('/downloadCertificate', downloadCertificate);
 
 module.exports=router
