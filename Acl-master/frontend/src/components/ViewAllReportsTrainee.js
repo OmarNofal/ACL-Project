@@ -15,8 +15,7 @@ import '../report.css';
 import { Link, useNavigate } from 'react-router-dom'
 
 
-
-function ViewUnseenReportsAdmin (){
+function ViewAllReportsTrainee (){
    
     const [reports, setViewReports] = useState([]);
 
@@ -24,33 +23,33 @@ function ViewUnseenReportsAdmin (){
     const [index,setIndex]=useState('');
     const [followUp,setFollowUp]=useState('');
    
-    const resolve = async (event) => {
-        //alert(event.target.getAttribute('id'))
-       let res = await axios.post('http://localhost:8000/api/users/changeReportsStatusAdmin',{id : event.target.getAttribute('id') , status : "resolved"})
-       console.log(res);
-    }
+    
 
     const handleNewDiv = (event)=>{
-        // alert(event.target.getAttribute('id').substring(6));
-         setIndex(Number(event.target.getAttribute('id').substring(6)));
-         setViewProblem(true);
-     }
+       // alert(event.target.getAttribute('id').substring(6));
+        setIndex(Number(event.target.getAttribute('id').substring(6)));
+        setViewProblem(true);
+    }
 
-     const handleNewDivClose = (event)=>{
-        // alert(event.target.getAttribute('id').substring(6));
-        // setIndex(Number(event.target.getAttribute('id').substring(6)));
-         setViewProblem(false);
-     }
-
-     const handlePostFollowUp=  async (event) => {
+    const handlePostFollowUp=  async (event) => {
         //alert(event.target.getAttribute('id'));
        // console.log('here')
        let res = await axios.post('http://localhost:8000/api/users/followUpProblem',{id : event.target.getAttribute('id') , followUp : followUp})
         
     }
 
+    const handleNewDivClose = (event)=>{
+        // alert(event.target.getAttribute('id').substring(6));
+        // setIndex(Number(event.target.getAttribute('id').substring(6)));
+         setViewProblem(false);
+     }
+
+     const goBack= ()=>{
+        <Link to='/CreateDiscountAdmin'> </Link>
+     }
+
     useEffect(() => {
-        axios.get('http://localhost:8000/api/users/seeReportsAdmin').then(
+        axios.get('http://localhost:8000/api/users/seeReportsTrainee').then(
         (res) => { 
             const response = res.data
             setViewReports(response)
@@ -72,9 +71,7 @@ function ViewUnseenReportsAdmin (){
                 <TableCell>Username</TableCell>
                 <TableCell align="right">Course Title</TableCell>
                 <TableCell align="right">Type</TableCell>
-                <TableCell align="right">FollowUps</TableCell>
-                <TableCell align="right"> </TableCell>
-                <TableCell align="right"> </TableCell>
+                <TableCell align="right">Status</TableCell>
                 <TableCell align="right"> </TableCell>
                 </TableRow>
             </TableHead>
@@ -89,18 +86,16 @@ function ViewUnseenReportsAdmin (){
                 </TableCell>
                 <TableCell align="right">{report.Title}</TableCell>
                 <TableCell align="right">{report.Type}</TableCell>
-                <TableCell align="right">{report.FollowUps}</TableCell>
-                <TableCell align="right" >  <Button id={'report'+i} onClick={handleNewDiv} variant="contained" color="primary"> View Problem </Button> </TableCell>
-                <TableCell align="right" >  <Button id={report._id} onClick={resolve} variant="contained" color="success"> Resolve </Button>
+                <TableCell align="right">{report.Status}</TableCell>
+                <TableCell align="right" >  <Button id={'report'+i} onClick={handleNewDiv} variant="contained" color="primary"> View Problem </Button>
                 </TableCell>
-                <TableCell align="right">   <Button   variant="contained" sx={{bgcolor:'#D3D3D3'}}> Pending </Button>
-                </TableCell>
+                
+               
                 </TableRow>
             ))}
             </TableBody>
         </Table>
         </TableContainer>
-
         {
             viewProblem&&<div className="reportDivDetails"> 
             <div className="problem">
@@ -133,27 +128,18 @@ function ViewUnseenReportsAdmin (){
             </div>
 
         }
-
-<pre className='goal'>
-             <Link to='/AdminHome'>
+       <pre className='goal'>
+             <Link to='/IndividualTrainee'>
               <t1> Back
               </t1>
 
               </Link>
       </pre>
-
-
-
     </div>
  );
     
-    {/* {/* //  {reports.map((report) =>(
 
-    //         <Typography  variant="h6" gutterBottom align="left" >
-    //         {report.Username}
-    //         </Typography>
-    //           ))} */}
-    
+ //{reports[index].Status!='resolved'&&<label>Karim</label>}</div>
 
    
 }
@@ -163,6 +149,6 @@ function ViewUnseenReportsAdmin (){
 
   
 
-export default ViewUnseenReportsAdmin;
+export default ViewAllReportsTrainee;
 
 

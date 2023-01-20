@@ -791,8 +791,9 @@ const viewWallet=asyncHandler(async(req,res)=>{
 const reportProblem=asyncHandler(async(req,res)=>{
     const username=req.body["username"] 
     const title=req.body["title"];
+    const description=req.body["description"];
     const type=req.body["type"]   
-    if(!username||!title||!type)
+    if(!username||!title||!type||!description)
     {
         res.status(400).send('Error in reporting problem')
     }
@@ -831,7 +832,8 @@ const reportProblem=asyncHandler(async(req,res)=>{
     const report=await Report.create({
         Username:username,
         Title:title,
-        Type:type 
+        Type:type ,
+        Description:description
      })
 
      res.status(200).send(report)
@@ -840,19 +842,8 @@ const reportProblem=asyncHandler(async(req,res)=>{
 
 
 const seeReportsTrainee=asyncHandler(async(req,res)=>{
-    const {username}=req.body
-    if(!username)
-    {
-        res.status(400)
-        throw new Error('Error while seeing problem')
-    }
-    const user = await User.find({Username:username})
-    if(!user){
-        res.status(400)
-        throw new Error ('User not found')
-    }
 
-    const reports=await Report.find({Username:username})
+    const reports=await Report.find()
     res.status(200).send(reports)
 
 })
@@ -939,12 +930,12 @@ const rejectRefundAdmin=asyncHandler(async(req,res)=>{
 
 const followUpProblem=asyncHandler(async(req,res)=>{
     const {id,followUp}=req.body
-
+    console.log(followUp)
     if(!id||!followUp){
         res.status(400)
         throw new Error('Error in the Follow Up')
     }
-    const report = Report.findById({_id:id})
+    const report = await Report.findById({_id:id})
     const status=report.Status
     if(status==='resolved'||status==='Resolved')
     {
@@ -952,7 +943,7 @@ const followUpProblem=asyncHandler(async(req,res)=>{
         throw new Error('Problem has been resolved')
     }
     report.FollowUp.push(followUp);
-    report.save();
+    await report.save();
     
 })
 

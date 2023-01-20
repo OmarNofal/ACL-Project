@@ -31,14 +31,14 @@ function IndividualTrainee() {
    
     <pre className='goal'>
                   <Link to='/ViewAllCoursesForINSorTRAINEEorGUEST'>
-                      <t1>                View all courses
+                      <t1>View all courses
                       </t1>
 
                   </Link>
           </pre>
           <pre className='goal'>
                   <Link to='/MyCourses'>
-                      <t1>                View my courses
+                      <t1>View my courses
                       </t1>
 
                   </Link>
@@ -49,6 +49,14 @@ function IndividualTrainee() {
                   </t1>
 
               </Link>
+          </pre>
+          <pre className='goal'>
+              <Link to='/ViewAllReportsTrainee'>
+                  <t1>View all Reports
+                                          </t1>
+
+              </Link>
+          
       </pre>
     </>
     

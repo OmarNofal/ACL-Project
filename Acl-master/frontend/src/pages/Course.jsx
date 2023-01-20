@@ -14,8 +14,15 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
 
 function CoursePage() {
+
+  
     const user={
         "Username":"trainee4",
         "Password": "$2a$10$3SI1dkp3l4NTKI0Z7kqhU.ibpmNSKsvsN6h0N7zrYVUCk2Ac63oce"
@@ -27,6 +34,8 @@ function CoursePage() {
     const [rating, setRating] = useState(0);
     const [reportText, setReportText] = useState('');
     const [openReport, setOpenReport] = useState(false);
+    const [type,setType]=useState('other');
+
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   
@@ -47,6 +56,8 @@ function CoursePage() {
     const handleOpenReport = () => {
         setOpenReport(true);
     };
+
+  
 
   
 
@@ -76,7 +87,8 @@ const handleReport = (text) => {
 axios.post('http://localhost:8000/api/users/reportProblem', {
     username: 'Trainee4',
     title: 'csen101',
-    type: text
+    description:text,
+    type: type
   })
   .then(function (response) {
     console.log(response);
@@ -135,10 +147,11 @@ Watch Course Videos
 <Button variant="contained" onClick={handleOpen}>
 Request a Refund
 </Button>
-<Button variant="contained" onClick={handleOpenReport}>
+<Button variant="contained" onClick={handleOpenReport} color='error'>
 Report a Problem
 </Button>
 </div>
+
 {progress === 100 ? (
 <div style={{display: "flex", justifyContent: "center", marginTop: "30px"}}>
 <Button variant="contained" onClick={() => handleDownloadCertificate()}>
@@ -183,6 +196,40 @@ value={reportText}
 onChange={(e) => setReportText(e.target.value)}
 fullWidth
 />
+<div>
+<FormControl>
+      
+      <FormLabel id="demo-form-control-label-placement">Type:</FormLabel>
+      <RadioGroup
+        row
+        aria-labelledby="demo-form-control-label-placement"
+        name="position"
+        defaultValue="other"
+      >
+        <FormControlLabel
+          value="financial"
+          control={<Radio />}
+          label="Financial"
+          labelPlacement="start"
+          onChange={(change)=> {setType(change.target.value)}}
+        />
+        <FormControlLabel
+          value="technical"
+          control={<Radio />}
+          label="Technical"
+          labelPlacement="start"
+          onChange={(change)=> {setType(change.target.value)}}
+        />
+        <FormControlLabel
+          value="other"
+          control={<Radio />}
+          label="Other"
+          labelPlacement="start"
+          onChange={(change)=> {setType(change.target.value)}}
+        />
+      </RadioGroup>
+    </FormControl>
+</div>
 </DialogContent>
 <DialogActions>
 <Button onClick={handleCloseReport} color="primary">

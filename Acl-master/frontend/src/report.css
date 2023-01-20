@@ -1,0 +1,32 @@
+.reportDivDetails{
+    width: 70%;
+    height:68%;
+    position: absolute;
+    top: 28%;
+    background-color: white;
+    align-items:left
+
+}
+.problem{
+   
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.24),
+    0 17px 50px 0 rgba(0, 0, 0, 0.19);
+    margin:20px;
+    border-radius: 4px;
+    padding: 10px;
+    padding-left: 40px;
+    align-items:start;
+
+  
+    
+
+}
+.buttonClose{
+    
+    padding: 20px;
+    text-decoration: none;
+    text-align: center;
+    margin: 300px 0 0 0;
+    display: inline-block;
+}
+

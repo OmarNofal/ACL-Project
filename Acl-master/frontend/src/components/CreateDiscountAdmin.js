@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { TextField,Button } from "@mui/material";
 import "../addDiscount.css";
+import { Link, useNavigate } from 'react-router-dom'
+
 
 
 function CreateDiscountAdmin (){
@@ -83,6 +85,14 @@ function CreateDiscountAdmin (){
                 <div>
                 <Button onClick={handleClick} title={course.Title} variant="contained" sx={{minWidth:"30%" ,marginBottom:"20px"}}>Set Discount</Button>
                 </div>
+
+                <pre className='goal'>
+             <Link to='/AdminHome'>
+              <t1> Back
+              </t1>
+
+              </Link>
+      </pre>
 
         </div>
             

@@ -19,6 +19,11 @@ const reportSchema = new Schema({
         
     },
 
+    Description:
+    {
+        type:String,
+    },
+
     Status:
     {
         type:String,

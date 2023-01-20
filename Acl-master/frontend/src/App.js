@@ -45,6 +45,9 @@ import PurchaseSuccess from './pages/PurchaseSuccess';
 import Test from './pages/Test'
 import Course from './pages/Course'
 
+
+import ViewAllReportsTrainee from './components/ViewAllReportsTrainee'
+
 function App() {
   
   return (
@@ -58,7 +61,7 @@ function App() {
               <Route path='/Register' element={<Register />}/>
               <Route path='/AdminHome' element={<AdminHome />}/>
               <Route path='/InstructorHome' element={<InstructorHome />}/>
-              <Route path='/IndiviualTrainee' element={<IndividualTrainee />}/>
+              <Route path='/IndividualTrainee' element={<IndividualTrainee />}/>
               <Route path='/CorporateTrainee' element={<CorporateTrainee />}/>
               <Route path='/ViewAllcoursesforcorporatetrainee' element={<ViewAllcoursesforcorporatetrainee />}/>
               <Route path='/ViewAllCoursesForINSorTRAINEEorGUEST' element={<ViewAllCoursesForINSorTRAINEEorGUEST />}/>
@@ -94,6 +97,8 @@ function App() {
               <Route path='/resetPassword' element={<ResetPasswordPage/>}/>
               <Route path='/success' element={<PurchaseSuccess/>}/>
 
+
+              <Route path='/ViewAllReportsTrainee' element={<ViewAllReportsTrainee/>}/>
             </Routes>
           </div>
       </Router>
