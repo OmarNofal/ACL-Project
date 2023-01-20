@@ -30,6 +30,14 @@ function Guest() {
 
               </Link>
       </pre>
+      <pre className='goal'>
+              <Link to='/ViewAllReportsTrainee'>
+                  <t1>View all Reports
+                                          </t1>
+
+              </Link>
+          
+      </pre>
               
 
     </>

@@ -775,15 +775,16 @@ const requestRefundTrainee=asyncHandler(async(req,res)=>{
 
 
 const viewWallet=asyncHandler(async(req,res)=>{
-    const {username}=req.body
-
-    const user = await User.find({Username:username})
+    
+    console.log('here')
+    const user = await User.findOne({Username:'YasserHegazy'})
     if(!user){
         res.status(400)
         throw new Error ('User not found')
     }
-
-    res.status(200).send(user.Wallet)
+    
+    const money=user.Wallet
+    res.status(200).json(money)
 })
 
 

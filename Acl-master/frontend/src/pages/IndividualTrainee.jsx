@@ -1,9 +1,24 @@
 import React from 'react'
 import SelectCountry from '../components/SelectCountry'
 import { Link, useNavigate } from 'react-router-dom'
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 import ViewAllTitlesCoursesAvailable from '../components/ViewAllcoursesforcorporatetrainee'
+import { Typography } from '@mui/material';
 function IndividualTrainee() {
+
+  const [wallet, setViewWallet] = useState(0);
+
+  
+  useEffect(() => {
+    axios.get('http://localhost:8000/api/users/viewWallet').then(
+    (res) => { 
+        const response = res.data
+        setViewWallet(response)
+    })}
+     );
+
   return (
     <>
     <div className='form'>
@@ -58,6 +73,7 @@ function IndividualTrainee() {
               </Link>
           
       </pre>
+      <div><Typography>Wallet:{wallet}</Typography></div>
     </>
     
   )
